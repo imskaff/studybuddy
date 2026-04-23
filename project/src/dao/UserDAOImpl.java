@@ -1,0 +1,151 @@
+package dao;
+
+import model.Student;
+import model.Tutor;
+import model.User;
+
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserDAOImpl implements UserDAO {
+    private static UserDAOImpl instance;
+
+    private UserDAOImpl() throws SQLException {
+        DriverManager.registerDriver(new org.postgresql.Driver());
+    }
+
+    public static synchronized UserDAOImpl getInstance() throws SQLException {
+        if (instance == null) {
+            instance = new UserDAOImpl();
+        }
+        return instance;
+    }
+
+    private Connection getConnection() throws SQLException {
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=sep2", "postgres",
+                "password");
+    }
+
+    @Override
+    public User create(String first_name, String last_name, LocalDate date_of_birth, String email, String phone,
+            String password, String gender, ArrayList<String> languages, String type) throws SQLException {
+        try (Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(
+                        "INSERT INTO users (first_name, last_name, date_of_birth, email, phone, password, gender, languages, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        PreparedStatement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, first_name);
+            statement.setString(2, last_name);
+            statement.setObject(3, date_of_birth);
+            statement.setString(4, email);
+            statement.setString(5, phone);
+            statement.setString(6, password);
+            statement.setString(7, gender);
+            statement.setObject(8, languages);
+            statement.setString(9, type);
+            statement.executeUpdate();
+
+            ResultSet keys = statement.getGeneratedKeys();
+            if (keys.next()) {
+                int id = keys.getInt(1);
+                if ("Tutor".equalsIgnoreCase(type)) {
+                    return new Tutor(first_name, last_name, date_of_birth, email, phone, password, gender, languages,
+                            "N/A", type, id);
+                } else {
+                    return new Student(first_name, last_name, date_of_birth, email, phone, password, gender, languages,
+                            id, type);
+                }
+            } else {
+                throw new SQLException("No keys generated");
+            }
+        }
+    }
+
+    @Override
+    public User readByInt(int id) throws SQLException {
+        try (Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?")) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int userId = resultSet.getInt(1);
+                String first_name = resultSet.getString(2);
+                String last_name = resultSet.getString(3);
+                LocalDate date_of_birth = resultSet.getObject(4, LocalDate.class);
+                String email = resultSet.getString(5);
+                String phone = resultSet.getString(6);
+                String password = resultSet.getString(7);
+                String gender = resultSet.getString(8);
+                ArrayList<String> languages = resultSet.getObject(9, ArrayList.class);
+                String type = resultSet.getString(10);
+                if ("Tutor".equalsIgnoreCase(type)) {
+                    return new Tutor(first_name, last_name, date_of_birth, email, phone, password, gender, languages,
+                            "N/A", type, userId);
+                } else {
+                    return new Student(first_name, last_name, date_of_birth, email, phone, password, gender, languages,
+                            userId, type);
+                }
+            } else {
+                throw new SQLException("No user found with that id");
+            }
+        }
+    }
+
+    @Override
+    public void update(User user) throws SQLException {
+        try (Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(
+                        "UPDATE users SET first_name = ?, last_name = ?, date_of_birth = ?, email = ?, phone = ?, password = ?, gender = ?, languages = ?, type = ? WHERE id = ?")) {
+            statement.setString(1, user.getFirst_name());
+            statement.setString(2, user.getLast_name());
+            statement.setObject(3, user.getDate_of_birth());
+            statement.setString(4, user.getEmail());
+            statement.setString(5, user.getPhone());
+            statement.setString(6, user.getPassword());
+            statement.setString(7, user.getGender());
+            statement.setObject(8, user.getLanguages());
+            statement.setString(9, user.getType());
+            statement.setInt(10, user.getId());
+            statement.executeUpdate();
+        }
+    }
+
+    @Override
+    public void delete(User user) throws SQLException {
+        try (Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM users WHERE id = ?")) {
+            statement.setInt(1, user.getId());
+            statement.executeUpdate();
+        }
+    }
+
+    @Override
+    public List<User> readAll() throws SQLException {
+        try (Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM users")) {
+            ResultSet resultSet = statement.executeQuery();
+            List<User> users = new ArrayList<>();
+            while (resultSet.next()) {
+                int userId = resultSet.getInt(1);
+                String first_name = resultSet.getString(2);
+                String last_name = resultSet.getString(3);
+                LocalDate date_of_birth = resultSet.getObject(4, LocalDate.class);
+                String email = resultSet.getString(5);
+                String phone = resultSet.getString(6);
+                String password = resultSet.getString(7);
+                String gender = resultSet.getString(8);
+                ArrayList<String> languages = resultSet.getObject(9, ArrayList.class);
+                String type = resultSet.getString(10);
+                if ("Tutor".equalsIgnoreCase(type)) {
+                    users.add(new Tutor(first_name, last_name, date_of_birth, email, phone, password, gender, languages,
+                            "N/A", type, userId));
+                } else {
+                    users.add(new Student(first_name, last_name, date_of_birth, email, phone, password, gender,
+                            languages, userId, type));
+                }
+            }
+            return users;
+        }
+    }
+}
