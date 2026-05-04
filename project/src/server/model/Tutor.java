@@ -1,4 +1,4 @@
-package model;
+package server.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,8 +11,6 @@ public class Tutor extends User {
         super(id, first_name, last_name, date_of_birth, email, phone, password, gender, languages, type);
         this.education_level = education_level;
     }
-
-
 
     public String getEducation_level() {
         return education_level;

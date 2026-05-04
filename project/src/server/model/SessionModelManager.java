@@ -1,7 +1,4 @@
-package model;
-
-import viewmodel.SessionViewModel;
-import mediator.ServerModel;
+package server.model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -10,11 +7,11 @@ import java.util.ArrayList;
 
 public class SessionModelManager implements SessionModel, PropertyChangeListener {
     private final SessionList list;
-    private ServerModel serverModel;
     private PropertyChangeSupport support;
 
     public SessionModelManager() {
-        this.list = new SessionList();
+        list = new SessionList();
+        support = new PropertyChangeSupport(this);
     }
 
     @Override

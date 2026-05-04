@@ -1,6 +1,6 @@
-package dao;
+package server.dao;
 
-import model.User;
+import server.model.User;
 
 import java.sql.SQLException;
 import java.time.LocalDate;

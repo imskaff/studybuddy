@@ -1,26 +1,27 @@
-package viewmodel;
+package client.viewmodel;
 
-import model.Session;
-import model.SessionModel;
+import client.model.Model;
+import server.model.Session;
 
-
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 public class SessionViewModel implements PropertyChangeListener
 {
-    private SessionModel model;
+    private Model model;
     private ObservableList<Session>sessions;
+    private PropertyChangeSupport support;
 
-    public SessionViewModel(SessionModel model)
+    public SessionViewModel(Model model)
     {
         this.model = model;
         this.sessions = FXCollections.observableArrayList();
 
-        this.model.addPropertyChangeListener(this);
+        support.addPropertyChangeListener(this);
     }
 
     private void loadFromModel()
@@ -44,7 +45,7 @@ public class SessionViewModel implements PropertyChangeListener
                 sessions.add((Session) evt.getNewValue());
                 break;
             case "SessionRemoved":
-                sessions.add((Session) evt.getNewValue());
+                sessions.remove((Session) evt.getNewValue());
                 break;
         }
     }

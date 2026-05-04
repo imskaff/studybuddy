@@ -1,5 +1,6 @@
-package model;
+package server.model;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Session {
@@ -7,12 +8,12 @@ public class Session {
     private String description;
     private double price;
     private String location;
-    private DateTimeFormatter start_date;
-    private DateTimeFormatter end_date;
+    private LocalDateTime start_date;
+    private LocalDateTime end_date;
     private Tutor tutor;
     private Student student;
 
-    public Session(int id, String description, double price, String location, DateTimeFormatter start_date, DateTimeFormatter end_date, Tutor tutor, Student student) {
+    public Session(int id, String description, double price, String location, LocalDateTime start_date, LocalDateTime end_date, Tutor tutor, Student student) {
         this.id = id;
         this.description = description;
         this.price = price;
@@ -51,19 +52,19 @@ public class Session {
         this.location = location;
     }
 
-    public DateTimeFormatter getStart_date() {
+    public LocalDateTime getStart_date() {
         return start_date;
     }
 
-    public void setStart_date(DateTimeFormatter start_date) {
+    public void setStart_date(LocalDateTime start_date) {
         this.start_date = start_date;
     }
 
-    public DateTimeFormatter getEnd_date() {
+    public LocalDateTime getEnd_date() {
         return end_date;
     }
 
-    public void setEnd_date(DateTimeFormatter end_date) {
+    public void setEnd_date(LocalDateTime end_date) {
         this.end_date = end_date;
     }
 

@@ -1,8 +1,8 @@
-package dao;
+package server.dao;
 
-import model.Student;
-import model.Tutor;
-import model.User;
+import server.model.Student;
+import server.model.Tutor;
+import server.model.User;
 
 import java.sql.*;
 import java.time.LocalDate;

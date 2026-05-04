@@ -1,11 +1,9 @@
-package model;
-
-import viewmodel.SessionViewModel;
+package server.model;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
-public interface SessionModel {
+public interface SessionModel{
     void bookSession(Student student, Tutor tutor, Session sessionId);
 
     ArrayList<Session> getAllSessions();

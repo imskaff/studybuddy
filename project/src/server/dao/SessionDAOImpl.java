@@ -1,11 +1,11 @@
-package dao;
+package server.dao;
 
-import model.Session;
-import model.Student;
-import model.Tutor;
+import server.model.Session;
+import server.model.Student;
+import server.model.Tutor;
 
 import java.sql.*;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +29,8 @@ public class SessionDAOImpl implements SessionDAO {
     }
 
     @Override
-    public Session create(String description, double price, String location, DateTimeFormatter start_date,
-            DateTimeFormatter end_date, Tutor tutor, Student student) throws SQLException {
+    public Session create(String description, double price, String location, LocalDateTime start_date,
+                          LocalDateTime end_date, Tutor tutor, Student student) throws SQLException {
 
         String sql = "INSERT INTO sessions (description, price, location, start_date, end_date, tutor_id, student_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = getConnection();
@@ -66,8 +66,8 @@ public class SessionDAOImpl implements SessionDAO {
                 String description = resultSet.getString(2);
                 double price = resultSet.getDouble(3);
                 String location = resultSet.getString(4);
-                DateTimeFormatter start_date = resultSet.getObject(5, DateTimeFormatter.class);
-                DateTimeFormatter end_date = resultSet.getObject(6, DateTimeFormatter.class);
+                LocalDateTime start_date = resultSet.getObject(5, LocalDateTime.class);
+                LocalDateTime end_date = resultSet.getObject(6, LocalDateTime.class);
                 Tutor tutor = resultSet.getObject(7, Tutor.class);
                 Student student = resultSet.getObject(8, Student.class);
                 return new Session(sessionId, description, price, location, start_date, end_date, tutor, student);
@@ -114,8 +114,8 @@ public class SessionDAOImpl implements SessionDAO {
                 String description = resultSet.getString(2);
                 double price = resultSet.getDouble(3);
                 String location = resultSet.getString(4);
-                DateTimeFormatter start_date = resultSet.getObject(5, DateTimeFormatter.class);
-                DateTimeFormatter end_date = resultSet.getObject(6, DateTimeFormatter.class);
+                LocalDateTime start_date = resultSet.getObject(5, LocalDateTime.class);
+                LocalDateTime end_date = resultSet.getObject(6, LocalDateTime.class);
                 Tutor tutor = resultSet.getObject(7, Tutor.class);
                 Student student = resultSet.getObject(8, Student.class);
                 sessions.add(
