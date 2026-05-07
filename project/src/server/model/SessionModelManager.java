@@ -50,13 +50,8 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
     }
 
     @Override
-    public String convert(String convert) {
-        return "";
-    }
-
-    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        support.addPropertyChangeListener(this);
+        support.addPropertyChangeListener(listener);
     }
 
     @Override

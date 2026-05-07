@@ -1,8 +1,6 @@
 package server.mediator;
 
-import client.mediator.Client;
-import client.model.Model;
-
+import server.model.SessionModel;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,9 +11,9 @@ import java.net.Socket;
 // allowing the server to handle multiple clients simultaneously.
 public class ServerConnector implements Runnable{
     private static final int PORT = 4025;
-        private Model model;
+    private SessionModel model;
 
-    public ServerConnector(Model model)
+    public ServerConnector(SessionModel model)
     {
         // Initializes the server-side model that contains the booking logic
         this.model = model;

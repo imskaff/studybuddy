@@ -3,7 +3,7 @@ package server.model;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
-public interface SessionModel{
+public interface SessionModel {
     void bookSession(Student student, Tutor tutor, Session sessionId);
 
     ArrayList<Session> getAllSessions();
@@ -17,9 +17,6 @@ public interface SessionModel{
     int getSize();
 
     void removeSession(int index);
-
-    // method used by client servermodel in the future
-    String convert(String convert);
 
     void addPropertyChangeListener(PropertyChangeListener listener);
 }

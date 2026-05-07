@@ -1,13 +1,13 @@
 package client.mediator;
 
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-
 import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
 
 // client-side
-public interface ServerModel {
+public interface ServerModel{
     void connect(String host, int port) throws Exception;
 
     void disconnect() throws Exception;
@@ -17,4 +17,6 @@ public interface ServerModel {
     ArrayList<Session> getAllSessions();
 
     boolean bookSession(int studentId, int sessionId, String date, String time);
+
+    void addPropertyChangeListener(PropertyChangeListener listener);
 }

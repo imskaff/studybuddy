@@ -1,22 +1,23 @@
 package server.model;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Session {
     private int id;
     private String description;
     private double price;
+    private String subject;
     private String location;
     private LocalDateTime start_date;
     private LocalDateTime end_date;
     private Tutor tutor;
     private Student student;
 
-    public Session(int id, String description, double price, String location, LocalDateTime start_date, LocalDateTime end_date, Tutor tutor, Student student) {
+    public Session(int id, String description, double price, String subject, String location, LocalDateTime start_date, LocalDateTime end_date, Tutor tutor, Student student) {
         this.id = id;
         this.description = description;
         this.price = price;
+        this.subject = subject;
         this.location = location;
         this.start_date = start_date;
         this.end_date = end_date;
@@ -26,6 +27,14 @@ public class Session {
 
     public int getId() {
         return id;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getDescription() {

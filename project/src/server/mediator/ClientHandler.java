@@ -1,7 +1,7 @@
 package server.mediator;
 
-import client.model.Model;
 import com.google.gson.Gson;
+import server.model.SessionModel;
 import server.model.*;
 import server.temp.BookSessionRequest;
 import server.temp.Response;
@@ -20,12 +20,12 @@ public class ClientHandler implements Runnable {
     private final PrintWriter out;
 
     // Used to access the server-side booking logic
-    private final Model model;
+    private final SessionModel model;
     private final Socket socket;
 
     private Gson gson;
 
-    public ClientHandler(Socket socket, Model model) throws IOException {
+    public ClientHandler(Socket socket, SessionModel model) throws IOException {
         this.socket = socket;
         this.model = model;
         // Creates the input stream attached to the socket

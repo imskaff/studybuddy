@@ -91,6 +91,7 @@ public class BookingViewModel implements PropertyChangeListener {
                 selectedSession.getId(),
                 selectedSession.getDescription(),
                 selectedSession.getPrice(),
+                selectedSession.getSubject(),
                 selectedSession.getLocation(),
                 selectedSession.getStart_date(),
                 selectedSession.getEnd_date(),
