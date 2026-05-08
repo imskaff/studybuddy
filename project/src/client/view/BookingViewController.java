@@ -1,10 +1,19 @@
 package client.view;
 
 import client.viewmodel.BookingViewModel;
+import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 
 public class BookingViewController {
     // fxml shit \/
+  private TabPane tPane;
+  private Tab tab;
+
+  private TextField startDate_textField;
+  private TextArea  endDate_textArea;
+
+  private Button confirm_btn;
+  private Button back_btn;
 
     // end
 

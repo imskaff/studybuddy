@@ -28,12 +28,19 @@ public class SessionViewController {
         this.viewModel = viewModel;
         this.root = root;
 
-        description_textArea.textProperty().bindBidirectional(viewModel.descriptionProperty());
-        tutor_textArea.textProperty().bindBidirectional(viewModel.tutorProperty());
-        subject_textArea.textProperty().bindBidirectional(viewModel.subjectProperty());
-        location_textArea.textProperty().bindBidirectional(viewModel.locationProperty());
-        duration_textArea.textProperty().bindBidirectional(viewModel.durationProperty());
-        price_textArea.textProperty().bindBidirectional(viewModel.priceProperty());
+        description_textArea.textProperty().bind(viewModel.descriptionProperty());
+        tutor_textArea.textProperty().bind(viewModel.tutorProperty());
+        subject_textArea.textProperty().bind(viewModel.subjectProperty());
+        location_textArea.textProperty().bind(viewModel.locationProperty());
+        duration_textArea.textProperty().bind(viewModel.durationProperty());
+        price_textArea.textProperty().bind(viewModel.priceProperty());
+
+        description_textArea.setEditable(false);
+        tutor_textArea.setEditable(false);
+        subject_textArea.setEditable(false);
+        location_textArea.setEditable(false);
+        duration_textArea.setEditable(false);
+        price_textArea.setEditable(false);
     }
 
     public Region getRoot() {

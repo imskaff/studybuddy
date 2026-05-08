@@ -20,7 +20,7 @@ public class StudentMainPageViewController {
     @FXML private TableColumn<Session, String> main_column_price;
     @FXML private TableColumn<Session, String> main_column_date;
     @FXML private TableColumn<Session, String> main_column_tutor;
-    @FXML private Tab main_tab1;
+    @FXML private Tab main_tab;
     @FXML private Tab profile_tab;
     @FXML private TextArea fname_textArea;
     @FXML private TextArea lname_textArea;
@@ -70,6 +70,7 @@ public class StudentMainPageViewController {
 
     @FXML private void onViewDetailsButtonClicked() {
         // TODO: open session detail / booking view
+
         
     }
 
