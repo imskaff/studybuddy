@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class ModelManager implements Model, PropertyChangeListener {
     private final ServerModel client;
     private final PropertyChangeSupport support;
+    private Student loggedInStudent;
 
     public ModelManager() {
         client = new Client();
@@ -36,6 +37,16 @@ public class ModelManager implements Model, PropertyChangeListener {
     public ArrayList<Session> getAllSessions() {
         return client.getAllSessions();
     }
+
+   @Override public void setLoggedInStudent(Student student)
+   {
+    this.loggedInStudent = student;
+   }
+
+   @Override public Student getLoggedInStudent()
+   {
+    return loggedInStudent;
+   }
 
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {

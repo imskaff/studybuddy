@@ -9,10 +9,15 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.model.Session;
+import server.model.Tutor;
+import server.model.Student;
+
 
 public class SessionViewModel implements PropertyChangeListener {
     private Model model;
     private ObservableList<Session> sessions;
+    private Session selectedSession;
+    private Student loggedInStudent;
 
     private final StringProperty description;
     private final StringProperty tutorName;
@@ -41,6 +46,7 @@ public class SessionViewModel implements PropertyChangeListener {
     }
 
     public void loadSession(Session session) {
+       this.selectedSession = session;
         if (session != null) {
             description.set(session.getDescription());
             tutorName.set(session.getTutor() != null
@@ -62,7 +68,24 @@ public class SessionViewModel implements PropertyChangeListener {
         return sessions;
     }
 
-    public StringProperty descriptionProperty() {
+  public Session getSelectedSession()
+  {
+    return selectedSession;
+  }
+
+  public void setLoggedInStudent(Student loggedInStudent) {
+    this.loggedInStudent = loggedInStudent;
+  }
+
+  public Tutor getSelectedTutor() {
+    if (selectedSession == null) {
+      return null;
+    }
+
+    return selectedSession.getTutor();
+  }
+
+  public StringProperty descriptionProperty() {
         return description;
     }
 
@@ -84,6 +107,30 @@ public class SessionViewModel implements PropertyChangeListener {
 
     public StringProperty priceProperty() {
         return price;
+    }
+
+    public void bookSession() {
+      if (selectedSession == null) {
+        System.out.println("No session selected");
+        return;
+      }
+
+      Student loggedInStudent = model.getLoggedInStudent();
+
+      if (loggedInStudent == null) {
+        System.out.println("No student logged in");
+        return;
+      }
+
+      try {
+        Tutor sessionTutor = selectedSession.getTutor();
+
+        model.bookSession(loggedInStudent, sessionTutor, selectedSession);
+
+        System.out.println("Session booked");
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
 
     @Override

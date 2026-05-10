@@ -4,49 +4,75 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Region;
+import server.model.Tutor;
 
 import client.viewmodel.SessionViewModel;
 
-public class SessionViewController {
-    @FXML private TextArea description_textArea;
-    @FXML private TextArea tutor_textArea;
-    @FXML private TextArea subject_textArea;
-    @FXML private TextArea location_textArea;
-    @FXML private TextArea duration_textArea;
-    @FXML private TextArea price_textArea;
-    @FXML private Button view_profile_button;
-    @FXML private Button book_session_button;
+public class SessionViewController
+{
+  @FXML private TextArea description_textArea;
+  @FXML private TextArea tutor_textArea;
+  @FXML private TextArea subject_textArea;
+  @FXML private TextArea location_textArea;
+  @FXML private TextArea duration_textArea;
+  @FXML private TextArea price_textArea;
+  @FXML private Button view_profile_button;
+  @FXML private Button book_session_button;
 
-    private Region root;
-    private SessionViewModel viewModel;
-    private ViewHandler viewHandler;
-    
-    public SessionViewController() {}
+  private Region root;
+  private SessionViewModel viewModel;
+  private ViewHandler viewHandler;
 
-    public void init(ViewHandler viewHandler, SessionViewModel viewModel, Region root) {
-        this.viewHandler = viewHandler;
-        this.viewModel = viewModel;
-        this.root = root;
+  public SessionViewController()
+  {
+  }
 
-        description_textArea.textProperty().bind(viewModel.descriptionProperty());
-        tutor_textArea.textProperty().bind(viewModel.tutorProperty());
-        subject_textArea.textProperty().bind(viewModel.subjectProperty());
-        location_textArea.textProperty().bind(viewModel.locationProperty());
-        duration_textArea.textProperty().bind(viewModel.durationProperty());
-        price_textArea.textProperty().bind(viewModel.priceProperty());
+  public void init(ViewHandler viewHandler, SessionViewModel viewModel,
+      Region root)
+  {
+    this.viewHandler = viewHandler;
+    this.viewModel = viewModel;
+    this.root = root;
 
-        description_textArea.setEditable(false);
-        tutor_textArea.setEditable(false);
-        subject_textArea.setEditable(false);
-        location_textArea.setEditable(false);
-        duration_textArea.setEditable(false);
-        price_textArea.setEditable(false);
+    description_textArea.textProperty().bind(viewModel.descriptionProperty());
+    tutor_textArea.textProperty().bind(viewModel.tutorProperty());
+    subject_textArea.textProperty().bind(viewModel.subjectProperty());
+    location_textArea.textProperty().bind(viewModel.locationProperty());
+    duration_textArea.textProperty().bind(viewModel.durationProperty());
+    price_textArea.textProperty().bind(viewModel.priceProperty());
+
+    makeTextAreasReadOnly();
+  }
+
+  private void makeTextAreasReadOnly()
+  {
+    description_textArea.setEditable(false);
+    tutor_textArea.setEditable(false);
+    subject_textArea.setEditable(false);
+    location_textArea.setEditable(false);
+    duration_textArea.setEditable(false);
+    price_textArea.setEditable(false);
+  }
+
+  public Region getRoot()
+  {
+    return root;
+  }
+
+  @FXML private void onBookSession()
+  {
+    viewModel.bookSession();
+  }
+
+  @FXML private void onViewTutorProfile()
+  {
+    Tutor tutor = viewModel.getSelectedTutor();
+
+    if (tutor != null)
+    {
+      viewHandler.openTutorProfileView(tutor);
     }
+  }
 
-    public Region getRoot() {
-        return root;
-    }
 
-    // fxml methods here \/
-    
 }

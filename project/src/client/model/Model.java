@@ -11,9 +11,14 @@ public interface Model {
 
     void connect() throws Exception;
 
-    void bookSession(Student loggedInStudent, Tutor sessionTutor, Session bookedSession) throws Exception;
+    void bookSession(Student loggedInStudent, Tutor sessionTutor, Session bookedSesion) throws Exception;
 
     ArrayList<Session> getAllSessions();
 
+  void setLoggedInStudent(Student student);
+
+  Student getLoggedInStudent();
+
     void addPropertyChangeListener(PropertyChangeListener listener);
+
 }

@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import server.model.Tutor;
 
 public class ViewHandler {
     private final ViewModelFactory viewModelFactory;
@@ -108,4 +109,14 @@ public class ViewHandler {
             e.printStackTrace();
         }
     }
+
+  public void openTutorProfileView(Tutor tutor)
+  {
+    System.out.println("Opening tutor profile for: "
+        + tutor.getFirst_name() + " " + tutor.getLast_name());
+
+    // later:
+    // tutorProfileViewModel.loadTutor(tutor);
+    // open TutorProfileView.fxml
+  }
 }

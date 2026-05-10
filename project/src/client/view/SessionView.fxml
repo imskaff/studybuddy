@@ -8,10 +8,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.stage.Stage?>
 
-<Stage title="Session details" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-    <scene>
-        <Scene>
-            <AnchorPane prefHeight="350.0" prefWidth="900.0">
+
+<AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" prefHeight="350.0" prefWidth="900.0" fx:controller="client.view.SessionViewController">
             <children>
                <TabPane layoutX="-2.0" layoutY="-2.0" prefHeight="350.0" prefWidth="910.0" tabClosingPolicy="UNAVAILABLE">
                  <tabs>
@@ -25,15 +23,13 @@
                                  <TextArea fx:id="location_textArea" layoutX="14.0" layoutY="227.0" prefHeight="45.0" prefWidth="590.0" text="Location" />
                                  <TextArea fx:id="duration_textArea" layoutX="15.0" layoutY="174.0" prefHeight="45.0" prefWidth="590.0" text="Duration" />
                                  <TextArea fx:id="price_textArea" layoutX="15.0" layoutY="121.0" prefHeight="45.0" prefWidth="590.0" text="Price" />
-                                 <Button fx:id="view_profile_button" layoutX="735.0" layoutY="281.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="158.0" text="View tutor profile details" />
-                                 <Button fx:id="book_session_button" layoutX="626.0" layoutY="281.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="99.0" text="Book session" />
+                                 <Button fx:id="view_profile_button" onAction="#onViewTutorProfile" layoutX="735.0" layoutY="281.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="158.0" text="View tutor profile details" />
+                                 <Button fx:id="book_session_button" onAction="#onBookSession" layoutX="626.0" layoutY="281.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="99.0" text="Book session" />
                               </children>
                            </AnchorPane>
                      </content>
                    </Tab>
                  </tabs>
                </TabPane>
-            </children></AnchorPane>
-        </Scene>
-    </scene>
-</Stage>
+            </children>
+</AnchorPane>
