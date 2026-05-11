@@ -18,6 +18,7 @@ public class SessionViewController
   @FXML private TextArea price_textArea;
   @FXML private Button view_profile_button;
   @FXML private Button book_session_button;
+  @FXML private Button back_button;
 
   private Region root;
   private SessionViewModel viewModel;
@@ -59,6 +60,15 @@ public class SessionViewController
     return root;
   }
 
+  private void setUpButtons()
+  {
+    back_button.setOnAction(event -> viewHandler.openStudentMainPageView());
+
+    book_session_button.setOnAction(event -> onBookSession());
+
+    view_profile_button.setOnAction(event -> onViewTutorProfile());
+  }
+
   @FXML private void onBookSession()
   {
     viewModel.bookSession();
@@ -73,6 +83,8 @@ public class SessionViewController
       viewHandler.openTutorProfileView(tutor);
     }
   }
+
+
 
 
 }

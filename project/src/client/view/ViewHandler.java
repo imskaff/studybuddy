@@ -10,6 +10,7 @@ import server.model.Tutor;
 public class ViewHandler {
     private final ViewModelFactory viewModelFactory;
     private Stage primaryStage;
+    private Scene currentScene;
 
     public ViewHandler(ViewModelFactory viewModelFactory) {
         this.viewModelFactory = viewModelFactory;
@@ -119,4 +120,27 @@ public class ViewHandler {
     // tutorProfileViewModel.loadTutor(tutor);
     // open TutorProfileView.fxml
   }
+
+  /*public void openStudentMainPageView()
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("/view/StudentMainPageView.fxml"));
+      Region root = loader.load();
+
+      StudentMainPageViewController controller = loader.getController();
+      controller.init(this, viewModelFactory.getStudentMainPageViewModel(), root);
+
+      currentScene.setRoot(root);
+      primaryStage.setTitle("Session Details");
+      primaryStage.setScene(currentScene);
+      primaryStage.show();
+
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }*/
 }
