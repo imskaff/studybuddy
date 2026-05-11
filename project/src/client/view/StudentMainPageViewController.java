@@ -69,8 +69,8 @@ public class StudentMainPageViewController {
     }
 
     @FXML private void onViewDetailsButtonClicked() {
-        // TODO: open session detail / booking view
 
+      viewHandler.openSessionView();
         
     }
 
