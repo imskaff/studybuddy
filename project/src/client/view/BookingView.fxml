@@ -23,7 +23,7 @@
                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="220.0" prefWidth="300.0">
                               <children>
                                  <TextField fx:id="startDate_textField" layoutX="22.0" layoutY="38.0" prefHeight="25.0" prefWidth="164.0" promptText="yyyy-MM-dd HH:mm" />
-                                 <Text layoutX="22.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start date" />
+                                 <Text layoutX="22.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start date *" />
                                  <Text layoutX="22.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="End date" />
                                  <Button fx:id="confirm_btn" layoutX="229.0" layoutY="152.0" mnemonicParsing="false" text="Confirm" />
                                  <Button fx:id="back_btn" layoutX="172.0" layoutY="152.0" mnemonicParsing="false" text="Back" />
