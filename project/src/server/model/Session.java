@@ -12,6 +12,7 @@ public class Session {
     private LocalDateTime end_date;
     private Tutor tutor;
     private Student student;
+    private 
 
     public Session(int id, String description, double price, String subject, String location, LocalDateTime start_date, LocalDateTime end_date, Tutor tutor, Student student) {
         this.id = id;
