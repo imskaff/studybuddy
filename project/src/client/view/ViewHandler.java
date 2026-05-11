@@ -77,13 +77,12 @@ public class ViewHandler {
     }
 
 
-    public void openSessionView(Session session) {
+    public void openSessionView(Session selected) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("SessionView.fxml"));
             Region root = loader.load();
             SessionViewController controller = loader.getController();
-            viewModelFactory.getSessionViewModel().loadSession(session);
             controller.init(this, viewModelFactory.getSessionViewModel(), root);
 
             Scene scene = new Scene(root);
@@ -106,5 +105,26 @@ public class ViewHandler {
     // open TutorProfileView.fxml
   }
 
+  /*public void openStudentMainPageView()
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("/view/StudentMainPageView.fxml"));
+      Region root = loader.load();
 
+      StudentMainPageViewController controller = loader.getController();
+      controller.init(this, viewModelFactory.getStudentMainPageViewModel(), root);
+
+      currentScene.setRoot(root);
+      primaryStage.setTitle("Session Details");
+      primaryStage.setScene(currentScene);
+      primaryStage.show();
+
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }*/
 }
