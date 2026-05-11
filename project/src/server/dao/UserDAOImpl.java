@@ -1,13 +1,12 @@
 package server.dao;
 
-import server.model.Student;
-import server.model.Tutor;
-import server.model.User;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import server.model.Student;
+import server.model.Tutor;
+import server.model.User;
 
 public class UserDAOImpl implements UserDAO {
     private static UserDAOImpl instance;
@@ -24,7 +23,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=sep2", "postgres",
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=studybuddy", "postgres",
                 "password");
     }
 
@@ -118,6 +117,48 @@ public class UserDAOImpl implements UserDAO {
             statement.setInt(1, user.getId());
             statement.executeUpdate();
         }
+    }
+
+    @Override
+    public User readByEmailAndPassword(String email, String password) throws SQLException {
+        String sql = "SELECT u.id, u.first_name, u.last_name, u.date_of_birth, u.email, u.phone, "
+                + "u.password, u.gender, u.user_type, t.education_level "
+                + "FROM users u LEFT JOIN tutors t ON u.id = t.user_id "
+                + "WHERE u.email = ? AND u.password = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement s = connection.prepareStatement(sql)) {
+            s.setString(1, email);
+            s.setString(2, password);
+            ResultSet rs = s.executeQuery();
+            if (!rs.next()) return null;
+            int id = rs.getInt("id");
+            String first_name = rs.getString("first_name");
+            String last_name = rs.getString("last_name");
+            LocalDate dob = rs.getObject("date_of_birth", LocalDate.class);
+            String em = rs.getString("email");
+            String phone = rs.getString("phone");
+            String pwd = rs.getString("password");
+            String gender = rs.getString("gender");
+            String type = rs.getString("user_type");
+            String educationLevel = rs.getString("education_level");
+            ArrayList<String> languages = readLanguages(connection, id);
+            if ("tutor".equalsIgnoreCase(type)) {
+                return new Tutor(first_name, last_name, dob, em, phone, pwd, gender, languages,
+                        educationLevel != null ? educationLevel : "N/A", type, id);
+            }
+            return new Student(first_name, last_name, dob, em, phone, pwd, gender, languages, id, type);
+        }
+    }
+
+    private ArrayList<String> readLanguages(Connection connection, int userId) throws SQLException {
+        ArrayList<String> languages = new ArrayList<>();
+        try (PreparedStatement s = connection.prepareStatement(
+                "SELECT language FROM user_languages WHERE user_id = ?")) {
+            s.setInt(1, userId);
+            ResultSet rs = s.executeQuery();
+            while (rs.next()) languages.add(rs.getString("language"));
+        }
+        return languages;
     }
 
     @Override

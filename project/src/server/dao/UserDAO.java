@@ -18,4 +18,6 @@ public interface UserDAO {
     void delete(User user) throws SQLException;
 
     List<User> readAll() throws SQLException;
+
+    User readByEmailAndPassword(String email, String password) throws SQLException;
 }

@@ -62,6 +62,8 @@ public class StudentMainPageViewController {
         phone_textArea.textProperty().bindBidirectional(viewModel.phoneProperty());
         gender_textArea.textProperty().bindBidirectional(viewModel.genderProperty());
         language_textArea.textProperty().bindBidirectional(viewModel.languagesProperty());
+
+        viewModel.loadData();
     }
 
     public Region getRoot() {

@@ -34,8 +34,12 @@ public class StudentMainPageViewModel implements PropertyChangeListener {
         gender = new SimpleStringProperty("");
         languages = new SimpleStringProperty("");
         model.addPropertyChangeListener(this);
+    }
+
+    public void loadData() {
         loadSessions();
-        loadProfile(null);
+        Student student = model.getLoggedInStudent();
+        if (student != null) loadProfile(student);
     }
 
     public void loadSessions() {
