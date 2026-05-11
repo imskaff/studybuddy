@@ -3,7 +3,7 @@ package client.viewmodel;
 import client.model.Model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.time.Duration;
+import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -17,25 +17,29 @@ public class SessionViewModel implements PropertyChangeListener {
     private Model model;
     private ObservableList<Session> sessions;
     private Session selectedSession;
-    private Student loggedInStudent;
 
     private final StringProperty description;
     private final StringProperty tutorName;
     private final StringProperty subject;
     private final StringProperty location;
-    private final StringProperty duration;
+    private final StringProperty startDate;
+    private final StringProperty endDate;
     private final StringProperty price;
+    private Student loggedInStudent;
+
+    private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     public SessionViewModel(Model model) {
         this.model = model;
         this.sessions = FXCollections.observableArrayList();
 
         this.description = new SimpleStringProperty("");
-        this.tutorName = new SimpleStringProperty("");
-        this.subject = new SimpleStringProperty("");
-        this.location = new SimpleStringProperty("");
-        this.duration = new SimpleStringProperty("");
-        this.price = new SimpleStringProperty("");
+        this.tutorName   = new SimpleStringProperty("");
+        this.subject     = new SimpleStringProperty("");
+        this.location    = new SimpleStringProperty("");
+        this.startDate   = new SimpleStringProperty("");
+        this.endDate     = new SimpleStringProperty("");
+        this.price       = new SimpleStringProperty("");
         model.addPropertyChangeListener(this);
         loadFromModel();
     }
@@ -46,20 +50,16 @@ public class SessionViewModel implements PropertyChangeListener {
     }
 
     public void loadSession(Session session) {
-       this.selectedSession = session;
+        this.selectedSession = session;
         if (session != null) {
-            description.set(session.getDescription());
+            description.set(session.getDescription() != null ? session.getDescription() : "");
             tutorName.set(session.getTutor() != null
                 ? session.getTutor().getFirst_name() + " " + session.getTutor().getLast_name()
                 : "");
-            subject.set(session.getSubject());
-            location.set(session.getLocation());
-            if (session.getStart_date() != null && session.getEnd_date() != null) {
-                long minutes = Duration.between(session.getStart_date(), session.getEnd_date()).toMinutes();
-                duration.set(minutes + " min");
-            } else {
-                duration.set("");
-            }
+            subject.set(session.getSubject() != null ? session.getSubject() : "");
+            location.set(session.getLocation() != null ? session.getLocation() : "");
+            startDate.set(session.getStart_date() != null ? session.getStart_date().format(FMT) : "");
+            endDate.set(session.getEnd_date()   != null ? session.getEnd_date().format(FMT)   : "");
             price.set(String.valueOf(session.getPrice()));
         }
     }
@@ -68,69 +68,46 @@ public class SessionViewModel implements PropertyChangeListener {
         return sessions;
     }
 
-  public Session getSelectedSession()
-  {
-    return selectedSession;
-  }
-
-  public void setLoggedInStudent(Student loggedInStudent) {
-    this.loggedInStudent = loggedInStudent;
-  }
-
-  public Tutor getSelectedTutor() {
-    if (selectedSession == null) {
-      return null;
+    public Session getSelectedSession() {
+        return selectedSession;
     }
 
-    return selectedSession.getTutor();
-  }
-
-  public StringProperty descriptionProperty() {
-        return description;
+    public void setLoggedInStudent(Student loggedInStudent) {
+        this.loggedInStudent = loggedInStudent;
     }
 
-    public StringProperty tutorProperty() {
-        return tutorName;
+    public Tutor getSelectedTutor() {
+        if (selectedSession == null) return null;
+        return selectedSession.getTutor();
     }
 
-    public StringProperty subjectProperty() {
-        return subject;
-    }
-
-    public StringProperty locationProperty() {
-        return location;
-    }
-
-    public StringProperty durationProperty() {
-        return duration;
-    }
-
-    public StringProperty priceProperty() {
-        return price;
-    }
+    public StringProperty descriptionProperty() { return description; }
+    public StringProperty tutorProperty()        { return tutorName;   }
+    public StringProperty subjectProperty()      { return subject;     }
+    public StringProperty locationProperty()     { return location;    }
+    public StringProperty startDateProperty()    { return startDate;   }
+    public StringProperty endDateProperty()      { return endDate;     }
+    public StringProperty priceProperty()        { return price;       }
 
     public void bookSession() {
-      if (selectedSession == null) {
-        System.out.println("No session selected");
-        return;
-      }
+        if (selectedSession == null) {
+            System.out.println("No session selected");
+            return;
+        }
 
-      Student loggedInStudent = model.getLoggedInStudent();
+        Student loggedInStudent = model.getLoggedInStudent();
 
-      if (loggedInStudent == null) {
-        System.out.println("No student logged in");
-        return;
-      }
+        if (loggedInStudent == null) {
+            System.out.println("No student logged in");
+            return;
+        }
 
-      try {
-        Tutor sessionTutor = selectedSession.getTutor();
-
-        model.bookSession(loggedInStudent, sessionTutor, selectedSession);
-
-        System.out.println("Session booked");
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+        try {
+            model.bookSession(loggedInStudent, selectedSession.getTutor(), selectedSession);
+            System.out.println("Session booked");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -144,5 +121,4 @@ public class SessionViewModel implements PropertyChangeListener {
                 break;
         }
     }
-
 }

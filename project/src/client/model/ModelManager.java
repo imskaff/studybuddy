@@ -4,12 +4,14 @@ import java.beans.PropertyChangeSupport;
 
 import client.mediator.Client;
 import client.mediator.ServerModel;
+import server.dao.SessionDAOImpl;
 import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ModelManager implements Model, PropertyChangeListener {
@@ -35,7 +37,21 @@ public class ModelManager implements Model, PropertyChangeListener {
 
     @Override
     public ArrayList<Session> getAllSessions() {
-        return client.getAllSessions();
+        try {
+            return new ArrayList<>(SessionDAOImpl.getInstance().readAvailable());
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to load sessions: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public ArrayList<Session> getBookedSessions() {
+        try {
+            if (loggedInStudent == null) return new ArrayList<>();
+            return new ArrayList<>(SessionDAOImpl.getInstance().readByStudent(loggedInStudent.getId()));
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to load booked sessions: " + e.getMessage(), e);
+        }
     }
 
    @Override public void setLoggedInStudent(Student student)

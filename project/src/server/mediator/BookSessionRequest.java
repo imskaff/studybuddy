@@ -1,6 +1,11 @@
 package server.mediator;
 
+//BookSessionRequest is a class that represents the booking data
+// sent from the client to the server. It includes the student ID,
+// session ID, date, and time, and it is converted to and from JSON
+// using Gson in ClientHandler.
 public class BookSessionRequest {
+    private final String type = "BOOK_SESSION";
     private int studentId;
     private int sessionId;
     private String date;
@@ -13,6 +18,7 @@ public class BookSessionRequest {
         this.time = time;
     }
 
+    public String getType()    { return type; }
     public int getStudentId() { return studentId; }
     public int getSessionId() { return sessionId; }
     public String getDate()   { return date; }

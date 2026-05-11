@@ -1,84 +1,84 @@
 package server.mediator;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import server.dao.SessionDAOImpl;
+import server.dao.UserDAOImpl;
+import server.model.Session;
 import server.model.SessionModel;
-import server.model.*;
-import server.temp.BookSessionRequest;
-import server.temp.Response;
+import server.model.Student;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ClientHandler implements Runnable {
-    // Used to read text coming from the client through the socket
     private final BufferedReader in;
-
-    // Used to send text back to the client through the socket
     private final PrintWriter out;
-
-    // Used to access the server-side booking logic
     private final SessionModel model;
     private final Socket socket;
-
-    private Gson gson;
+    private final Gson gson;
 
     public ClientHandler(Socket socket, SessionModel model) throws IOException {
         this.socket = socket;
         this.model = model;
-        // Creates the input stream attached to the socket
-        // It allows the server to receive data from the client
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-        // Creates the output stream attached to the socket
-        // It allows the server to send data back to the client
-        this.out = new PrintWriter(socket.getOutputStream());
-
+        this.out = new PrintWriter(socket.getOutputStream(), true);
         this.gson = new Gson();
     }
 
     @Override
     public void run() {
         try {
-            // Reads one line of text sent by the client --> JSON
-            String clientText = in.readLine();
-
-            // Prints the received JSON for debugging
-            System.out.println("Client> " + clientText);
-
-            // Converts the JSON text into a BookSessionRequest object
-            BookSessionRequest request = gson.fromJson(clientText, BookSessionRequest.class);
-
-            // Prints the converted request object for debugging
-            System.out.println("Request: " + request);
-
-            // This object will store the server's answer
-            Response reply;
-
-            if (request.getDate() == null || request.getTime() == null
-                    || request.getDate().isEmpty() || request.getTime().isEmpty()) {
-                // If date or time is missing, create an error response
-                reply = new Response("ERROR", "Invalid date or/and time");
-            } else {
-                // If the request looks valid, create a success response
-                reply = new Response("OK", "Booking confirmed");
+            String line;
+            while ((line = in.readLine()) != null) {
+                System.out.println("Client> " + line);
+                handleRequest(line);
             }
-
-            System.out.println("Reply: " + reply);
-
-            // Converts the Response object into JSON text
-            String replyJson = gson.toJson(reply);
-
-            // Prints the JSON response for debugging
-            System.out.println("Server> " + replyJson);
-
-            // Sends the JSON response back to the client
-            out.println(replyJson);
+        } catch (SocketException e) {
+            System.out.println("Client disconnected");
         } catch (Exception e) {
             e.printStackTrace();
-
+        } finally {
+            try { socket.close(); } catch (IOException ignored) {}
         }
+    }
+
+    private void handleRequest(String line) {
+        try {
+            JsonObject obj = gson.fromJson(line, JsonObject.class);
+            String type = obj.has("type") ? obj.get("type").getAsString() : "";
+
+            switch (type) {
+                case "BOOK_SESSION" -> handleBookSession(line);
+                default -> sendResponse(new Response("ERROR", "Unknown request type: " + type));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            sendResponse(new Response("ERROR", "Server error: " + e.getMessage()));
+        }
+    }
+
+    private void handleBookSession(String line) throws Exception {
+        BookSessionRequest request = gson.fromJson(line, BookSessionRequest.class);
+        System.out.println("Request: " + request);
+
+        Session session = SessionDAOImpl.getInstance().readByInt(request.getSessionId());
+        Student student = (Student) UserDAOImpl.getInstance().readByInt(request.getStudentId());
+        session.setStudent(student);
+        SessionDAOImpl.getInstance().update(session);
+
+        Response reply = new Response("OK", "Session booked");
+        System.out.println("Reply: " + reply);
+        sendResponse(reply);
+    }
+
+    private void sendResponse(Response response) {
+        out.println(gson.toJson(response));
     }
 }

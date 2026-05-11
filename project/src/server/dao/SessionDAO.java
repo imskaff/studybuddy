@@ -1,12 +1,11 @@
 package server.dao;
 
-import server.model.Session;
-import server.model.Student;
-import server.model.Tutor;
-
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import server.model.Session;
+import server.model.Student;
+import server.model.Tutor;
 
 public interface SessionDAO {
     Session create(String description, double price, String subject, String location, LocalDateTime start_date,
@@ -19,4 +18,8 @@ public interface SessionDAO {
     void delete(Session session) throws SQLException;
 
     List<Session> readAll() throws SQLException;
+
+    List<Session> readAvailable() throws SQLException;
+
+    List<Session> readByStudent(int studentId) throws SQLException;
 }

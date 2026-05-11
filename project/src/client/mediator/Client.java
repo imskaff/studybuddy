@@ -1,5 +1,6 @@
 package client.mediator;
 
+import com.google.gson.Gson;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.BufferedReader;
@@ -8,23 +9,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import server.mediator.BookSessionRequest;
+import server.mediator.Response;
 import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
 
-// This class is the client-side implementation of the SessionModel interface.
-// It is responsible for communicating with the server using sockets.
-// It converts BookSessionRequest objects into JSON, sends them to the server,
-// receives a JSON response, converts it into a Response object,
-// and returns true or false based on the result.
 public class Client implements ServerModel {
-
-    // Address of the server
-    private final String HOST = "localhost";
-
-    // Port number used to connect to the server
-    // Must match the port in BookingServer
-    private final int PORT = 4025;
 
     private Socket socket;
     private BufferedReader in;
@@ -46,13 +37,6 @@ public class Client implements ServerModel {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         System.out.println("Connected to server " + host + ":" + port);
-
-        // TODO: gotta check how we actually did this part, commented for now - @adam
-        // this is for receiving messages from the server asynchronously (e.g. for updates)
-
-        // Thread receiverThread = new Thread(new ReceiverThread(in));
-        // receiverThread.setDaemon(true);
-        // receiverThread.start();
     }
 
     @Override
@@ -68,67 +52,37 @@ public class Client implements ServerModel {
     }
 
     @Override
+    public Session bookSession(Student student, Tutor tutor, Session session) {
+        if (socket == null || socket.isClosed()) {
+            throw new IllegalStateException("Not connected to server");
+        }
+        try {
+            Gson gson = new Gson();
+            BookSessionRequest req = new BookSessionRequest(student.getId(), session.getId(), null, null);
+            out.println(gson.toJson(req));
+
+            String replyJson = in.readLine();
+            Response reply = gson.fromJson(replyJson, Response.class);
+
+            if ("OK".equals(reply.getStatus())) {
+                session.setStudent(student);
+                support.firePropertyChange("SessionBooked", null, session);
+            } else {
+                System.out.println("Booking failed: " + reply.getMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return session;
+    }
+
+    @Override
     public boolean bookSession(int studentId, int sessionId, String date, String time) {
-        // // Used to convert Java objects <-> JSON
-        // Gson gson = new Gson();
-        //
-        // try
-        // {
-        // // Creates a connection to the server
-        // Socket socket = new Socket(HOST, PORT);
-        //
-        // // Input stream to read the server's reply
-        // BufferedReader in = new BufferedReader(new
-        // InputStreamReader(socket.getInputStream()));
-        //
-        // // Output stream to send data to the server
-        // PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-        //
-        // // Create request object with booking data
-        // BookSessionRequest request = new BookSessionRequest(studentId, sessionId,
-        // date, time);
-        //
-        // // Convert request object into JSON
-        // String requestJson = gson.toJson(request);
-        //
-        // // Print request for debugging
-        // System.out.println("Client> " + requestJson);
-        //
-        // // Send JSON request to the server
-        // out.println(requestJson);
-        //
-        // // Read JSON response from the server
-        // String replyJson = in.readLine();
-        //
-        // // Print response for debugging
-        // System.out.println("Server> " + replyJson);
-        //
-        // // Convert JSON response into Response object
-        // Response reply = gson.fromJson(replyJson, Response.class);
-        //
-        // // Close the connection after request/reply
-        // socket.close();
-        //
-        // // Return true if booking was successful, false otherwise
-        // return "OK".equals(reply.getStatus());
-        // }
-        // catch (IOException e)
-        // {
-        // e.printStackTrace();
-        // return false;
-        // }
         return false;
     }
 
     @Override
-    public Session bookSession(Student student, Tutor tutor, Session session) {
-        // TODO: send request to server, return created session
-        return null;
-    }
-
-    @Override
     public ArrayList<Session> getAllSessions() {
-        // TODO: fetch from server
         return new ArrayList<>();
     }
 }

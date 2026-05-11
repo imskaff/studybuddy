@@ -4,14 +4,17 @@ import client.model.Model;
 
 public class ViewModelFactory {
     private SessionViewModel sessionViewModel;
-    private BookingViewModel bookingViewModel;
     private TutorMainPageViewModel tutorMainPageViewModel;
     private StudentMainPageViewModel studentMainPageViewModel;
     private WelcomeViewModel welcomeViewModel;
 
     public ViewModelFactory(Model model) {
+        try {
+            model.connect();
+        } catch (Exception e) {
+            System.out.println("Could not connect to server: " + e.getMessage());
+        }
         sessionViewModel = new SessionViewModel(model);
-        bookingViewModel = new BookingViewModel(model);
         tutorMainPageViewModel = new TutorMainPageViewModel(model);
         studentMainPageViewModel = new StudentMainPageViewModel(model);
         welcomeViewModel = new WelcomeViewModel(model);
@@ -23,10 +26,6 @@ public class ViewModelFactory {
 
     public SessionViewModel getSessionViewModel() {
         return sessionViewModel;
-    }
-
-    public BookingViewModel getBookingViewModel() {
-        return bookingViewModel;
     }
 
     public TutorMainPageViewModel getTutorMainPageViewModel() {

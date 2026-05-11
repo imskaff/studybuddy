@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class TestDBConnection {
+public class DBConnectionTest {
     public static void main(String[] args) {
         String url = "jdbc:postgresql://localhost:5432/postgres?currentSchema=studybuddy";
 

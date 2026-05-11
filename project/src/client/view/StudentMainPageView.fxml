@@ -92,7 +92,7 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <TableView prefHeight="616.0" prefWidth="900.0">
+                                <TableView fx:id="bookedSessions_tableView" prefHeight="616.0" prefWidth="900.0">
                                     <columns>
                                         <TableColumn fx:id="title_column_bookedS" prefWidth="222.92862784862518" text="Title" />
                                         <TableColumn fx:id="price_column_bookedS" prefWidth="165.07137298583984" text="Price" />

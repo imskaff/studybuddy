@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import server.model.Session;
 import server.model.Tutor;
 
 public class ViewHandler {
@@ -75,30 +76,14 @@ public class ViewHandler {
         }
     }
 
-    public void openBookingView() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("BookingView.fxml"));
-            Region root = loader.load();
-            BookingViewController controller = loader.getController();
-            controller.init(this, viewModelFactory.getBookingViewModel(), root);
 
-            Scene scene = new Scene(root);
-            primaryStage.setTitle("Booking");
-            primaryStage.setScene(scene);
-            primaryStage.setResizable(false);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void openSessionView() {
+    public void openSessionView(Session session) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("SessionView.fxml"));
             Region root = loader.load();
             SessionViewController controller = loader.getController();
+            viewModelFactory.getSessionViewModel().loadSession(session);
             controller.init(this, viewModelFactory.getSessionViewModel(), root);
 
             Scene scene = new Scene(root);
@@ -121,26 +106,5 @@ public class ViewHandler {
     // open TutorProfileView.fxml
   }
 
-  /*public void openStudentMainPageView()
-  {
-    try
-    {
-      FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource("/view/StudentMainPageView.fxml"));
-      Region root = loader.load();
 
-      StudentMainPageViewController controller = loader.getController();
-      controller.init(this, viewModelFactory.getStudentMainPageViewModel(), root);
-
-      currentScene.setRoot(root);
-      primaryStage.setTitle("Session Details");
-      primaryStage.setScene(currentScene);
-      primaryStage.show();
-
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-  }*/
 }

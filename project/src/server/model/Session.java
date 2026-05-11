@@ -1,5 +1,8 @@
 package server.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.time.LocalDateTime;
 
 public class Session {
@@ -12,7 +15,10 @@ public class Session {
     private LocalDateTime end_date;
     private Tutor tutor;
     private Student student;
-    private 
+
+    private boolean toBeCanceled;
+    private SessionState state;
+    private PropertyChangeSupport support;
 
     public Session(int id, String description, double price, String subject, String location, LocalDateTime start_date, LocalDateTime end_date, Tutor tutor, Student student) {
         this.id = id;
@@ -24,6 +30,10 @@ public class Session {
         this.end_date = end_date;
         this.tutor = tutor;
         this.student = student;
+        this.toBeCanceled = false;
+        this.state = new Booked();
+
+        this.support = new PropertyChangeSupport(this);
     }
 
     public int getId() {
@@ -92,5 +102,37 @@ public class Session {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public SessionState getState() {
+        return state;
+    }
+
+    public boolean isToBeCanceled()
+    {
+        return toBeCanceled;
+    }
+
+    public void setToBeCanceled(boolean toBeCanceled)
+    {
+        this.toBeCanceled = toBeCanceled;
+    }
+
+    public void setState(SessionState newState) {
+
+        SessionState oldState = this.state;
+        this.state = newState;
+
+        support.firePropertyChange("state", oldState, newState);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener)
+    {
+        support.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener)
+    {
+        support.removePropertyChangeListener(listener);
     }
 }
