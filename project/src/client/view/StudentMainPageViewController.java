@@ -16,12 +16,22 @@ import server.model.Tutor;
 
 public class StudentMainPageViewController {
     @FXML private TableView<Session> main_tableView;
+
     @FXML private TableColumn<Session, String> main_column_title;
     @FXML private TableColumn<Session, String> main_column_price;
     @FXML private TableColumn<Session, String> main_column_date;
     @FXML private TableColumn<Session, String> main_column_tutor;
+
+    @FXML private TableColumn<Session, String> title_column_bookedS;
+    @FXML private TableColumn<Session, String> price_column_bookedS;
+    @FXML private TableColumn<Session, String> date_column_bookedS;
+    @FXML private TableColumn<Session, String> tutor_column_bookedS;
+    @FXML private TableColumn<Session, String> status_column_bookedS;
+
+
     @FXML private Tab main_tab;
     @FXML private Tab profile_tab;
+    @FXML private Tab bookedSessions_tab;
     @FXML private TextArea fname_textArea;
     @FXML private TextArea lname_textArea;
     @FXML private TextArea email_textArea;
@@ -29,6 +39,10 @@ public class StudentMainPageViewController {
     @FXML private TextArea gender_textArea;
     @FXML private TextArea dateOfBirth_textArea;
     @FXML private TextArea language_textArea;
+
+
+
+
 
     private Region root;
     private ViewHandler viewHandler;
