@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="359.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="359.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.student.TutorProfileViewController">
     <children>
         <TextField fx:id="fname_textField" layoutX="10.0" layoutY="61.0" />
         <TextField fx:id="lname_textField" layoutX="186.0" layoutY="60.0" />
@@ -26,6 +26,6 @@
         <Separator layoutY="30.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="4.0" prefWidth="359.0" />
         <Text layoutX="191.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Education" />
         <Separator layoutY="362.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="359.0" />
-        <Button fx:id="back_btn" layoutX="294.0" layoutY="374.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="53.0" text="Back" />
+        <Button fx:id="back_btn" layoutX="294.0" layoutY="374.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="53.0" text="Close" />
     </children>
 </AnchorPane>

@@ -2,9 +2,10 @@ package client.viewmodel;
 
 import client.model.Model;
 
+
 public class ViewModelFactory {
     private SessionViewModel sessionViewModel;
-    private TutorMainPageViewModel tutorMainPageViewModel;
+    private TutorProfileViewModel tutorProfileViewModel;
     private StudentMainPageViewModel studentMainPageViewModel;
     private WelcomeViewModel welcomeViewModel;
 
@@ -15,7 +16,7 @@ public class ViewModelFactory {
             System.out.println("Could not connect to server: " + e.getMessage());
         }
         sessionViewModel = new SessionViewModel(model);
-        tutorMainPageViewModel = new TutorMainPageViewModel(model);
+        tutorProfileViewModel = new TutorProfileViewModel(model);
         studentMainPageViewModel = new StudentMainPageViewModel(model);
         welcomeViewModel = new WelcomeViewModel(model);
     }
@@ -28,8 +29,8 @@ public class ViewModelFactory {
         return sessionViewModel;
     }
 
-    public TutorMainPageViewModel getTutorMainPageViewModel() {
-        return tutorMainPageViewModel;
+    public TutorProfileViewModel getTutorProfileViewModel() {
+        return tutorProfileViewModel;
     }
 
     public StudentMainPageViewModel getStudentMainPageViewModel() {

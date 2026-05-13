@@ -1,5 +1,6 @@
-package client.view;
+package client.view.student;
 
+import client.view.ViewHandler;
 import client.viewmodel.SessionViewModel;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

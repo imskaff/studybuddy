@@ -1,12 +1,12 @@
-package client.view;
+package client.view.student;
 
+import client.view.ViewHandler;
 import client.viewmodel.TutorProfileViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
-import javafx.stage.Stage;
 
 public class TutorProfileViewController {
     @FXML private TextField fname_textField;
@@ -20,12 +20,11 @@ public class TutorProfileViewController {
 
     private Region root;
     private TutorProfileViewModel viewModel;
-    private Stage popupStage;
+
 
     public TutorProfileViewController() {}
 
-    public void init(Stage popupStage, TutorProfileViewModel viewModel, Region root) {
-        this.popupStage = popupStage;
+    public void init(ViewHandler viewHandler, TutorProfileViewModel viewModel, Region root) {
         this.viewModel  = viewModel;
         this.root       = root;
 

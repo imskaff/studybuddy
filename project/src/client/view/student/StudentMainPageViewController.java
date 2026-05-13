@@ -1,5 +1,6 @@
-package client.view;
+package client.view.student;
 
+import client.view.ViewHandler;
 import client.viewmodel.StudentMainPageViewModel;
 import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleStringProperty;

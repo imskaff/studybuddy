@@ -1,5 +1,8 @@
 package client.view;
 
+import client.view.student.SessionViewController;
+import client.view.student.StudentMainPageViewController;
+import client.view.student.TutorProfileViewController;
 import client.viewmodel.ViewModelFactory;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -58,13 +61,13 @@ public class ViewHandler {
         }
     }
 
-    public void openTutorMainPageView() {
+    public void openTutorProfileView() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("TutorMainPageView.fxml"));
+            loader.setLocation(getClass().getResource("TutorProfileView.fxml"));
             Region root = loader.load();
-            TutorMainPageViewController controller = loader.getController();
-            controller.init(this, viewModelFactory.getTutorMainPageViewModel(), root);
+            TutorProfileViewController controller = loader.getController();
+            controller.init(this, viewModelFactory.getTutorProfileViewModel(), root);
 
             Scene scene = new Scene(root);
             primaryStage.setTitle("Tutor Main Page");
