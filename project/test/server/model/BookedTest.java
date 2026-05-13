@@ -1,7 +1,6 @@
 package server.model;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +10,6 @@ public class BookedTest
 {
   @Test void whenNowIsAfterEndDate_setStateToCompleted()
   {
-    //1. Arrange
     Booked booked = new Booked();
     Session mockSession = mock(Session.class);
 
@@ -20,18 +18,8 @@ public class BookedTest
 
     when(mockSession.getEnd_date()).thenReturn(endDate);
 
-    // Mock the static LocalDateTime.now() to return fixed time
-    try (MockedStatic<LocalDateTime> mockedTime = mockStatic(
-        LocalDateTime.class))
-    {
-      mockedTime.when(LocalDateTime::now).thenReturn(fixedNow);
+    booked.completed(mockSession, fixedNow);
 
-      // 2.Act
-      booked.completed(mockSession);
-    }
-
-    //3. Assert
-    // Verify that setState was called with an instance of Completed
     verify(mockSession, times(1)).setState(any(Completed.class));
   }
 
@@ -45,13 +33,7 @@ public class BookedTest
 
     when(mockSession.getEnd_date()).thenReturn(exactTime);
 
-    try(MockedStatic<LocalDateTime> mockedTime = mockStatic(
-        LocalDateTime.class))
-    {
-      mockedTime.when(LocalDateTime::now).thenReturn(exactTime);
-
-      booked.completed(mockSession);
-    }
+    booked.completed(mockSession, exactTime);
 
     verify(mockSession, times(1)).setState(any(Completed.class));
   }
@@ -67,11 +49,8 @@ public class BookedTest
 
     when(mockSession.getEnd_date()).thenReturn(endDate);
 
-    try (MockedStatic<LocalDateTime> mockedTime = mockStatic(LocalDateTime.class))
-    {
-      mockedTime.when(LocalDateTime::now).thenReturn(fixedNow);
-      booked.completed(mockSession);
-    }
+    booked.completed(mockSession, fixedNow);
+
     verify(mockSession, never()).setState(any());
   }
 }
