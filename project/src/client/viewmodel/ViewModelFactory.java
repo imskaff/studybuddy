@@ -8,6 +8,8 @@ public class ViewModelFactory {
     private TutorProfileViewModel tutorProfileViewModel;
     private StudentMainPageViewModel studentMainPageViewModel;
     private WelcomeViewModel welcomeViewModel;
+    private CreateStudentProfileViewModel createStudentViewModel;
+    private CreateTutorProfileViewModel createTutorViewModel;
 
     public ViewModelFactory(Model model) {
         try {
@@ -35,5 +37,13 @@ public class ViewModelFactory {
 
     public StudentMainPageViewModel getStudentMainPageViewModel() {
         return studentMainPageViewModel;
-    }   
+    }
+
+    public CreateStudentProfileViewModel getCreateStudentViewModel() {
+      return createStudentViewModel;
+    }
+
+    public CreateTutorProfileViewModel getCreateTutorViewModel() {
+      return createTutorViewModel;
+    }
 }
