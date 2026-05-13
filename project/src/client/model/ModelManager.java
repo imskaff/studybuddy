@@ -3,7 +3,7 @@ package client.model;
 import java.beans.PropertyChangeSupport;
 
 import client.mediator.Client;
-import client.mediator.ServerModel;
+import client.mediator.ClientModel;
 import server.dao.SessionDAOImpl;
 import server.model.Session;
 import server.model.Student;
@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ModelManager implements Model, PropertyChangeListener {
-    private final ServerModel client;
+    private final ClientModel client;
     private final PropertyChangeSupport support;
     private Student loggedInStudent;
 
