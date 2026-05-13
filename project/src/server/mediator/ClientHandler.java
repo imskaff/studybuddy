@@ -8,6 +8,7 @@ import server.dao.SessionDAOImpl;
 import server.dao.UserDAOImpl;
 import server.model.Session;
 import server.model.SessionModel;
+import server.model.SessionModelManager;
 import server.model.Student;
 
 import java.io.BufferedReader;
@@ -20,11 +21,11 @@ import java.net.SocketException;
 public class ClientHandler implements Runnable {
     private final BufferedReader in;
     private final PrintWriter out;
-    private final SessionModel model;
+    private final SessionModelManager model;
     private final Socket socket;
     private final Gson gson;
 
-    public ClientHandler(Socket socket, SessionModel model) throws IOException {
+    public ClientHandler(Socket socket, SessionModelManager model) throws IOException {
         this.socket = socket;
         this.model = model;
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));

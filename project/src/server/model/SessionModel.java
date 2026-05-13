@@ -10,7 +10,7 @@ public interface SessionModel {
 
     Session getSession(int index);
 
-    Session getSessionById(int index);
+    //Session getSessionById(int index);
 
     void removeSessionById(int id);
 
@@ -19,4 +19,20 @@ public interface SessionModel {
     void removeSession(int index);
 
     void addPropertyChangeListener(PropertyChangeListener listener);
+
+  boolean bookSession(Student student, Session session);
+
+  boolean createSession(Session session);
+
+  boolean editSession(Session updatedSession);
+
+  boolean deleteSession(int sessionId);
+
+  Session getSessionById(int sessionId);
+
+  boolean createStudentProfile(Student student);
+
+  boolean createTutorProfile(Tutor tutor);
+
+  boolean handleTutorRegistration(int tutorId, String action);
 }

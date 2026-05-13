@@ -1,32 +1,46 @@
 package server.mediator;
 
-//BookSessionRequest is a class that represents the booking data
-// sent from the client to the server. It includes the student ID,
-// session ID, date, and time, and it is converted to and from JSON
-// using Gson in ClientHandler.
 public class BookSessionRequest {
-    private final String type = "BOOK_SESSION";
-    private int studentId;
-    private int sessionId;
-    private String date;
-    private String time;
+  // Identifies the type of request sent to the server
+  private String type = "BOOK_SESSION";
 
-    public BookSessionRequest(int studentId, int sessionId, String date, String time) {
-        this.studentId = studentId;
-        this.sessionId = sessionId;
-        this.date = date;
-        this.time = time;
-    }
+  private int studentId;
+  // ID of the student who is booking the session
 
-    public String getType()    { return type; }
-    public int getStudentId() { return studentId; }
-    public int getSessionId() { return sessionId; }
-    public String getDate()   { return date; }
-    public String getTime()   { return time; }
+  private int sessionId;
+  // ID of the session the student wants to book
 
-    @Override
-    public String toString() {
-        return "BOOK_SESSION{studentId=" + studentId + ", sessionId=" + sessionId
-                + ", date='" + date + "', time='" + time + "'}";
-    }
+
+
+  public BookSessionRequest(int studentId, int sessionId)
+  {
+    this.studentId = studentId;
+    this.sessionId = sessionId;
+  }
+
+  // Getter used by the server to identify the request type
+  public String getType()
+  {
+    return type;
+  }
+
+  // Getters are needed so the server can read the values after converting from JSON
+  public int getStudentId()
+  {
+    return studentId;
+  }
+
+  public int getSessionId()
+  {
+    return sessionId;
+  }
+
+  @Override
+  public String toString()
+  {
+    return "BOOK_SESSION{" +
+        "studentId=" + studentId +
+        ", sessionId=" + sessionId +
+        '}';
+  }
 }
