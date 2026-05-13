@@ -28,9 +28,6 @@ public class Client implements ClientModel
   // Must match the port in BookingServer
   private final int PORT = 4025;
 
-    private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
     private final PropertyChangeSupport support;
 
     public Client() {
@@ -48,7 +45,7 @@ public class Client implements ClientModel
 
   }
 
-  @Override
+ /*@Override
     public void connect(String host, int port) throws Exception {
         socket = new Socket(host, port);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -67,6 +64,7 @@ public class Client implements ClientModel
             e.printStackTrace();
         }
     }
+  */
 
   // This helper method is used to send any request object to the server.
   // It converts the request into JSON, sends it through the socket,
