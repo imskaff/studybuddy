@@ -9,9 +9,9 @@ import server.model.Tutor;
 // client-side
 public interface ClientModel
 {
-    void connect(String host, int port) throws Exception;
+    //void connect(String host, int port) throws Exception;
 
-    void disconnect() throws Exception;
+    //void disconnect() throws Exception;
 
   boolean bookSession(int studentId, int sessionId);
 
