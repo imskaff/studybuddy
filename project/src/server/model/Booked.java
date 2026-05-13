@@ -7,8 +7,11 @@ public record Booked() implements SessionState
     @Override
     public void completed(Session session)
     {
-        LocalDateTime now = LocalDateTime.now();
+        completed(session, LocalDateTime.now());
+    }
 
+    void completed(Session session, LocalDateTime now)
+    {
         if(now.isAfter(session.getEnd_date()) || now.isEqual(session.getEnd_date()))
         {
             session.setState(new Completed());

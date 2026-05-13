@@ -104,4 +104,13 @@ public abstract class User {
     public void setType(String type) {
         this.type = type;
     }
+
+  @Override public String toString()
+  {
+    return "User{" + "id=" + id + ", first_name='" + first_name + '\''
+        + ", last_name='" + last_name + '\'' + ", date_of_birth="
+        + date_of_birth + ", email='" + email + '\'' + ", phone='" + phone
+        + '\'' + ", password='" + password + '\'' + ", gender='" + gender + '\''
+        + ", languages=" + languages + ", type='" + type + '\'' + '}';
+  }
 }
