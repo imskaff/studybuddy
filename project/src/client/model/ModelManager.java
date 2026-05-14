@@ -18,6 +18,7 @@ public class ModelManager implements Model, PropertyChangeListener {
     private final ClientModel client;
     private final PropertyChangeSupport support;
     private Student loggedInStudent;
+    private Tutor loggedInTutor;
 
     public ModelManager() {
         client = new Client();
@@ -67,12 +68,42 @@ public class ModelManager implements Model, PropertyChangeListener {
     return loggedInStudent;
    }
 
-    @Override
+   @Override public void setLoggedInTutor(Tutor tutor)
+   {
+     this.loggedInTutor = tutor;
+   }
+
+  @Override public Tutor getLoggedInTutor()
+  {
+    return loggedInTutor;
+  }
+
+  @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
 
-    @Override
+  @Override public void complete(Session session)
+  {
+    session.complete(session);
+  }
+
+  @Override public void book(Session session)
+  {
+    session.book(session);
+  }
+
+  @Override public void cancel(Session session)
+  {
+    session.cancel(session);
+  }
+
+  @Override public void remove(Session session)
+  {
+    session.remove(session);
+  }
+
+  @Override
     public void propertyChange(PropertyChangeEvent evt) {
         support.firePropertyChange(evt);
     }

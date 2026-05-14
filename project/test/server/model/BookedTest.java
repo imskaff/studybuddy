@@ -8,9 +8,9 @@ import static org.mockito.Mockito.*;
 
 public class BookedTest
 {
-  @Test void whenNowIsAfterEndDate_setStateToCompleted()
+  @Test void whenNowIsAfterEndDate_setStateToComplete()
   {
-    Booked booked = new Booked();
+    Book book = new Book();
     Session mockSession = mock(Session.class);
 
     LocalDateTime endDate = LocalDateTime.of(2026, 5, 20, 10, 0);
@@ -18,30 +18,30 @@ public class BookedTest
 
     when(mockSession.getEnd_date()).thenReturn(endDate);
 
-    booked.completed(mockSession, fixedNow);
+    book.complete(mockSession, fixedNow);
 
-    verify(mockSession, times(1)).setState(any(Completed.class));
+    verify(mockSession, times(1)).setState(any(Complete.class));
   }
 
   @Test
-  void whenNowIsEqualEndDate_setStateToCompleted()
+  void whenNowIsEqualEndDate_setStateToComplete()
   {
-    Booked booked = new Booked();
+    Book book = new Book();
     Session mockSession = mock(Session.class);
 
     LocalDateTime exactTime = LocalDateTime.of(2026, 5, 20, 10, 0);
 
     when(mockSession.getEnd_date()).thenReturn(exactTime);
 
-    booked.completed(mockSession, exactTime);
+    book.complete(mockSession, exactTime);
 
-    verify(mockSession, times(1)).setState(any(Completed.class));
+    verify(mockSession, times(1)).setState(any(Complete.class));
   }
 
   @Test
   void whenNowIsBeforeEndDate_shouldNotChangeState()
   {
-    Booked booked = new Booked();
+    Book book = new Book();
     Session mockSession = mock(Session.class);
 
     LocalDateTime endDate = LocalDateTime.of(2026, 5, 20, 10, 0);
@@ -49,7 +49,7 @@ public class BookedTest
 
     when(mockSession.getEnd_date()).thenReturn(endDate);
 
-    booked.completed(mockSession, fixedNow);
+    book.complete(mockSession, fixedNow);
 
     verify(mockSession, never()).setState(any());
   }

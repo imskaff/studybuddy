@@ -4,6 +4,8 @@ import client.model.Model;
 import client.viewmodel.student.SessionViewModel;
 import client.viewmodel.student.StudentMainPageViewModel;
 import client.viewmodel.student.TutorProfileViewModel;
+import client.viewmodel.tutor.CreateNewSessionViewModel;
+import client.viewmodel.tutor.TutorMainPageViewModel;
 
 public class ViewModelFactory {
     private SessionViewModel sessionViewModel;
@@ -11,6 +13,7 @@ public class ViewModelFactory {
     private StudentMainPageViewModel studentMainPageViewModel;
     private WelcomeViewModel welcomeViewModel;
     private TutorMainPageViewModel tutorMainPageViewModel;
+    private CreateNewSessionViewModel createNewSessionViewModel;
 
     public ViewModelFactory(Model model) {
         try {
@@ -44,4 +47,9 @@ public class ViewModelFactory {
     public TutorMainPageViewModel getTutorMainPageViewModel() {
         return tutorMainPageViewModel;
     }
+
+  public CreateNewSessionViewModel getCreateNewSessionViewModel()
+  {
+    return createNewSessionViewModel;
+  }
 }
