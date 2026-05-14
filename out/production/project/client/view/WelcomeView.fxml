@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="client.view.WelcomeViewController"
+      alignment="CENTER" spacing="12" prefWidth="320" prefHeight="280"
+      style="-fx-padding: 32;">
+
+    <Label text="StudyBuddy" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+
+    <TextField fx:id="email_field" promptText="Email" maxWidth="240"/>
+    <PasswordField fx:id="password_field" promptText="Password" maxWidth="240"/>
+
+    <Label fx:id="error_label" text="" style="-fx-text-fill: red;" visible="false" managed="false"/>
+
+    <Button fx:id="login_button" text="Log In" maxWidth="240"
+            onAction="#onLoginButtonClicked"/>
+    <Button fx:id="register_button" text="Register" maxWidth="240"
+            onAction="#onRegisterButtonClicked"/>
+
+</VBox>
