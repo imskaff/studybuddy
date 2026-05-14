@@ -8,6 +8,7 @@ public class ViewModelFactory {
     private TutorProfileViewModel tutorProfileViewModel;
     private StudentMainPageViewModel studentMainPageViewModel;
     private WelcomeViewModel welcomeViewModel;
+    private TutorMainPageViewModel tutorMainPageViewModel;
 
     public ViewModelFactory(Model model) {
         try {
@@ -19,6 +20,7 @@ public class ViewModelFactory {
         tutorProfileViewModel = new TutorProfileViewModel(model);
         studentMainPageViewModel = new StudentMainPageViewModel(model);
         welcomeViewModel = new WelcomeViewModel(model);
+        tutorMainPageViewModel = new TutorMainPageViewModel(model);
     }
 
     public WelcomeViewModel getWelcomeViewModel() {
@@ -36,4 +38,8 @@ public class ViewModelFactory {
     public StudentMainPageViewModel getStudentMainPageViewModel() {
         return studentMainPageViewModel;
     }   
+
+    public TutorMainPageViewModel getTutorMainPageViewModel() {
+        return tutorMainPageViewModel;
+    }
 }

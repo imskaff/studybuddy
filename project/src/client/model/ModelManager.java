@@ -26,13 +26,16 @@ public class ModelManager implements Model, PropertyChangeListener {
 
     @Override
     public void connect() throws Exception {
-        client.connect("localhost", 4025);
         client.addPropertyChangeListener(this);
     }
 
     @Override
     public void bookSession(Student loggedInStudent, Tutor sessionTutor, Session bookedSession) throws Exception {
-        client.bookSession(loggedInStudent, sessionTutor, bookedSession);
+        boolean success = client.bookSession(loggedInStudent.getId(), bookedSession.getId());
+        if (success) {
+            bookedSession.setStudent(loggedInStudent);
+            support.firePropertyChange("SessionBooked", null, bookedSession);
+        }
     }
 
     @Override
