@@ -7,7 +7,8 @@ import client.viewmodel.student.TutorProfileViewModel;
 import client.viewmodel.tutor.CreateNewSessionViewModel;
 import client.viewmodel.tutor.TutorMainPageViewModel;
 
-public class ViewModelFactory {
+public class ViewModelFactory
+{
     private SessionViewModel sessionViewModel;
     private TutorProfileViewModel tutorProfileViewModel;
     private StudentMainPageViewModel studentMainPageViewModel;
@@ -18,7 +19,12 @@ public class ViewModelFactory {
     private CreateTutorProfileViewModel createTutorViewModel;
     private AdminViewModel adminViewModel;
 
+    private ViewState viewState;
+
+
     public ViewModelFactory(Model model) {
+      this.viewState = new ViewState();
+
         try {
             model.connect();
         } catch (Exception e) {
@@ -28,7 +34,7 @@ public class ViewModelFactory {
         tutorProfileViewModel = new TutorProfileViewModel(model);
         studentMainPageViewModel = new StudentMainPageViewModel(model);
         welcomeViewModel = new WelcomeViewModel(model);
-        tutorMainPageViewModel = new TutorMainPageViewModel(model);
+        tutorMainPageViewModel = new TutorMainPageViewModel(model, viewState);
         createStudentViewModel = new CreateStudentProfileViewModel(model);
         createTutorViewModel = new CreateTutorProfileViewModel(model);
         adminViewModel = new AdminViewModel(model);
@@ -58,7 +64,6 @@ public class ViewModelFactory {
   {
     return createNewSessionViewModel;
   }
-}
 
     public CreateStudentProfileViewModel getCreateStudentViewModel() {
       return createStudentViewModel;
