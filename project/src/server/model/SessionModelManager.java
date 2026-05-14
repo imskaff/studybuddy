@@ -228,9 +228,9 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
       {
         return false;
       }
-      // Creates the tutor in the database.
-      // createTutor() also creates a pending tutor_request row.
-      UserDAOImpl.getInstance().createTutor(tutor);
+      UserDAOImpl.getInstance().create(tutor.getFirst_name(), tutor.getLast_name(), tutor.getDate_of_birth(),
+          tutor.getEmail(), tutor.getPhone(), tutor.getPassword(), tutor.getGender(),
+          tutor.getLanguages(), "Tutor");
 
       return true;
     }
@@ -246,26 +246,19 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
   {
     try
     {
-      String status = null;
-
-      // Converts the action into a database status
+      // Approves the tutor
       if("APPROVE".equals(action))
       {
-        status = "approved";
+        return UserDAOImpl.getInstance().updateTutorApproval(tutorId, true);
       }
+
+      // Declines the tutor
       else if("DECLINE".equals(action))
       {
-        status = "declined";
+        return UserDAOImpl.getInstance().updateTutorApproval(tutorId, false);
       }
 
-      // Invalid action
-      if(status == null)
-      {
-        return false;
-      }
-
-      // Updates the tutor request status in the database
-      return UserDAOImpl.getInstance().updateTutorRequestStatus(tutorId, status);
+      return false;
     }
     catch(Exception e)
     {
