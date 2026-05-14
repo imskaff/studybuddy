@@ -59,7 +59,7 @@ class StudentMainPageViewModelTest {
 
         viewModel.loadSessions();
 
-        assertTrue(viewModel.getSessions().isEmpty());
+        assertTrue(viewModel.getSessions().isEmpty(), () -> "Sessions list should be empty");
     }
 
     // --- viewing booked sessions ---
@@ -73,7 +73,7 @@ class StudentMainPageViewModelTest {
 
         ObservableList<Session> bookedSessions = viewModel.getBookedSessions();
         assertEquals(1, bookedSessions.size());
-        assertTrue(bookedSessions.contains(booked));
+        assertTrue(bookedSessions.contains(booked), () -> "Booked sessions list should contain the session returned by the model");
     }
 
     @Test
@@ -82,7 +82,7 @@ class StudentMainPageViewModelTest {
 
         viewModel.loadBookedSessions();
 
-        assertTrue(viewModel.getBookedSessions().isEmpty());
+        assertTrue(viewModel.getBookedSessions().isEmpty(), () -> "Booked sessions list should be empty");
     }
 
     // --- booking moves session to booked list ---
@@ -96,7 +96,7 @@ class StudentMainPageViewModelTest {
         viewModel.propertyChange(new PropertyChangeEvent(this, "SessionBooked", null, session));
         Thread.sleep(300);
 
-        assertFalse(viewModel.getSessions().contains(session));
+        assertFalse(viewModel.getSessions().contains(session), () -> "Booked session should be removed from the available list");
     }
 
     @Test
@@ -110,7 +110,7 @@ class StudentMainPageViewModelTest {
         viewModel.propertyChange(new PropertyChangeEvent(this, "SessionBooked", null, session));
         Thread.sleep(300);
 
-        assertTrue(viewModel.getBookedSessions().contains(session));
+        assertTrue(viewModel.getBookedSessions().contains(session), () -> "Booked session should be added to the booked list");
     }
 
     @Test
@@ -123,8 +123,8 @@ class StudentMainPageViewModelTest {
         viewModel.propertyChange(new PropertyChangeEvent(this, "SessionBooked", null, s1));
         Thread.sleep(300);
 
-        assertFalse(viewModel.getSessions().contains(s1));
-        assertTrue(viewModel.getSessions().contains(s2));
+        assertFalse(viewModel.getSessions().contains(s1), () -> "Booked session should be removed from the available list");
+        assertTrue(viewModel.getSessions().contains(s2), () -> "Only the booked session should be removed from the available list");
     }
 
     // --- helpers ---
