@@ -5,6 +5,7 @@ import java.beans.PropertyChangeSupport;
 import client.mediator.Client;
 import client.mediator.ClientModel;
 import server.dao.SessionDAOImpl;
+import server.dao.UserDAOImpl;
 import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
@@ -18,6 +19,7 @@ public class ModelManager implements Model, PropertyChangeListener {
     private final ClientModel client;
     private final PropertyChangeSupport support;
     private Student loggedInStudent;
+    private int loggedInAdminId = -1;
 
     public ModelManager() {
         client = new Client();
@@ -66,6 +68,35 @@ public class ModelManager implements Model, PropertyChangeListener {
    {
     return loggedInStudent;
    }
+
+   @Override public void setLoggedInAdminId(int adminId)
+   {
+    this.loggedInAdminId = adminId;
+   }
+
+   @Override public int getLoggedInAdminId()
+   {
+    return loggedInAdminId;
+   }
+
+    @Override
+    public ArrayList<Tutor> getPendingTutors() {
+        try {
+            return UserDAOImpl.getInstance().readPendingTutors();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to load pending tutors: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public boolean approveTutor(int tutorId) {
+        return client.handleTutorRegistration(tutorId, "APPROVE", loggedInAdminId);
+    }
+
+    @Override
+    public boolean declineTutor(int tutorId) {
+        return client.handleTutorRegistration(tutorId, "DECLINE", loggedInAdminId);
+    }
 
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {

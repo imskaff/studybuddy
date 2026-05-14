@@ -25,6 +25,7 @@ public class ViewModelFactory {
         studentMainPageViewModel = new StudentMainPageViewModel(model);
         welcomeViewModel = new WelcomeViewModel(model);
         tutorMainPageViewModel = new TutorMainPageViewModel(model);
+        adminViewModel = new AdminViewModel(model);
     }
 
     public WelcomeViewModel getWelcomeViewModel() {
