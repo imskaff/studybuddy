@@ -17,11 +17,6 @@ public class ViewModelFactory {
     private AdminViewModel adminViewModel;
 
     public ViewModelFactory(Model model) {
-        try {
-            model.connect();
-        } catch (Exception e) {
-            System.out.println("Could not connect to server: " + e.getMessage());
-        }
         sessionViewModel = new SessionViewModel(model);
         tutorProfileViewModel = new TutorProfileViewModel(model);
         studentMainPageViewModel = new StudentMainPageViewModel(model);

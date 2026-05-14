@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class ClientMain extends Application {
 
     // client starts here
-    
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         ModelManager model = new ModelManager();
