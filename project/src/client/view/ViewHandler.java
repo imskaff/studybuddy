@@ -2,6 +2,7 @@ package client.view;
 
 import client.view.student.SessionViewController;
 import client.view.student.StudentMainPageViewController;
+import client.view.tutor.CreateNewSessionController;
 import client.view.tutor.TutorProfileViewController;
 import client.view.tutor.TutorMainPageController;
 import client.viewmodel.ViewModelFactory;

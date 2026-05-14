@@ -16,7 +16,11 @@ public class ViewModelFactory {
     private CreateTutorProfileViewModel createTutorViewModel;
     private AdminViewModel adminViewModel;
 
+    private ViewState viewState;
+    private CreateNewSessionViewModel createNewSessionViewModel;
+
     public ViewModelFactory(Model model) {
+        this.viewState = new ViewState();
         sessionViewModel = new SessionViewModel(model);
         tutorProfileViewModel = new TutorProfileViewModel(model);
         studentMainPageViewModel = new StudentMainPageViewModel(model);
@@ -47,12 +51,15 @@ public class ViewModelFactory {
         return tutorMainPageViewModel;
     }
 
+    public CreateNewSessionViewModel getCreateNewSessionViewModel() {
+        return createNewSessionViewModel;
+    }
     public CreateStudentProfileViewModel getCreateStudentViewModel() {
-      return createStudentViewModel;
+        return createStudentViewModel;
     }
 
     public CreateTutorProfileViewModel getCreateTutorViewModel() {
-      return createTutorViewModel;
+        return createTutorViewModel;
     }
 
     public AdminViewModel getAdminViewModel() {
