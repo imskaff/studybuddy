@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 
 public abstract class CreateProfileViewModel
 {
-  private Model model;
+  protected Model model;
 
   private final StringProperty firstName   = new SimpleStringProperty("");
   private final StringProperty lastName    = new SimpleStringProperty("");
