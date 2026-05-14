@@ -6,7 +6,6 @@ import client.viewmodel.student.StudentMainPageViewModel;
 import client.viewmodel.tutor.TutorProfileViewModel;
 import client.viewmodel.tutor.CreateNewSessionViewModel;
 import client.viewmodel.tutor.TutorMainPageViewModel;
-import client.viewmodel.tutor.CreateNewSessionViewModel;
 
 public class ViewModelFactory
 {
@@ -22,10 +21,6 @@ public class ViewModelFactory
 
     private ViewState viewState;
 
-
-    private ViewState viewState;
-    private CreateNewSessionViewModel createNewSessionViewModel;
-
     public ViewModelFactory(Model model) {
         this.viewState = new ViewState();
         sessionViewModel = new SessionViewModel(model);
@@ -33,8 +28,8 @@ public class ViewModelFactory
         studentMainPageViewModel = new StudentMainPageViewModel(model);
         welcomeViewModel = new WelcomeViewModel(model);
         tutorMainPageViewModel = new TutorMainPageViewModel(model, viewState);
-        createNewSessionViewModel = new CreateNewSessionViewModel(model, viewState);
-        createStudentViewModel = new CreateStudentProfileViewModel(model, UserType.STUDENT);
+//        createNewSessionViewModel = new CreateNewSessionViewModel(model, viewState);
+        createStudentViewModel = new CreateStudentProfileViewModel(model);
         createTutorViewModel = new CreateTutorProfileViewModel(model);
         adminViewModel = new AdminViewModel(model);
     }
