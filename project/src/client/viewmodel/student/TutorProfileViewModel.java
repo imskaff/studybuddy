@@ -1,4 +1,4 @@
-package client.viewmodel.tutor;
+package client.viewmodel.student;
 
 import client.model.Model;
 import java.time.format.DateTimeFormatter;

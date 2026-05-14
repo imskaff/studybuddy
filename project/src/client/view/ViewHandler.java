@@ -1,7 +1,9 @@
 package client.view;
 
+import client.view.admin.AdminViewController;
 import client.view.student.SessionViewController;
 import client.view.student.StudentMainPageViewController;
+import client.view.tutor.CreateNewSessionController;
 import client.view.tutor.TutorProfileViewController;
 import client.view.tutor.TutorMainPageController;
 import client.viewmodel.ViewModelFactory;
@@ -151,14 +153,15 @@ public class ViewHandler
           getClass().getResource("client/view/tutor/CreateNewSession.fxml"));
       Region root = loader.load();
       CreateNewSessionController controller = loader.getController();
-      controller.init(this, viewModelFactory.getCreateNewSessionViewModel(),
-          root);
 
-      Scene scene = new Scene(root);
-      primaryStage.setTitle("Create New Session");
-      primaryStage.setScene(scene);
-      primaryStage.setResizable(false);
-      primaryStage.show();
+      Stage popupStage = new Stage();
+      controller.init(popupStage,this, viewModelFactory.getCreateNewSessionViewModel(), root);
+
+      popupStage.setTitle("Create New Session");
+      popupStage.setScene(new Scene(root));
+      popupStage.setResizable(false);
+      popupStage.initOwner(primaryStage);
+      popupStage.show();
     }
     catch (IOException e)
     {
@@ -186,5 +189,6 @@ public class ViewHandler
       e.printStackTrace();
     }
   }
+
 }
 

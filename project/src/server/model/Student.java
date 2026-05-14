@@ -10,6 +10,7 @@ public class Student extends User {
         super(id, first_name, last_name, date_of_birth, email, phone, password, gender, languages, type);
     }
 
+
   // Simplified constructor used when only the student ID is needed
   public Student(int id)
   {

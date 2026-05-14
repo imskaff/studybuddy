@@ -67,6 +67,7 @@ public class TutorMainPageController
 
     setFieldsReadOnly();
     viewModel.loadData();
+    setUpButtons();
   }
 
   private void setFieldsReadOnly()

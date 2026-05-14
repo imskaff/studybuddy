@@ -79,7 +79,7 @@ public class TutorMainPageViewModel implements PropertyChangeListener
     public StringProperty genderProperty() { return gender; }
     public StringProperty languagesProperty() { return languages; }
     public StringProperty educationProperty() { return education; }
-    public StringProperty descriptionProperty() { return description; }
+
 
     public void completeSession(Session session) {
         if (session != null) {
