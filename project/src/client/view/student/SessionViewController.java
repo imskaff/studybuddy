@@ -1,7 +1,7 @@
 package client.view.student;
 
 import client.view.ViewHandler;
-import client.viewmodel.SessionViewModel;
+import client.viewmodel.student.SessionViewModel;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

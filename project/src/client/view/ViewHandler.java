@@ -61,25 +61,6 @@ public class ViewHandler {
         }
     }
 
-    public void openTutorProfileView() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("TutorProfileView.fxml"));
-            Region root = loader.load();
-            TutorProfileViewController controller = loader.getController();
-            controller.init(this, viewModelFactory.getTutorProfileViewModel(), root);
-
-            Scene scene = new Scene(root);
-            primaryStage.setTitle("Tutor Main Page");
-            primaryStage.setScene(scene);
-            primaryStage.setResizable(false);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
     public void openSessionView(Session selected) {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -100,13 +81,46 @@ public class ViewHandler {
 
   public void openTutorProfileView(Tutor tutor)
   {
-    System.out.println("Opening tutor profile for: "
-        + tutor.getFirst_name() + " " + tutor.getLast_name());
+    try {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("student/TutorProfileView.fxml"));
+      Region root = loader.load();
+      TutorProfileViewController controller = loader.getController();
+      viewModelFactory.getTutorProfileViewModel().loadTutor(tutor);
 
-    // later:
-    // tutorProfileViewModel.loadTutor(tutor);
-    // open TutorProfileView.fxml
+      Stage popupStage = new Stage();
+      controller.init(popupStage, viewModelFactory.getTutorProfileViewModel(), root);
+
+      popupStage.setTitle("Tutor Profile");
+      popupStage.setScene(new Scene(root));
+      popupStage.setResizable(false);
+      popupStage.initOwner(primaryStage);
+      popupStage.show();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
+
+  public void openTutorMainPageView()
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("/view/TutorMainPageView.fxml"));
+      Region root = loader.load();
+        TutorMainPageViewController controller = loader.getController();
+        controller.init(this, viewModelFactory.getTutorMainPageViewModel(), root);
+
+        Scene scene = new Scene(root);
+        primaryStage.setTitle("Tutor Main Page");
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.show();
+    }
+    catch (Exception e)    {
+      e.printStackTrace();
+    }
+}
 
   /*public void openStudentMainPageView()
   {

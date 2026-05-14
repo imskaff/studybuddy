@@ -1,4 +1,4 @@
-package client.viewmodel;
+package client.viewmodel.student;
 
 import client.model.Model;
 import java.beans.PropertyChangeEvent;
