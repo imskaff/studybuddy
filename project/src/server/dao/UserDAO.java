@@ -29,4 +29,8 @@ public interface UserDAO {
     void declineTutor(int tutorId) throws SQLException;
 
     int getAdminId(String username, String password) throws SQLException;
+
+    User readByEmail(String email) throws SQLException;
+
+    boolean updateTutorApproval(int tutorId, boolean approved) throws SQLException;
 }

@@ -109,6 +109,36 @@ public class ModelManager implements Model, PropertyChangeListener {
     }
 
     @Override
+    public void registerStudent(Student student) {
+        client.createStudentProfile(student, true);
+    }
+
+    @Override
+    public void registerTutor(Tutor tutor) {
+        client.createTutorProfile(tutor, true);
+    }
+
+  @Override public void complete(Session session)
+  {
+    session.complete(session);
+  }
+
+  @Override public void book(Session session)
+  {
+    session.book(session);
+  }
+
+  @Override public void cancel(Session session)
+  {
+    session.cancel(session);
+  }
+
+  @Override public void remove(Session session)
+  {
+    session.remove(session);
+  }
+
+  @Override
     public void propertyChange(PropertyChangeEvent evt) {
         support.firePropertyChange(evt);
     }

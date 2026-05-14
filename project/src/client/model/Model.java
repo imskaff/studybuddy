@@ -12,7 +12,7 @@ public interface Model {
 
   void disconnect();
 
-  void bookSession(Student loggedInStudent, Tutor sessionTutor, Session bookedSesion) throws Exception;
+  void bookSession(Student loggedInStudent, Tutor sessionTutor, Session bookedSession) throws Exception;
 
   ArrayList<Session> getAllSessions();
 
@@ -21,10 +21,6 @@ public interface Model {
   void setLoggedInStudent(Student student);
 
   Student getLoggedInStudent();
-
-  void setLoggedInTutor(Tutor tutor);
-
-  Tutor getLoggedInTutor();
 
   void setLoggedInAdminId(int adminId);
 
@@ -36,6 +32,19 @@ public interface Model {
 
   boolean declineTutor(int tutorId);
 
+  void registerStudent(Student student);
+
+  void registerTutor(Tutor tutor);
+
+  void setLoggedInTutor(Tutor tutor);
+
+  Tutor getLoggedInTutor();
+
   void addPropertyChangeListener(PropertyChangeListener listener);
+
+  public void complete(Session session);
+  public void book(Session session);
+  public void cancel(Session session);
+  public void remove(Session session);
 
 }

@@ -2,7 +2,8 @@ package server.model;
 
 public interface SessionState
 {
-  public void completed(Session session);
-  public void booked(Session session);
-  public void canceled(Session session);
+  public void complete(Session session);
+  public void book(Session session);
+  public void cancel(Session session);
+  public void remove(Session session);
 }

@@ -38,6 +38,7 @@ public class TutorProfileViewModel {
         languages.set(langs != null && !langs.isEmpty() ? String.join(", ", langs) : "");
     }
 
+
     public StringProperty firstNameProperty() { return firstName; }
     public StringProperty lastNameProperty() { return lastName; }
     public StringProperty emailProperty() { return email; }

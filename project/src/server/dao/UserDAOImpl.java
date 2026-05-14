@@ -46,18 +46,29 @@ public class UserDAOImpl implements UserDAO {
             statement.executeUpdate();
 
             ResultSet keys = statement.getGeneratedKeys();
-            if (keys.next()) {
-                int id = keys.getInt(1);
-                if ("Tutor".equalsIgnoreCase(type)) {
-                    return new Tutor(first_name, last_name, date_of_birth, email, phone, password, gender, languages,
-                            "N/A", type, id);
-                } else {
-                    return new Student(first_name, last_name, date_of_birth, email, phone, password, gender, languages,
-                            id, type);
-                }
-            } else {
-                throw new SQLException("No keys generated");
+          if(keys.next())
+          {
+            int id = keys.getInt(1);
+
+            // Creates a Tutor object
+            if("Tutor".equalsIgnoreCase(type))
+            {
+              return new Tutor(first_name, last_name,
+                  date_of_birth, email, phone,
+                  password, gender, languages,
+                  "N/A", type, id);
             }
+
+            // Creates a Student object
+            return new Student(first_name, last_name,
+                date_of_birth, email, phone,
+                password, gender, languages,
+                id, type);
+          }
+          else
+          {
+            throw new SQLException("No keys generated");
+          }
         }
     }
 
@@ -219,7 +230,59 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
-    private ArrayList<String> readLanguages(Connection connection, int userId) throws SQLException {
+
+  @Override public User readByEmail(String email) throws SQLException
+  {
+    String sql = "SELECT u.id, u.first_name, u.last_name, u.date_of_birth, " +
+        "u.email, u.phone, u.password, u.gender, u.user_type, " + "t.education_level " +
+        "FROM users u " + "LEFT JOIN tutors t ON u.id = t.user_id " + "WHERE u.email = ?";
+
+    try(Connection connection = getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql))
+    {
+      statement.setString(1, email);
+      ResultSet rs = statement.executeQuery();
+
+      if(rs.next())
+      {
+        int id = rs.getInt("id");
+        String first_name = rs.getString("first_name");
+        String last_name = rs.getString("last_name");
+        LocalDate dob = rs.getObject("date_of_birth", LocalDate.class);
+        String phone = rs.getString("phone");
+        String password = rs.getString("password");
+        String gender = rs.getString("gender");
+        String type = rs.getString("user_type");
+        String educationLevel = rs.getString("education_level");
+
+        ArrayList<String> languages = readLanguages(connection, id);
+
+        if("tutor".equalsIgnoreCase(type))
+        {
+          return new Tutor(first_name, last_name, dob, email, phone, password, gender, languages,
+              educationLevel != null ? educationLevel : "N/A", type, id);
+        }
+        return new Student(first_name, last_name, dob, email, phone, password,
+            gender, languages, id, type);
+      }
+      return null;
+    }
+  }
+
+  @Override public boolean updateTutorApproval(int tutorId, boolean approved) throws SQLException
+  {
+    String sql = "UPDATE tutors SET is_approved = ? WHERE user_id = ?";
+
+    try (Connection connection = getConnection();
+          PreparedStatement statement = connection.prepareStatement(sql))
+    {
+      statement.setBoolean(1, approved);
+      statement.setInt(2, tutorId);
+      return statement.executeUpdate() > 0;
+    }
+  }
+
+  private ArrayList<String> readLanguages(Connection connection, int userId) throws SQLException {
         ArrayList<String> languages = new ArrayList<>();
         try (PreparedStatement s = connection.prepareStatement(
                 "SELECT language FROM user_languages WHERE user_id = ?")) {

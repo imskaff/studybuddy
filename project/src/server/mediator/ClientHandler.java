@@ -92,18 +92,16 @@ public class ClientHandler implements Runnable {
     }
   }
 
-  private void handleBookSession(String clientText) throws Exception {
-    BookSessionRequest request = gson.fromJson(clientText, BookSessionRequest.class);
-    System.out.println("Request: " + request);
+  private void handleBookSession(String clientText)
+  {
+    BookSessionRequest request =
+        gson.fromJson(clientText, BookSessionRequest.class);
 
-    Session session = SessionDAOImpl.getInstance().readByInt(request.getSessionId());
-    Student student = (Student) UserDAOImpl.getInstance().readByInt(request.getStudentId());
-    session.setStudent(student);
-    SessionDAOImpl.getInstance().update(session);
+    model.bookSession(
+        request.getStudentId(),
+        request.getSessionId());
 
-    Response reply = new Response("OK", "Session booked");
-    System.out.println("Reply: " + reply);
-    sendResponse(reply);
+    sendResponse(new Response("OK", "Session booked"));
   }
 
   private void handleCreateSession(String clientText) {

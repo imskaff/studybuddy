@@ -4,18 +4,24 @@ import client.model.Model;
 import client.viewmodel.student.SessionViewModel;
 import client.viewmodel.student.StudentMainPageViewModel;
 import client.viewmodel.tutor.TutorProfileViewModel;
+import client.viewmodel.tutor.CreateNewSessionViewModel;
 import client.viewmodel.tutor.TutorMainPageViewModel;
 import client.viewmodel.tutor.CreateNewSessionViewModel;
 
-public class ViewModelFactory {
+public class ViewModelFactory
+{
     private SessionViewModel sessionViewModel;
     private TutorProfileViewModel tutorProfileViewModel;
     private StudentMainPageViewModel studentMainPageViewModel;
     private WelcomeViewModel welcomeViewModel;
     private TutorMainPageViewModel tutorMainPageViewModel;
+    private CreateNewSessionViewModel createNewSessionViewModel;
     private CreateStudentProfileViewModel createStudentViewModel;
     private CreateTutorProfileViewModel createTutorViewModel;
     private AdminViewModel adminViewModel;
+
+    private ViewState viewState;
+
 
     private ViewState viewState;
     private CreateNewSessionViewModel createNewSessionViewModel;

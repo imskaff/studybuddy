@@ -1,6 +1,8 @@
 package client.viewmodel.tutor;
 
 import client.model.Model;
+import client.viewmodel.ViewState;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -13,34 +15,36 @@ import java.beans.PropertyChangeListener;
 
 public class TutorMainPageViewModel implements PropertyChangeListener
 {
-    private final Model model;
+  private final Model model;
+  private final ViewState viewState;
 
     private final ObservableList<Session> sessions;
 
-    private final StringProperty firstName;
-    private final StringProperty lastName;
-    private final StringProperty dateOfBirth;
-    private final StringProperty email;
-    private final StringProperty phone;
-    private final StringProperty gender;
-    private final StringProperty languages;
-    private final StringProperty education;
-    private final StringProperty description;
+  private final StringProperty firstName;
+  private final StringProperty lastName;
+  private final StringProperty dateOfBirth;
+  private final StringProperty email;
+  private final StringProperty phone;
+  private final StringProperty gender;
+  private final StringProperty languages;
+  private final StringProperty education;
+  private final StringProperty description;
 
-    public TutorMainPageViewModel(Model model) {
-        this.model = model;
-        sessions = FXCollections.observableArrayList();
-        firstName = new SimpleStringProperty("");
-        lastName = new SimpleStringProperty("");
-        dateOfBirth = new SimpleStringProperty("");
-        email = new SimpleStringProperty("");
-        phone = new SimpleStringProperty("");
-        gender = new SimpleStringProperty("");
-        languages = new SimpleStringProperty("");
-        education = new SimpleStringProperty("");
-        description = new SimpleStringProperty("");
-        model.addPropertyChangeListener(this);
-    }
+  public TutorMainPageViewModel(Model model, ViewState viewState) {
+      this.model = model;
+      this.viewState = viewState;
+      sessions = FXCollections.observableArrayList();
+      firstName = new SimpleStringProperty("");
+      lastName = new SimpleStringProperty("");
+      dateOfBirth = new SimpleStringProperty("");
+      email = new SimpleStringProperty("");
+      phone = new SimpleStringProperty("");
+      gender = new SimpleStringProperty("");
+      languages = new SimpleStringProperty("");
+      education = new SimpleStringProperty("");
+      description = new SimpleStringProperty("");
+      model.addPropertyChangeListener(this);
+  }
 
     public void loadData()
     {
@@ -76,6 +80,30 @@ public class TutorMainPageViewModel implements PropertyChangeListener
     public StringProperty languagesProperty() { return languages; }
     public StringProperty educationProperty() { return education; }
     public StringProperty descriptionProperty() { return description; }
+
+    public void completeSession(Session session) {
+        if (session != null) {
+            model.complete(session);
+        }
+    }
+
+    public void bookSession(Session session) {
+        if (session != null) {
+            model.book(session);
+        }
+    }
+
+    public void cancelSession(Session session) {
+        if (session != null) {
+            model.cancel(session);
+        }
+    }
+
+    public void removeSession(Session session) {
+        if (session != null) {
+            model.remove(session);
+        }
+    }
 
     @Override public void propertyChange(PropertyChangeEvent evt)
     {
