@@ -1,6 +1,6 @@
-package client.view.student;
+package client.view.tutor;
 
-import client.viewmodel.student.TutorProfileViewModel;
+import client.viewmodel.tutor.TutorProfileViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;

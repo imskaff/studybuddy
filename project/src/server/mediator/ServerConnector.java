@@ -1,10 +1,10 @@
 package server.mediator;
 
-import server.model.SessionModel;
-import server.model.SessionModelManager;
-
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
+
+import server.model.SessionModelManager;
 // The BookingServer class acts as the connecting class.
 // It creates a server socket that listens on a specific port
 // and waits for incoming client connections. When a client connects,
@@ -33,18 +33,23 @@ public class ServerConnector implements Runnable{
         {
             // Creates the server socket and binds it to the port.
             ServerSocket listenSocket = new ServerSocket(PORT);
+            System.out.println("Running - waiting for a client...");
+
 
             // Infinite loop so the server keeps running and can accept multiple clients.
             while (true)
             {
-                // Message to indicate the server is waiting for a connection.
-                System.out.println("Waiting for a client...");
-
                 // This method blocks (waits) until a client connects.
                 Socket socket = listenSocket.accept();
 
                 // Confirmation that a client has successfully connected.
-                System.out.println("Client connected!");
+                String clientIp = socket.getInetAddress().getHostAddress();
+                
+                LocalDateTime now = LocalDateTime.now();
+                String date = String.valueOf(now.getDayOfMonth()) + "." + String.valueOf(now.getMonthValue()) + "." + String.valueOf(now.getYear());
+                String time = String.valueOf(now.getHour()) + ":" + String.valueOf(now.getMinute()) + ":" + String.valueOf(now.getSecond());
+
+                System.out.println("[" + clientIp + "] Client connected at " + date + " " + time);
 
                 // Creates a new ClientHandler object to handle this specific client.
                 // We pass the socket and the shared model.

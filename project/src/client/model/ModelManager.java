@@ -4,15 +4,12 @@ import java.beans.PropertyChangeSupport;
 
 import client.mediator.Client;
 import client.mediator.ClientModel;
-import server.dao.SessionDAOImpl;
-import server.dao.UserDAOImpl;
 import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ModelManager implements Model, PropertyChangeListener {
@@ -29,7 +26,16 @@ public class ModelManager implements Model, PropertyChangeListener {
 
     @Override
     public void connect() throws Exception {
+        // Registers this ModelManager as a listener for server-pushed events
         client.addPropertyChangeListener(this);
+
+        // Opens a persistent socket connection to the server
+        client.connect("localhost", 4025);
+    }
+
+    @Override
+    public void disconnect() {
+        client.disconnect();
     }
 
     @Override
@@ -43,21 +49,13 @@ public class ModelManager implements Model, PropertyChangeListener {
 
     @Override
     public ArrayList<Session> getAllSessions() {
-        try {
-            return new ArrayList<>(SessionDAOImpl.getInstance().readAvailable());
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to load sessions: " + e.getMessage(), e);
-        }
+        return client.getAvailableSessions();
     }
 
     @Override
     public ArrayList<Session> getBookedSessions() {
-        try {
-            if (loggedInStudent == null) return new ArrayList<>();
-            return new ArrayList<>(SessionDAOImpl.getInstance().readByStudent(loggedInStudent.getId()));
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to load booked sessions: " + e.getMessage(), e);
-        }
+        if (loggedInStudent == null) return new ArrayList<>();
+        return client.getBookedSessions(loggedInStudent.getId());
     }
 
    @Override public void setLoggedInStudent(Student student)
@@ -72,15 +70,14 @@ public class ModelManager implements Model, PropertyChangeListener {
 
    @Override public void setLoggedInTutor(Tutor tutor)
    {
-     this.loggedInTutor = tutor;
+    this.loggedInTutor = tutor;
    }
 
-  @Override public Tutor getLoggedInTutor()
-  {
+   @Override public Tutor getLoggedInTutor()
+   {
     return loggedInTutor;
-  }
+   }
 
-  @Override
    @Override public void setLoggedInAdminId(int adminId)
    {
     this.loggedInAdminId = adminId;
@@ -93,11 +90,7 @@ public class ModelManager implements Model, PropertyChangeListener {
 
     @Override
     public ArrayList<Tutor> getPendingTutors() {
-        try {
-            return UserDAOImpl.getInstance().readPendingTutors();
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to load pending tutors: " + e.getMessage(), e);
-        }
+        return client.getPendingTutors();
     }
 
     @Override

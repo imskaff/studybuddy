@@ -7,11 +7,12 @@ import server.model.Student;
 import server.model.Tutor;
 
 // client-side
-public interface ClientModel
-{
-    //void connect(String host, int port) throws Exception;
+public interface ClientModel {
+  // Opens a persistent connection to the server
+  void connect(String host, int port) throws Exception;
 
-    //void disconnect() throws Exception;
+  // Closes the connection to the server
+  void disconnect();
 
   boolean bookSession(int studentId, int sessionId);
 
@@ -33,7 +34,15 @@ public interface ClientModel
   // Sends a tutor registration handling request to the server.
   boolean handleTutorRegistration(int tutorId, String action, int adminId);
 
-    void addPropertyChangeListener(PropertyChangeListener listener);
+  // Retrieves all available (unbooked) sessions from the server.
+  ArrayList<Session> getAvailableSessions();
 
-  void bookSession(Student loggedInStudent, Tutor sessionTutor, Session bookedSession);
+  // Retrieves all sessions booked by a specific student from the server.
+  ArrayList<Session> getBookedSessions(int studentId);
+
+  // Retrieves all pending tutor registrations from the server.
+  ArrayList<Tutor> getPendingTutors();
+
+  // Adds a property change listener to the client model.
+  void addPropertyChangeListener(PropertyChangeListener listener);
 }

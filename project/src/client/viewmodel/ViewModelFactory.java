@@ -35,7 +35,7 @@ public class ViewModelFactory
         studentMainPageViewModel = new StudentMainPageViewModel(model);
         welcomeViewModel = new WelcomeViewModel(model);
         tutorMainPageViewModel = new TutorMainPageViewModel(model, viewState);
-        createStudentViewModel = new CreateStudentProfileViewModel(model);
+        createStudentViewModel = new CreateStudentProfileViewModel(model, UserType.STUDENT);
         createTutorViewModel = new CreateTutorProfileViewModel(model);
         adminViewModel = new AdminViewModel(model);
     }

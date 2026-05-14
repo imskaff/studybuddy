@@ -10,6 +10,8 @@ public interface Model {
 
   void connect() throws Exception;
 
+  void disconnect();
+
   void bookSession(Student loggedInStudent, Tutor sessionTutor, Session bookedSession) throws Exception;
 
   ArrayList<Session> getAllSessions();
@@ -19,6 +21,10 @@ public interface Model {
   void setLoggedInStudent(Student student);
 
   Student getLoggedInStudent();
+
+  void setLoggedInTutor(Tutor tutor);
+
+  Tutor getLoggedInTutor();
 
   void setLoggedInAdminId(int adminId);
 

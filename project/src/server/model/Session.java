@@ -17,9 +17,8 @@ public class Session {
     private Student student;
 
     private boolean toBeCanceled;
-    private boolean toBeRemoved;
-    private SessionState state;
-    private PropertyChangeSupport support;
+    private transient SessionState state;
+    private transient PropertyChangeSupport support;
 
     public Session(int id, String description, double price, String subject, String location, LocalDateTime start_date, LocalDateTime end_date, Tutor tutor, Student student) {
         this.id = id;

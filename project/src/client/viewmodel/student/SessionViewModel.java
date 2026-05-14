@@ -41,12 +41,6 @@ public class SessionViewModel implements PropertyChangeListener {
         this.endDate     = new SimpleStringProperty("");
         this.price       = new SimpleStringProperty("");
         model.addPropertyChangeListener(this);
-        loadFromModel();
-    }
-
-    private void loadFromModel() {
-        sessions.clear();
-        sessions.addAll(model.getAllSessions());
     }
 
     public void loadSession(Session session) {
