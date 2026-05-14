@@ -25,7 +25,7 @@ public class TutorProfileViewController {
 
     public void init(Stage popupStage, TutorProfileViewModel viewModel, Region root) {
         this.popupStage = popupStage;
-        this.root       = root;
+        this.root = root;
 
         fname_textField.textProperty().bind(viewModel.firstNameProperty());
         lname_textField.textProperty().bind(viewModel.lastNameProperty());

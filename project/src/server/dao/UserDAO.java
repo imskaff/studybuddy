@@ -22,7 +22,11 @@ public interface UserDAO {
 
     User readByEmailAndPassword(String email, String password) throws SQLException;
 
-    User readByEmail(String email) throws SQLException;
+    ArrayList<Tutor> readPendingTutors() throws SQLException;
 
-  boolean updateTutorApproval(int tutorId, boolean approved) throws SQLException;
+    void updateApprovalStatus(int tutorId, boolean approved, int adminId) throws SQLException;
+
+    void declineTutor(int tutorId) throws SQLException;
+
+    int getAdminId(String username, String password) throws SQLException;
 }

@@ -203,31 +203,24 @@ public class ClientHandler implements Runnable {
     }
   }
 
-  private void handleTutorRegistration(String clientText)
+  private void handleTutorRegistration(String clientText) throws Exception
   {
     HandleTutorRegistrationRequest request =
-        gson.fromJson(clientText,
-            HandleTutorRegistrationRequest.class);
+        gson.fromJson(clientText, HandleTutorRegistrationRequest.class);
 
-    boolean handled =
-        model.handleTutorRegistration(
-            request.getTutorId(),
-            request.getAction());
-
-    if(handled && request.getAction().equals("APPROVE"))
+    if ("APPROVE".equals(request.getAction()))
     {
-      sendResponse(new Response("APPROVED",
-          "Tutor profile approved"));
+      UserDAOImpl.getInstance().updateApprovalStatus(request.getTutorId(), true, request.getAdminId());
+      sendResponse(new Response("APPROVED", "Tutor profile approved"));
     }
-    else if(handled && request.getAction().equals("DECLINE"))
+    else if ("DECLINE".equals(request.getAction()))
     {
-      sendResponse(new Response("DECLINED",
-          "Tutor profile declined"));
+      UserDAOImpl.getInstance().declineTutor(request.getTutorId());
+      sendResponse(new Response("DECLINED", "Tutor profile declined"));
     }
     else
     {
-      sendResponse(new Response("ERROR",
-          "No pending tutor registration request exists"));
+      sendResponse(new Response("ERROR", "Unknown action"));
     }
   }
 

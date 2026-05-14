@@ -52,7 +52,7 @@ public class StudentMainPageViewController {
 
         // available sessions
         main_column_title.setCellValueFactory(data ->
-            new SimpleStringProperty(data.getValue().getDescription()));
+            new SimpleStringProperty(data.getValue().getSubject()));
         main_column_price.setCellValueFactory(data ->
             new SimpleStringProperty(String.format("%.2f", data.getValue().getPrice())));
         main_column_date.setCellValueFactory(data ->
@@ -66,7 +66,7 @@ public class StudentMainPageViewController {
 
         // booked sessions
         title_column_bookedS.setCellValueFactory(data ->
-            new SimpleStringProperty(data.getValue().getDescription()));
+            new SimpleStringProperty(data.getValue().getSubject()));
         price_column_bookedS.setCellValueFactory(data ->
             new SimpleStringProperty(String.format("%.2f", data.getValue().getPrice())));
         date_column_bookedS.setCellValueFactory(data ->
@@ -89,12 +89,24 @@ public class StudentMainPageViewController {
         gender_textArea.textProperty().bindBidirectional(viewModel.genderProperty());
         language_textArea.textProperty().bindBidirectional(viewModel.languagesProperty());
 
+        setFieldsReadOnly();
         viewModel.loadData();
     }
 
     public Region getRoot() {
         return root;
     }
+
+  private void setFieldsReadOnly()
+  {
+    fname_textArea.setEditable(false);
+    lname_textArea.setEditable(false);
+    dateOfBirth_textArea.setEditable(false);
+    email_textArea.setEditable(false);
+    phone_textArea.setEditable(false);
+    gender_textArea.setEditable(false);
+    language_textArea.setEditable(false);
+  }
 
     @FXML private void onViewDetailsButtonClicked() {
         Session selected = main_tableView.getSelectionModel().getSelectedItem();

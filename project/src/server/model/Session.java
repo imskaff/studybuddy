@@ -17,6 +17,7 @@ public class Session {
     private Student student;
 
     private boolean toBeCanceled;
+    private boolean toBeRemoved;
     private SessionState state;
     private PropertyChangeSupport support;
 
@@ -31,7 +32,8 @@ public class Session {
         this.tutor = tutor;
         this.student = student;
         this.toBeCanceled = false;
-        this.state = new Booked();
+        this.toBeRemoved = false;
+        this.state = new Available();
 
         this.support = new PropertyChangeSupport(this);
     }
@@ -118,12 +120,42 @@ public class Session {
         this.toBeCanceled = toBeCanceled;
     }
 
+    public boolean isToBeRemoved()
+    {
+      return toBeRemoved;
+    }
+
+    public void setToBeRemoved(boolean toBeRemoved)
+    {
+      this.toBeRemoved = toBeRemoved;
+    }
+
     public void setState(SessionState newState) {
 
         SessionState oldState = this.state;
         this.state = newState;
 
         support.firePropertyChange("state", oldState, newState);
+    }
+
+    public void complete(Session session)
+    {
+      state.complete(this);
+    }
+
+    public void book(Session session)
+    {
+      state.book(this);
+    }
+
+    public void cancel(Session session)
+    {
+      state.cancel(this);
+    }
+
+    public void remove(Session session)
+    {
+      state.remove(this);
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener)

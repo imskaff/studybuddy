@@ -2,10 +2,10 @@ package server.model;
 
 import java.time.LocalDateTime;
 
-public record Completed() implements SessionState
+public record Complete() implements SessionState
 {
     @Override
-    public void completed(Session session)
+    public void complete(Session session)
     {
         LocalDateTime now = LocalDateTime.now();
 
@@ -16,15 +16,21 @@ public record Completed() implements SessionState
     }
 
     @Override
-    public void booked(Session session)
+    public void book(Session session)
     {
         System.out.println("Session cannot be booked if it's completed");
     }
 
     @Override
-    public void canceled(Session session)
+    public void cancel(Session session)
     {
         session.setToBeCanceled(false);
         System.out.println("Session cannot be canceled if it's completed");
+    }
+
+    @Override
+  public void remove(Session session)
+    {
+      session.setToBeRemoved(true);
     }
 }
