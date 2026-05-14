@@ -5,6 +5,7 @@ import client.viewmodel.student.SessionViewModel;
 import client.viewmodel.student.StudentMainPageViewModel;
 import client.viewmodel.tutor.TutorProfileViewModel;
 import client.viewmodel.tutor.TutorMainPageViewModel;
+import client.viewmodel.tutor.CreateNewSessionViewModel;
 
 public class ViewModelFactory {
     private SessionViewModel sessionViewModel;
@@ -25,7 +26,8 @@ public class ViewModelFactory {
         tutorProfileViewModel = new TutorProfileViewModel(model);
         studentMainPageViewModel = new StudentMainPageViewModel(model);
         welcomeViewModel = new WelcomeViewModel(model);
-        tutorMainPageViewModel = new TutorMainPageViewModel(model);
+        tutorMainPageViewModel = new TutorMainPageViewModel(model, viewState);
+        createNewSessionViewModel = new CreateNewSessionViewModel(model, viewState);
         createStudentViewModel = new CreateStudentProfileViewModel(model, UserType.STUDENT);
         createTutorViewModel = new CreateTutorProfileViewModel(model);
         adminViewModel = new AdminViewModel(model);
