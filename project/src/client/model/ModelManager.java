@@ -108,6 +108,16 @@ public class ModelManager implements Model, PropertyChangeListener {
         support.addPropertyChangeListener(listener);
     }
 
+    @Override
+    public void registerStudent(Student student) {
+        client.createStudentProfile(student, true);
+    }
+
+    @Override
+    public void registerTutor(Tutor tutor) {
+        client.createTutorProfile(tutor, true);
+    }
+
   @Override public void complete(Session session)
   {
     session.complete(session);

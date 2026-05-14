@@ -22,10 +22,6 @@ public interface Model {
 
   Student getLoggedInStudent();
 
-  void setLoggedInTutor(Tutor tutor);
-
-  Tutor getLoggedInTutor();
-
   void setLoggedInAdminId(int adminId);
 
   int getLoggedInAdminId();

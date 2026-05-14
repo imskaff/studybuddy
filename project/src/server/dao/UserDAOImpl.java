@@ -230,7 +230,7 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
-    private ArrayList<String> readLanguages(Connection connection, int userId) throws SQLException {
+
   @Override public User readByEmail(String email) throws SQLException
   {
     String sql = "SELECT u.id, u.first_name, u.last_name, u.date_of_birth, " +

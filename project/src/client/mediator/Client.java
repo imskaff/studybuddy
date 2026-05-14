@@ -36,7 +36,7 @@ public class Client implements ClientModel
 
   // Output stream used to send data to the server
   private PrintWriter out;
-
+  
   // Gson is used to convert Java objects <-> JSON
   private Gson gson;
 
@@ -134,46 +134,6 @@ public class Client implements ClientModel
       // Prints the received JSON response for debugging
       System.out.println("Server> " + replyJson);
 
-      // Converts the JSON response into a Response object
-      Response reply =
-          gson.fromJson(replyJson, Response.class);
-
-      return "OK".equals(reply.getStatus())
-          || "APPROVED".equals(reply.getStatus())
-          || "DECLINED".equals(reply.getStatus());
-    }
-    catch(IOException e)
-    {
-      // Prints the error if communication fails
-      e.printStackTrace();
-
-      // Returns false if an error occurs
-      return false;
-    }
-  }
-
-  // This helper method sends a request and returns the raw JSON response.
-  // Used by methods that need to parse data from the response
-  // (e.g., lists of sessions or tutors).
-  private String sendRequestForResponse(Object request)
-  {
-    try
-    {
-      // Converts the request object into JSON text
-      String requestJson = gson.toJson(request);
-
-      // Prints the JSON request for debugging
-      System.out.println("Client> " + requestJson);
-
-      // Sends the JSON request to the server
-      out.println(requestJson);
-
-      // Reads the JSON response from the server
-      String replyJson = in.readLine();
-
-      // Prints the received JSON response for debugging
-      System.out.println("Server> " + replyJson);
-
       return replyJson;
     }
     catch(IOException e)
@@ -234,10 +194,10 @@ public class Client implements ClientModel
     return sendRequest(request);
   }
 
-  @Override public boolean handleTutorRegistration(int tutorId, String action)
+  @Override public boolean handleTutorRegistration(int tutorId, String action, int adminId)
   {
     HandleTutorRegistrationRequest request =
-        new HandleTutorRegistrationRequest(tutorId, action);
+        new HandleTutorRegistrationRequest(tutorId, action, adminId);
 
     return sendRequest(request);
   }

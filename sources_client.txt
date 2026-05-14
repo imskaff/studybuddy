@@ -1,0 +1,4 @@
+C:\Users\skf\Desktop\sep2\theproject\project\src\client\model\Model.java
+C:\Users\skf\Desktop\sep2\theproject\project\src\client\model\ModelManager.java
+C:\Users\skf\Desktop\sep2\theproject\project\src\client\mediator\Client.java
+C:\Users\skf\Desktop\sep2\theproject\project\src\client\mediator\ClientModel.java

@@ -17,6 +17,7 @@ public class Session {
     private Student student;
 
     private boolean toBeCanceled;
+    private boolean toBeRemoved;
     private transient SessionState state;
     private transient PropertyChangeSupport support;
 
