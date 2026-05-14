@@ -1,7 +1,6 @@
 package client.mediator;
 
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
@@ -33,7 +32,6 @@ public interface ClientModel
   // Sends a tutor registration handling request to the server.
   boolean handleTutorRegistration(int tutorId, String action, int adminId);
 
-    void addPropertyChangeListener(PropertyChangeListener listener);
-
-  void bookSession(Student loggedInStudent, Tutor sessionTutor, Session bookedSession);
+  // Adds a property change listener to the client model.
+  void addPropertyChangeListener(PropertyChangeListener listener);
 }

@@ -38,12 +38,6 @@ public class Client implements ClientModel
         support.addPropertyChangeListener(listener);
     }
 
-  @Override public void bookSession(Student loggedInStudent, Tutor sessionTutor,
-      Session bookedSession)
-  {
-
-  }
-
  /*@Override
     public void connect(String host, int port) throws Exception {
         socket = new Socket(host, port);
