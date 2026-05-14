@@ -20,6 +20,16 @@ public interface Model {
 
   Student getLoggedInStudent();
 
+  void setLoggedInAdminId(int adminId);
+
+  int getLoggedInAdminId();
+
+  ArrayList<Tutor> getPendingTutors();
+
+  boolean approveTutor(int tutorId);
+
+  boolean declineTutor(int tutorId);
+
   void addPropertyChangeListener(PropertyChangeListener listener);
 
 }

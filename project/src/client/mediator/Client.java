@@ -192,11 +192,11 @@ public class Client implements ClientModel
   }
 
   // Sends an approval/decline tutor registration request to the server
-  @Override public boolean handleTutorRegistration(int tutorId, String action)
+  @Override public boolean handleTutorRegistration(int tutorId, String action, int adminId)
   {
     // Creates the handle tutor registration request object
     HandleTutorRegistrationRequest request =
-        new HandleTutorRegistrationRequest(tutorId, action);
+        new HandleTutorRegistrationRequest(tutorId, action, adminId);
 
     // Sends the request to the server
     return sendRequest(request);

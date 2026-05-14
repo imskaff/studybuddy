@@ -37,6 +37,8 @@ public class WelcomeViewController {
             viewHandler.openStudentMainPageView();
         } else if ("tutor".equals(userType)) {
             viewHandler.openTutorMainPageView();
+        } else if ("admin".equals(userType)) {
+            viewHandler.openAdminView();
         } else {
             error_label.setText("Invalid email or password.");
             error_label.setVisible(true);
