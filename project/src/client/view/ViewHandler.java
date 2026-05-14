@@ -2,7 +2,7 @@ package client.view;
 
 import client.view.student.SessionViewController;
 import client.view.student.StudentMainPageViewController;
-import client.view.student.TutorProfileViewController;
+import client.view.tutor.TutorProfileViewController;
 import client.view.tutor.TutorMainPageController;
 import client.viewmodel.ViewModelFactory;
 import javafx.fxml.FXMLLoader;
@@ -80,7 +80,7 @@ public class ViewHandler {
     public void openTutorProfileView(Tutor tutor) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("student/TutorProfileView.fxml"));
+            loader.setLocation(getClass().getResource("tutor/TutorProfileView.fxml"));
             Region root = loader.load();
             TutorProfileViewController controller = loader.getController();
             viewModelFactory.getTutorProfileViewModel().loadTutor(tutor);

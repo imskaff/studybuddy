@@ -3,7 +3,8 @@ package client.viewmodel;
 import client.model.Model;
 import client.viewmodel.student.SessionViewModel;
 import client.viewmodel.student.StudentMainPageViewModel;
-import client.viewmodel.student.TutorProfileViewModel;
+import client.viewmodel.tutor.TutorProfileViewModel;
+import client.viewmodel.tutor.TutorMainPageViewModel;
 
 public class ViewModelFactory {
     private SessionViewModel sessionViewModel;
@@ -26,7 +27,7 @@ public class ViewModelFactory {
         studentMainPageViewModel = new StudentMainPageViewModel(model);
         welcomeViewModel = new WelcomeViewModel(model);
         tutorMainPageViewModel = new TutorMainPageViewModel(model);
-        createStudentViewModel = new CreateStudentProfileViewModel(model);
+        createStudentViewModel = new CreateStudentProfileViewModel(model, UserType.STUDENT);
         createTutorViewModel = new CreateTutorProfileViewModel(model);
         adminViewModel = new AdminViewModel(model);
     }

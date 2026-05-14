@@ -3,9 +3,9 @@ package client.viewmodel.tutor;
 import client.model.Model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.model.Session;
-import server.model.Student;
 import server.model.Tutor;
 
 import java.beans.PropertyChangeEvent;
@@ -16,7 +16,6 @@ public class TutorMainPageViewModel implements PropertyChangeListener
     private final Model model;
 
     private final ObservableList<Session> sessions;
-    private final ObservableList<Session> bookedSessions;
 
     private final StringProperty firstName;
     private final StringProperty lastName;
@@ -30,6 +29,7 @@ public class TutorMainPageViewModel implements PropertyChangeListener
 
     public TutorMainPageViewModel(Model model) {
         this.model = model;
+        sessions = FXCollections.observableArrayList();
         firstName = new SimpleStringProperty("");
         lastName = new SimpleStringProperty("");
         dateOfBirth = new SimpleStringProperty("");
@@ -44,37 +44,40 @@ public class TutorMainPageViewModel implements PropertyChangeListener
 
     public void loadData()
     {
-      loadSessions();
-      loadBookedSessions();
-      Student student = model.getLoggedInStudent();
-      if (student != null) loadProfile(student);
+        loadSessions();
+        Tutor tutor = model.getLoggedInTutor();
+        if (tutor != null) loadProfile(tutor);
     }
 
     public void loadSessions()
     {
-      sessions.setAll(model.getAllSessions());
-    }
-
-    public void loadBookedSessions()
-    {
-      bookedSessions.setAll(model.getBookedSessions());
+        sessions.setAll(model.getAllSessions());
     }
 
     public void loadProfile(Tutor tutor)
     {
-      firstName.set(tutor.getFirst_name());
-      lastName.set(tutor.getLast_name());
-      dateOfBirth.set(tutor.getDate_of_birth().toString());
-      email.set(tutor.getEmail());
-      phone.set(tutor.getPhone());
-      gender.set(tutor.getGender());
-      languages.set(String.join(", ", tutor.getLanguages()));
-      education.set(String.join("\n", tutor.getEducation_level()));
-
+        firstName.set(tutor.getFirst_name());
+        lastName.set(tutor.getLast_name());
+        dateOfBirth.set(tutor.getDate_of_birth().toString());
+        email.set(tutor.getEmail());
+        phone.set(tutor.getPhone());
+        gender.set(tutor.getGender());
+        languages.set(String.join(", ", tutor.getLanguages()));
+        education.set(tutor.getEducation_level());
     }
 
-  @Override public void propertyChange(PropertyChangeEvent evt)
-  {
+    public ObservableList<Session> getSessions() { return sessions; }
+    public StringProperty firstNameProperty() { return firstName; }
+    public StringProperty lastNameProperty() { return lastName; }
+    public StringProperty dateOfBirthProperty() { return dateOfBirth; }
+    public StringProperty emailProperty() { return email; }
+    public StringProperty phoneProperty() { return phone; }
+    public StringProperty genderProperty() { return gender; }
+    public StringProperty languagesProperty() { return languages; }
+    public StringProperty educationProperty() { return education; }
+    public StringProperty descriptionProperty() { return description; }
 
-  }
+    @Override public void propertyChange(PropertyChangeEvent evt)
+    {
+    }
 }

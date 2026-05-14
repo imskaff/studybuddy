@@ -19,6 +19,7 @@ public class ModelManager implements Model, PropertyChangeListener {
     private final ClientModel client;
     private final PropertyChangeSupport support;
     private Student loggedInStudent;
+    private Tutor loggedInTutor;
     private int loggedInAdminId = -1;
 
     public ModelManager() {
@@ -67,6 +68,16 @@ public class ModelManager implements Model, PropertyChangeListener {
    @Override public Student getLoggedInStudent()
    {
     return loggedInStudent;
+   }
+
+   @Override public void setLoggedInTutor(Tutor tutor)
+   {
+    this.loggedInTutor = tutor;
+   }
+
+   @Override public Tutor getLoggedInTutor()
+   {
+    return loggedInTutor;
    }
 
    @Override public void setLoggedInAdminId(int adminId)

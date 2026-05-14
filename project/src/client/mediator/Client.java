@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import com.google.gson.GsonBuilder;
 import server.mediator.*;

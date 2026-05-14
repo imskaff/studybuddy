@@ -20,7 +20,8 @@ public class WelcomeViewModel {
                 model.setLoggedInStudent(student);
                 return "student";
             }
-            if (user instanceof Tutor) {
+            if (user instanceof Tutor tutor) {
+                model.setLoggedInTutor(tutor);
                 return "tutor";
             }
             int adminId = UserDAOImpl.getInstance().getAdminId(email, password);
