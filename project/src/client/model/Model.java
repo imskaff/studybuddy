@@ -30,6 +30,10 @@ public interface Model {
 
   boolean declineTutor(int tutorId);
 
+  void registerStudent(Student student);
+
+  void registerTutor(Tutor tutor);
+
   void addPropertyChangeListener(PropertyChangeListener listener);
 
 }
