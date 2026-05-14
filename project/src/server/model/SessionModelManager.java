@@ -11,15 +11,9 @@ import java.util.ArrayList;
 public class SessionModelManager implements SessionModel, PropertyChangeListener {
     private final SessionList list;
     private PropertyChangeSupport support;
-  private ArrayList<Student> students;
-  private ArrayList<Tutor> tutors;
-  private ArrayList<Tutor> pendingTutors;
 
     public SessionModelManager() {
         list = new SessionList();
-      students = new ArrayList<>();
-      tutors = new ArrayList<>();
-      pendingTutors = new ArrayList<>();
         support = new PropertyChangeSupport(this);
     }
 
@@ -234,18 +228,9 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
       {
         return false;
       }
-      // Checks if another pending tutor request already uses the same email
-      for(int i = 0; i < pendingTutors.size(); i++)
-      {
-        if(pendingTutors.get(i).getEmail().equals(tutor.getEmail()))
-        {
-          return false;
-        }
-      }
-      // Sets the tutor status to pending
-      tutor.setStatus("pending");
-      // Adds the tutor to the pending tutor registration list
-      pendingTutors.add(tutor);
+      // Creates the tutor in the database.
+      // createTutor() also creates a pending tutor_request row.
+      UserDAOImpl.getInstance().createTutor(tutor);
 
       return true;
     }
@@ -259,36 +244,34 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
   @Override
   public boolean handleTutorRegistration(int tutorId, String action)
   {
-    // Searches through the pending tutor registration requests
-    for(int i = 0; i < pendingTutors.size(); i++)
+    try
     {
-      Tutor tutor = pendingTutors.get(i);
-      // Checks if this is the selected tutor
-      if(tutor.getId() == tutorId)
+      String status = null;
+
+      // Converts the action into a database status
+      if("APPROVE".equals(action))
       {
-        // Approves the tutor registration
-        if("APPROVE".equals(action))
-        {
-          // Sets the tutor status to approved
-          tutor.setStatus("approved");
-          // Adds the tutor to the approved tutor list
-          tutors.add(tutor);
-          // Removes the tutor from the pending tutor list
-          pendingTutors.remove(i);
-
-          return true;
-        }
-        // Declines the tutor registration
-        else if("DECLINE".equals(action))
-        {
-          // Removes the tutor from the pending tutor list
-          pendingTutors.remove(i);
-
-          return true;
-        }
+        status = "approved";
       }
+      else if("DECLINE".equals(action))
+      {
+        status = "declined";
+      }
+
+      // Invalid action
+      if(status == null)
+      {
+        return false;
+      }
+
+      // Updates the tutor request status in the database
+      return UserDAOImpl.getInstance().updateTutorRequestStatus(tutorId, status);
     }
-    return false;
+    catch(Exception e)
+    {
+      e.printStackTrace();
+      return false;
+    }
   }
 
   @Override

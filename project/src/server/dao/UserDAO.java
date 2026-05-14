@@ -1,5 +1,6 @@
 package server.dao;
 
+import server.model.Tutor;
 import server.model.User;
 
 import java.sql.SQLException;
@@ -22,4 +23,14 @@ public interface UserDAO {
     User readByEmailAndPassword(String email, String password) throws SQLException;
 
     User readByEmail(String email) throws SQLException;
+
+  // Creates a tutor profile in the database.
+  // This method inserts data into:
+  // 1. app_user table
+  // 2. tutor table
+  // 3. tutor_request table
+  // The tutor request is automatically created with "pending" status.
+  Tutor createTutor(Tutor tutor) throws SQLException;
+
+  boolean updateTutorRequestStatus(int tutorId, String status) throws SQLException;
 }

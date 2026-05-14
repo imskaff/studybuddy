@@ -32,7 +32,7 @@ public class UserDAOImpl implements UserDAO {
             String password, String gender, ArrayList<String> languages, String type) throws SQLException {
         try (Connection connection = getConnection();
                 PreparedStatement statement = connection.prepareStatement(
-                        "INSERT INTO users (first_name, last_name, date_of_birth, email, phone, password, gender, languages, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO app_user (first_name, last_name, date_of_birth, email, phone, password, gender, languages, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, first_name);
             statement.setString(2, last_name);
@@ -46,22 +46,110 @@ public class UserDAOImpl implements UserDAO {
             statement.executeUpdate();
 
             ResultSet keys = statement.getGeneratedKeys();
-            if (keys.next()) {
-                int id = keys.getInt(1);
-                if ("Tutor".equalsIgnoreCase(type)) {
-                    return new Tutor(first_name, last_name, date_of_birth, email, phone, password, gender, languages,
-                            "N/A", type, id);
-                } else {
-                    return new Student(first_name, last_name, date_of_birth, email, phone, password, gender, languages,
-                            id, type);
-                }
-            } else {
-                throw new SQLException("No keys generated");
-            }
+          if(keys.next())
+          {
+            int id = keys.getInt(1);
+
+            // This create() method is used for creating student users.
+            // Tutor users are created in createTutor(),
+            // because tutors need extra inserts into tutor and tutor_request tables.
+            return new Student(first_name, last_name, date_of_birth,
+                email, phone, password, gender, languages,
+                id, type);
+          }
+          else {
+            throw new SQLException("No keys generated");
+          }
         }
     }
 
-    @Override
+  @Override public Tutor createTutor(Tutor tutor) throws SQLException
+  {
+    try(Connection connection = getConnection()) {
+      // Inserts common user information into app_user
+      PreparedStatement userStatement = connection.prepareStatement(
+              "INSERT INTO app_user (first_name, last_name, date_of_birth, email, phone, password, gender, languages, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              PreparedStatement.RETURN_GENERATED_KEYS);
+
+      userStatement.setString(1, tutor.getFirst_name());
+      userStatement.setString(2, tutor.getLast_name());
+      userStatement.setObject(3, tutor.getDate_of_birth());
+      userStatement.setString(4, tutor.getEmail());
+      userStatement.setString(5, tutor.getPhone());
+      userStatement.setString(6, tutor.getPassword());
+      userStatement.setString(7, tutor.getGender());
+      userStatement.setObject(8, tutor.getLanguages());
+      userStatement.setString(9, "Tutor");
+
+      userStatement.executeUpdate();
+
+      ResultSet userKeys = userStatement.getGeneratedKeys();
+
+      if(!userKeys.next())
+      {
+        throw new SQLException("No user keys generated");
+      }
+      // This is the generated ID from app_user
+      int userId = userKeys.getInt(1);
+      // Inserts tutor-specific information into tutor table
+      PreparedStatement tutorStatement =
+          connection.prepareStatement(
+              "INSERT INTO tutor (user_id, education_level) VALUES (?, ?)",
+              PreparedStatement.RETURN_GENERATED_KEYS);
+
+      tutorStatement.setInt(1, userId);
+      tutorStatement.setString(2, tutor.getEducation_level());
+
+      tutorStatement.executeUpdate();
+
+      ResultSet tutorKeys = tutorStatement.getGeneratedKeys();
+
+      if(!tutorKeys.next())
+      {
+        throw new SQLException("No tutor keys generated");
+      }
+
+      // This is the generated ID from tutor table
+      int tutorId = tutorKeys.getInt(1);
+
+      // Creates a pending tutor registration request
+      // status is automatically set to 'pending' by the database
+      PreparedStatement requestStatement = connection.prepareStatement(
+              "INSERT INTO tutor_request (tutor_id) VALUES (?)");
+
+      requestStatement.setInt(1, tutorId);
+      requestStatement.executeUpdate();
+
+      // Returns the created Tutor object
+      return new Tutor(tutor.getFirst_name(), tutor.getLast_name(), tutor.getDate_of_birth(),
+          tutor.getEmail(), tutor.getPhone(), tutor.getPassword(),
+          tutor.getGender(), tutor.getLanguages(), tutor.getEducation_level(),
+          "Tutor", userId);
+    }
+  }
+
+  @Override
+  public boolean updateTutorRequestStatus(int userId, String status) throws SQLException
+  {
+    String sql =
+        "UPDATE tutor_request " +
+            "SET status = ?, resolved_at = NOW() " +
+            "WHERE tutor_id = (" +
+            "SELECT id FROM tutor WHERE user_id = ?) " +
+            "AND status = 'pending'";
+
+    try(Connection connection = getConnection();
+        PreparedStatement statement =
+            connection.prepareStatement(sql))
+    {
+      statement.setString(1, status);
+      statement.setInt(2, userId);
+
+      return statement.executeUpdate() > 0;
+    }
+  }
+
+  @Override
     public User readByInt(int id) throws SQLException {
         String sql = "SELECT u.id, u.first_name, u.last_name, u.date_of_birth, u.email, u.phone, "
                 + "u.password, u.gender, u.user_type, t.education_level "
@@ -191,6 +279,7 @@ public class UserDAOImpl implements UserDAO {
       return null;
     }
   }
+
 
   private ArrayList<String> readLanguages(Connection connection, int userId) throws SQLException {
         ArrayList<String> languages = new ArrayList<>();
