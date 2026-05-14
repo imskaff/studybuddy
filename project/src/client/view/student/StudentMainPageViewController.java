@@ -1,7 +1,7 @@
 package client.view.student;
 
 import client.view.ViewHandler;
-import client.viewmodel.StudentMainPageViewModel;
+import client.viewmodel.student.StudentMainPageViewModel;
 import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;

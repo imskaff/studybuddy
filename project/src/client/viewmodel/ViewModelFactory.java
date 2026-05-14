@@ -1,7 +1,9 @@
 package client.viewmodel;
 
 import client.model.Model;
-
+import client.viewmodel.student.SessionViewModel;
+import client.viewmodel.student.StudentMainPageViewModel;
+import client.viewmodel.student.TutorProfileViewModel;
 
 public class ViewModelFactory {
     private SessionViewModel sessionViewModel;
