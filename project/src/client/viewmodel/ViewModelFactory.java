@@ -14,6 +14,9 @@ public class ViewModelFactory {
     private WelcomeViewModel welcomeViewModel;
     private TutorMainPageViewModel tutorMainPageViewModel;
     private CreateNewSessionViewModel createNewSessionViewModel;
+    private CreateStudentProfileViewModel createStudentViewModel;
+    private CreateTutorProfileViewModel createTutorViewModel;
+    private AdminViewModel adminViewModel;
 
     public ViewModelFactory(Model model) {
         try {
@@ -26,6 +29,9 @@ public class ViewModelFactory {
         studentMainPageViewModel = new StudentMainPageViewModel(model);
         welcomeViewModel = new WelcomeViewModel(model);
         tutorMainPageViewModel = new TutorMainPageViewModel(model);
+        createStudentViewModel = new CreateStudentProfileViewModel(model);
+        createTutorViewModel = new CreateTutorProfileViewModel(model);
+        adminViewModel = new AdminViewModel(model);
     }
 
     public WelcomeViewModel getWelcomeViewModel() {
@@ -42,7 +48,7 @@ public class ViewModelFactory {
 
     public StudentMainPageViewModel getStudentMainPageViewModel() {
         return studentMainPageViewModel;
-    }   
+    }
 
     public TutorMainPageViewModel getTutorMainPageViewModel() {
         return tutorMainPageViewModel;
@@ -52,4 +58,17 @@ public class ViewModelFactory {
   {
     return createNewSessionViewModel;
   }
+}
+
+    public CreateStudentProfileViewModel getCreateStudentViewModel() {
+      return createStudentViewModel;
+    }
+
+    public CreateTutorProfileViewModel getCreateTutorViewModel() {
+      return createTutorViewModel;
+    }
+
+    public AdminViewModel getAdminViewModel() {
+        return adminViewModel;
+    }
 }

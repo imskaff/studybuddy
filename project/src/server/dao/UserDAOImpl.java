@@ -154,6 +154,71 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    @Override
+    public ArrayList<Tutor> readPendingTutors() throws SQLException {
+        String sql = "SELECT u.id, u.first_name, u.last_name, u.date_of_birth, u.email, u.phone, "
+                + "u.password, u.gender, u.user_type, t.education_level "
+                + "FROM users u JOIN tutors t ON u.id = t.user_id "
+                + "WHERE t.is_approved = FALSE";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet rs = statement.executeQuery();
+            ArrayList<Tutor> tutors = new ArrayList<>();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                Tutor tutor = new Tutor(
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getObject("date_of_birth", LocalDate.class),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("password"),
+                        rs.getString("gender"),
+                        readLanguages(connection, id),
+                        rs.getString("education_level") != null ? rs.getString("education_level") : "N/A",
+                        rs.getString("user_type"),
+                        id);
+                tutor.setStatus("pending");
+                tutors.add(tutor);
+            }
+            return tutors;
+        }
+    }
+
+    @Override
+    public void updateApprovalStatus(int tutorId, boolean approved, int adminId) throws SQLException {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "UPDATE tutors SET is_approved = ?, approved_by = ? WHERE user_id = ?")) {
+            statement.setBoolean(1, approved);
+            statement.setInt(2, adminId);
+            statement.setInt(3, tutorId);
+            statement.executeUpdate();
+        }
+    }
+
+    @Override
+    public void declineTutor(int tutorId) throws SQLException {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "DELETE FROM tutors WHERE user_id = ?")) {
+            statement.setInt(1, tutorId);
+            statement.executeUpdate();
+        }
+    }
+
+    @Override
+    public int getAdminId(String username, String password) throws SQLException {
+        String sql = "SELECT id FROM administrators WHERE username = ? AND password = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement s = connection.prepareStatement(sql)) {
+            s.setString(1, username);
+            s.setString(2, password);
+            ResultSet rs = s.executeQuery();
+            return rs.next() ? rs.getInt("id") : -1;
+        }
+    }
+
     private ArrayList<String> readLanguages(Connection connection, int userId) throws SQLException {
         ArrayList<String> languages = new ArrayList<>();
         try (PreparedStatement s = connection.prepareStatement(

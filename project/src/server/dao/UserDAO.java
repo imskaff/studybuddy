@@ -1,5 +1,6 @@
 package server.dao;
 
+import server.model.Tutor;
 import server.model.User;
 
 import java.sql.SQLException;
@@ -20,4 +21,12 @@ public interface UserDAO {
     List<User> readAll() throws SQLException;
 
     User readByEmailAndPassword(String email, String password) throws SQLException;
+
+    ArrayList<Tutor> readPendingTutors() throws SQLException;
+
+    void updateApprovalStatus(int tutorId, boolean approved, int adminId) throws SQLException;
+
+    void declineTutor(int tutorId) throws SQLException;
+
+    int getAdminId(String username, String password) throws SQLException;
 }

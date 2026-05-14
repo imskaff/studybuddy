@@ -20,6 +20,20 @@ public interface Model {
 
   Student getLoggedInStudent();
 
+  void setLoggedInAdminId(int adminId);
+
+  int getLoggedInAdminId();
+
+  ArrayList<Tutor> getPendingTutors();
+
+  boolean approveTutor(int tutorId);
+
+  boolean declineTutor(int tutorId);
+
+  void registerStudent(Student student);
+
+  void registerTutor(Tutor tutor);
+
   void setLoggedInTutor(Tutor tutor);
 
   Tutor getLoggedInTutor();

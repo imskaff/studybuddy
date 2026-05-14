@@ -23,6 +23,11 @@ public class WelcomeViewModel {
             if (user instanceof Tutor) {
                 return "tutor";
             }
+            int adminId = UserDAOImpl.getInstance().getAdminId(email, password);
+            if (adminId != -1) {
+                model.setLoggedInAdminId(adminId);
+                return "admin";
+            }
             return null;
         } catch (Exception e) {
             e.printStackTrace();

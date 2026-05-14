@@ -31,7 +31,7 @@ public interface ClientModel
   boolean createTutorProfile(Tutor tutor, boolean rulesConfirmed);
 
   // Sends a tutor registration handling request to the server.
-  boolean handleTutorRegistration(int tutorId, String action);
+  boolean handleTutorRegistration(int tutorId, String action, int adminId);
 
     void addPropertyChangeListener(PropertyChangeListener listener);
 
