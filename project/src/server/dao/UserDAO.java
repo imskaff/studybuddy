@@ -20,4 +20,6 @@ public interface UserDAO {
     List<User> readAll() throws SQLException;
 
     User readByEmailAndPassword(String email, String password) throws SQLException;
+
+    User readByEmail(String email) throws SQLException;
 }

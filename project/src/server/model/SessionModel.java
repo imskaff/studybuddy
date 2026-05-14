@@ -20,7 +20,7 @@ public interface SessionModel {
 
     void addPropertyChangeListener(PropertyChangeListener listener);
 
-  boolean bookSession(Student student, Session session);
+  boolean bookSession(int studentId, int sessionId);
 
   boolean createSession(Session session);
 

@@ -35,22 +35,23 @@ public class ClientHandler implements Runnable {
           .create();
     }
 
-    @Override
-    public void run() {
-        try {
-            String line;
-            while ((line = in.readLine()) != null) {
-                System.out.println("Client> " + line);
-                handleRequest(line);
-            }
-        } catch (SocketException e) {
-            System.out.println("Client disconnected");
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try { socket.close(); } catch (IOException ignored) {}
-        }
+  @Override
+  public void run()
+  {
+    try {
+      String clientText = in.readLine();
+
+      System.out.println("Client> " + clientText);
+
+      handleRequest(clientText);
+
+      socket.close();
     }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
 
   private void handleRequest(String clientText) throws Exception
   {
@@ -91,18 +92,16 @@ public class ClientHandler implements Runnable {
     }
   }
 
-  private void handleBookSession(String clientText) throws Exception {
-    BookSessionRequest request = gson.fromJson(clientText, BookSessionRequest.class);
-    System.out.println("Request: " + request);
+  private void handleBookSession(String clientText)
+  {
+    BookSessionRequest request =
+        gson.fromJson(clientText, BookSessionRequest.class);
 
-    Session session = SessionDAOImpl.getInstance().readByInt(request.getSessionId());
-    Student student = (Student) UserDAOImpl.getInstance().readByInt(request.getStudentId());
-    session.setStudent(student);
-    SessionDAOImpl.getInstance().update(session);
+    model.bookSession(
+        request.getStudentId(),
+        request.getSessionId());
 
-    Response reply = new Response("OK", "Session booked");
-    System.out.println("Reply: " + reply);
-    sendResponse(reply);
+    sendResponse(new Response("OK", "Session booked"));
   }
 
   private void handleCreateSession(String clientText)
