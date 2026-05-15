@@ -127,7 +127,7 @@ public class ViewHandler
     {
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(
-          getClass().getResource("client/view/tutor/TutorMainPage.fxml"));
+          getClass().getResource("tutor/TutorMainPage.fxml"));
       Region root = loader.load();
       TutorMainPageController controller = loader.getController();
       controller.init(this, viewModelFactory.getTutorMainPageViewModel(), root);
@@ -150,7 +150,7 @@ public class ViewHandler
     {
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(
-          getClass().getResource("client/view/tutor/CreateNewSession.fxml"));
+          getClass().getResource("tutor/CreateNewSession.fxml"));
       Region root = loader.load();
       CreateNewSessionController controller = loader.getController();
 

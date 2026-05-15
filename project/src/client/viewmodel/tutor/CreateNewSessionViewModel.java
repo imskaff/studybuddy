@@ -3,6 +3,7 @@ package client.viewmodel.tutor;
 import client.model.Model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import server.model.Session;
 import server.model.Tutor;
 
 import java.beans.PropertyChangeEvent;
@@ -70,8 +71,13 @@ public class CreateNewSessionViewModel implements PropertyChangeListener
 
   }
 
+  public boolean createSession(Session session)
+  {
+    return model.createSession(session);
+  }
+
   public Tutor getCurrentTutor()
   {
-    return currentTutor;
+    return model.getLoggedInTutor();
   }
 }

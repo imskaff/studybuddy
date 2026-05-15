@@ -11,8 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import server.model.Session;
-import server.model.SessionModelManager;
-import server.model.Student;
 import server.model.Tutor;
 
 import java.time.LocalDateTime;
@@ -31,13 +29,14 @@ public class CreateNewSessionController
   @FXML private Button create_btn;
   @FXML private Button back_btn;
 
+  private Stage popup;
   private ViewHandler viewHandler;
   private CreateNewSessionViewModel viewModel;
-  private SessionModelManager modelManager;
   private Region root;
 
   public void init(Stage popup, ViewHandler viewHandler, CreateNewSessionViewModel viewModel, Region root)
   {
+    this.popup = popup;
     this.viewHandler = viewHandler;
     this.viewModel = viewModel;
     this.root = root;
@@ -54,7 +53,7 @@ public class CreateNewSessionController
 
   private void setUpButtons()
   {
-    back_btn.setOnAction(event -> viewHandler.openTutorMainPageView());
+    back_btn.setOnAction(event -> popup.close());
     create_btn.setOnAction(event -> setCreate_btn());
   }
 
@@ -79,11 +78,11 @@ public class CreateNewSessionController
       Session session = new Session(description, price, subject, location,
           startDate, endDate, currentTutor);
 
-      boolean success = modelManager.createSession(session);
+      boolean success = viewModel.createSession(session);
 
       if (success)
       {
-        viewHandler.openTutorMainPageView();
+        popup.close();
       }
       else
       {

@@ -46,7 +46,7 @@
                         <Text layoutX="41.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone number" />
                         <TextField fx:id="phone_textField" layoutX="40.0" layoutY="280.0" prefHeight="30.0" prefWidth="270.0" />
                         <Text layoutX="41.0" layoutY="330.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Languages" />
-                        <TextArea fx:id="languages_textField" layoutX="40.0" layoutY="340.0" prefHeight="156.0" prefWidth="270.0" />
+                        <TextArea fx:id="language_textArea" layoutX="40.0" layoutY="340.0" prefHeight="156.0" prefWidth="270.0" />
                         <Separator layoutY="514.0" prefWidth="905.0" />
                         <TextArea fx:id="education_textArea" layoutX="417.0" layoutY="97.0" prefHeight="401.0" prefWidth="313.0" />
                         <Text layoutX="418.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Education" />

@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import server.model.Session;
+import server.model.SessionState;
 
 import java.time.format.DateTimeFormatter;
 
@@ -50,8 +51,10 @@ public class TutorMainPageController
     date_column.setCellValueFactory(data ->
         new SimpleStringProperty(data.getValue().getStart_date()
             .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
-    state_column.setCellValueFactory(cellData ->
-        new SimpleStringProperty(cellData.getValue().getState().getClass().getSimpleName()));
+    state_column.setCellValueFactory(cellData -> {
+        SessionState state = cellData.getValue().getState();
+        return new SimpleStringProperty(state != null ? state.getClass().getSimpleName() : "");
+    });
 
     mySessions_tView.setItems(viewModel.getSessions());
 

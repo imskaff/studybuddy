@@ -94,6 +94,11 @@ public class ModelManager implements Model, PropertyChangeListener {
     }
 
     @Override
+    public boolean createSession(Session session) {
+        return client.createSession(session);
+    }
+
+    @Override
     public boolean approveTutor(int tutorId) {
         return client.handleTutorRegistration(tutorId, "APPROVE", loggedInAdminId);
     }

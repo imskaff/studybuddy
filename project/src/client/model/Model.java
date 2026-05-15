@@ -28,6 +28,8 @@ public interface Model {
 
   ArrayList<Tutor> getPendingTutors();
 
+  boolean createSession(Session session);
+
   boolean approveTutor(int tutorId);
 
   boolean declineTutor(int tutorId);
