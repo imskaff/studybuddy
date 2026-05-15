@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Separator layoutY="39.0" prefWidth="600.0" />
+      <Separator layoutY="350.0" prefWidth="600.0" />
+      <Text fx:id="rules_text" layoutX="180.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Community Guidelines &amp; User Agreement">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Text>
+      <Text fx:id="welcome_text" layoutX="19.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!" />
+      <TextArea fx:id="rules_textArea" layoutX="15.0" layoutY="75.0" prefHeight="257.0" prefWidth="568.0" text="BEFORE YOU START:&#10;Please read and agree to our community rules before booking tutors.&#10;&#10;1. ACCOUNT INTEGRITY &amp; SAFETY&#10;- Be Truthful: Provide accurate information on your profile.&#10;- Age Requirements: You must be at least 13 years old to create an account.&#10;- No Shared Accounts: Your profile is for your personal use only.&#10;&#10;2. RESPECTFUL BEHAVIOR&#10;- Zero Tolerance for Harassment: Any harassment toward tutors will result in an immediate account ban.&#10;- Professional Environment: All interactions must remain professional and focused on learning.&#10;&#10;3. CANCELLATIONS &amp; ATTENDANCE&#10;- 24-Hour Cancellation Policy: Cancellations within 24 hours may be subject to a charge.&#10;- Punctuality: Tutors will only wait 15 minutes. Missing this window results in a &quot;No-Show&quot; charge.&#10;&#10;4. ACADEMIC INTEGRITY&#10;- No Cheating: You agree not to ask tutors to take exams or complete graded assignments for you.&#10;" wrapText="true" />
+      <Button fx:id="back_btn" layoutX="514.0" layoutY="362.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Back" />
+   </children>
+</AnchorPane>
