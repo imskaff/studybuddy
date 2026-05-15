@@ -3,16 +3,18 @@ package client.viewmodel;
 import client.model.Model;
 import client.viewmodel.admin.AdminViewModel;
 import client.viewmodel.student.CreateStudentProfileViewModel;
-import client.viewmodel.student.SessionViewModel;
+import client.viewmodel.student.SessionStudentViewModel;
 import client.viewmodel.student.StudentMainPageViewModel;
 import client.viewmodel.student.TutorProfileViewModel;
 import client.viewmodel.tutor.CreateNewSessionViewModel;
 import client.viewmodel.tutor.CreateTutorProfileViewModel;
+import client.viewmodel.tutor.SessionTutorViewModel;
 import client.viewmodel.tutor.TutorMainPageViewModel;
 
 public class ViewModelFactory
 {
-    private SessionViewModel sessionViewModel;
+    private SessionStudentViewModel sessionStudentViewModel;
+    private SessionTutorViewModel sessionTutorViewModel;
     private TutorProfileViewModel tutorProfileViewModel;
     private StudentMainPageViewModel studentMainPageViewModel;
     private WelcomeViewModel welcomeViewModel;
@@ -24,20 +26,15 @@ public class ViewModelFactory
 
     private ViewState viewState;
 
-
     public ViewModelFactory(Model model) {
-      this.viewState = new ViewState();
-
-        try {
-            model.connect();
-        } catch (Exception e) {
-            System.out.println("Could not connect to server: " + e.getMessage());
-        }
-        sessionViewModel = new SessionViewModel(model);
+        this.viewState = new ViewState();
+        sessionStudentViewModel = new SessionStudentViewModel(model);
+        sessionTutorViewModel = new SessionTutorViewModel(model);
         tutorProfileViewModel = new TutorProfileViewModel(model);
         studentMainPageViewModel = new StudentMainPageViewModel(model);
         welcomeViewModel = new WelcomeViewModel(model);
         tutorMainPageViewModel = new TutorMainPageViewModel(model, viewState);
+//        createNewSessionViewModel = new CreateNewSessionViewModel(model, viewState);
         createStudentViewModel = new CreateStudentProfileViewModel(model);
         createTutorViewModel = new CreateTutorProfileViewModel(model);
         adminViewModel = new AdminViewModel(model);
@@ -48,8 +45,12 @@ public class ViewModelFactory
         return welcomeViewModel;
     }
 
-    public SessionViewModel getSessionViewModel() {
-        return sessionViewModel;
+    public SessionStudentViewModel getSessionStudentViewModel() {
+        return sessionStudentViewModel;
+    }
+
+    public SessionTutorViewModel getSessionTutorViewModel() {
+        return sessionTutorViewModel;
     }
 
     public TutorProfileViewModel getTutorProfileViewModel() {
@@ -64,17 +65,15 @@ public class ViewModelFactory
         return tutorMainPageViewModel;
     }
 
-  public CreateNewSessionViewModel getCreateNewSessionViewModel()
-  {
-    return createNewSessionViewModel;
-  }
-
+    public CreateNewSessionViewModel getCreateNewSessionViewModel() {
+        return createNewSessionViewModel;
+    }
     public CreateStudentProfileViewModel getCreateStudentViewModel() {
-      return createStudentViewModel;
+        return createStudentViewModel;
     }
 
     public CreateTutorProfileViewModel getCreateTutorViewModel() {
-      return createTutorViewModel;
+        return createTutorViewModel;
     }
 
     public AdminViewModel getAdminViewModel() {

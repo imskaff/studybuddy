@@ -1,8 +1,9 @@
 package client.view;
 
 import client.view.admin.AdminViewController;
-import client.view.student.SessionViewController;
+import client.view.student.SessionStudentViewController;
 import client.view.student.StudentMainPageViewController;
+import client.view.tutor.SessionTutorViewController;
 import client.view.tutor.CreateNewSessionController;
 import client.view.tutor.TutorProfileViewController;
 import client.view.tutor.TutorMainPageController;
@@ -76,16 +77,38 @@ public class ViewHandler
     }
   }
 
-  public void openSessionView(Session selected)
+  public void openStudentSessionView(Session selected)
   {
     try
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource("student/SessionView.fxml"));
+      loader.setLocation(getClass().getResource("student/SessionStudentView.fxml"));
       Region root = loader.load();
-      SessionViewController controller = loader.getController();
-      viewModelFactory.getSessionViewModel().loadSession(selected);
-      controller.init(this, viewModelFactory.getSessionViewModel(), root);
+      SessionStudentViewController controller = loader.getController();
+      viewModelFactory.getSessionStudentViewModel().loadSession(selected);
+      controller.init(this, viewModelFactory.getSessionStudentViewModel(), root);
+
+      primaryStage.setTitle("Session");
+      primaryStage.setScene(new Scene(root));
+      primaryStage.setResizable(false);
+      primaryStage.show();
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  public void openTutorSessionView(Session selected)
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("tutor/SessionTutorView.fxml"));
+      Region root = loader.load();
+      SessionTutorViewController controller = loader.getController();
+      viewModelFactory.getSessionTutorViewModel().loadSession(selected);
+      controller.init(this, viewModelFactory.getSessionTutorViewModel(), root);
 
       primaryStage.setTitle("Session");
       primaryStage.setScene(new Scene(root));
@@ -127,7 +150,7 @@ public class ViewHandler
     {
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(
-          getClass().getResource("client/view/tutor/TutorMainPage.fxml"));
+          getClass().getResource("tutor/TutorMainPage.fxml"));
       Region root = loader.load();
       TutorMainPageController controller = loader.getController();
       controller.init(this, viewModelFactory.getTutorMainPageViewModel(), root);
@@ -150,7 +173,7 @@ public class ViewHandler
     {
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(
-          getClass().getResource("client/view/tutor/CreateNewSession.fxml"));
+          getClass().getResource("tutor/CreateNewSession.fxml"));
       Region root = loader.load();
       CreateNewSessionController controller = loader.getController();
 

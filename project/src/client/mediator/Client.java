@@ -97,8 +97,7 @@ public class Client implements ClientModel
 
       Response reply = gson.fromJson(replyJson, Response.class);
 
-      // Closes the socket connection
-      socket.close();
+
 
       return "OK".equals(reply.getStatus())
           || "APPROVED".equals(reply.getStatus())

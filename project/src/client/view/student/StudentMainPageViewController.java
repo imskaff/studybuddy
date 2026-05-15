@@ -111,7 +111,7 @@ public class StudentMainPageViewController {
     @FXML private void onViewDetailsButtonClicked() {
         Session selected = main_tableView.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            viewHandler.openSessionView(selected);
+            viewHandler.openStudentSessionView(selected);
         } else {
             System.out.println("No session selected");
         }

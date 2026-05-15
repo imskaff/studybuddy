@@ -112,8 +112,7 @@ public class ClientHandler implements Runnable {
     if (created) {
       sendResponse(new Response("OK", "Session created"));
     } else {
-      sendResponse(new Response("ERROR",
-          "One or more required fields are empty or invalid"));
+      sendResponse(new Response("ERROR", "Failed to create session"));
     }
   }
 
