@@ -38,6 +38,17 @@ public class Session {
         this.support = new PropertyChangeSupport(this);
     }
 
+    public Session(String description, double price, String subject, String location, LocalDateTime start_date, LocalDateTime end_date, Tutor tutor)
+    {
+      this.description = description;
+      this.price = price;
+      this.subject = subject;
+      this.location = location;
+      this.start_date = start_date;
+      this.end_date = end_date;
+      this.tutor = tutor;
+    }
+
     public int getId() {
         return id;
     }

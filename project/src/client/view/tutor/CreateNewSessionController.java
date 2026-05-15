@@ -4,14 +4,99 @@ import client.view.ViewHandler;
 import client.viewmodel.ViewState;
 import client.viewmodel.tutor.CreateNewSessionViewModel;
 import client.viewmodel.tutor.TutorMainPageViewModel;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
+import javafx.stage.Stage;
+import server.model.Session;
+import server.model.SessionModelManager;
+import server.model.Student;
+import server.model.Tutor;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class CreateNewSessionController
 {
+  @FXML private TextField subject_textField;
+  @FXML private TextField price_textField;
+  @FXML private TextField location_textField;
+  @FXML private TextField startDate_textField;
+  @FXML private TextField endDate_textField;
+  @FXML private TextArea description_textArea;
+
+  @FXML private Button create_btn;
+  @FXML private Button back_btn;
+
   private ViewHandler viewHandler;
+  private CreateNewSessionViewModel viewModel;
+  private SessionModelManager modelManager;
+  private Region root;
 
-  public void init(ViewHandler viewHandler, CreateNewSessionViewModel viewModel, Region root)
+  public void init(Stage popup, ViewHandler viewHandler, CreateNewSessionViewModel viewModel, Region root)
   {
+    this.viewHandler = viewHandler;
+    this.viewModel = viewModel;
+    this.root = root;
 
+    subject_textField.textProperty().bindBidirectional(viewModel.subjectProperty());
+    price_textField.textProperty().bindBidirectional(viewModel.priceProperty());
+    location_textField.textProperty().bindBidirectional(viewModel.locationProperty());
+    startDate_textField.textProperty().bindBidirectional(viewModel.startDateProperty());
+    endDate_textField.textProperty().bindBidirectional(viewModel.endDateProperty());
+    description_textArea.textProperty().bindBidirectional(viewModel.descriptionProperty());
+
+    setUpButtons();
+  }
+
+  private void setUpButtons()
+  {
+    back_btn.setOnAction(event -> viewHandler.openTutorMainPageView());
+    create_btn.setOnAction(event -> setCreate_btn());
+  }
+
+  private void setCreate_btn()
+  {
+    try
+    {
+      String subject = viewModel.subjectProperty().get();
+      double price = Double.parseDouble(viewModel.priceProperty().get());
+      String location = viewModel.locationProperty().get();
+      String description = viewModel.descriptionProperty().get();
+
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+          "yyyy-MM-dd HH:mm");
+
+      LocalDateTime startDate = LocalDateTime.parse(
+          viewModel.startDateProperty().get(), formatter);
+      LocalDateTime endDate = LocalDateTime.parse(
+          viewModel.endDateProperty().get(), formatter);
+
+      Tutor currentTutor = viewModel.getCurrentTutor();
+      Session session = new Session(description, price, subject, location,
+          startDate, endDate, currentTutor);
+
+      boolean success = modelManager.createSession(session);
+
+      if (success)
+      {
+        viewHandler.openTutorMainPageView();
+      }
+      else
+      {
+        System.err.println("Database error: Could not create session.");
+      }
+    }
+  catch (NumberFormatException e) {
+  System.err.println("Invalid input: Price must be a valid number.");
+} catch (DateTimeParseException e) {
+  // This catches errors if the user types the date in the wrong format!
+  System.err.println("Invalid date format! Please use: yyyy-MM-dd HH:mm (e.g., 2024-05-20 14:30)");
+} catch (Exception e) {
+  e.printStackTrace();
+}
   }
 }
