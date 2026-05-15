@@ -1,8 +1,9 @@
-package client.viewmodel;
+package client.viewmodel.student;
 
 import client.model.Model;
+import client.viewmodel.CreateProfileViewModel;
+import client.viewmodel.UserType;
 import server.model.Student;
-import server.model.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

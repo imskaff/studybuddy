@@ -1,7 +1,7 @@
 package client.view.admin;
 
 import client.view.ViewHandler;
-import client.viewmodel.AdminViewModel;
+import client.viewmodel.admin.AdminViewModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
