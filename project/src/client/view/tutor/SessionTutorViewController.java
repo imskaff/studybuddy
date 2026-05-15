@@ -19,10 +19,12 @@ public class SessionTutorViewController
   @FXML private TextField price_textField;
   @FXML private Button back_button;
   @FXML private Button edit_session_button;
+  @FXML private Button delete_button;
 
   private Region root;
   private SessionTutorViewModel viewModel;
   private ViewHandler viewHandler;
+  private boolean editMode = false;
 
   public SessionTutorViewController()
   {
@@ -34,27 +36,31 @@ public class SessionTutorViewController
     this.viewModel = viewModel;
     this.root = root;
 
-    description_textArea.textProperty().bind(viewModel.descriptionProperty());
+    // tutor name is display-only
     tutor_textField.textProperty().bind(viewModel.tutorProperty());
-    subject_textField.textProperty().bind(viewModel.subjectProperty());
-    location_textField.textProperty().bind(viewModel.locationProperty());
-    startDate_textField.textProperty().bind(viewModel.startDateProperty());
-    endDate_textField.textProperty().bind(viewModel.endDateProperty());
-    price_textField.textProperty().bind(viewModel.priceProperty());
 
-    setFieldsReadOnly();
+    // editable fields so user input flows back to ViewModel
+    description_textArea.textProperty().bindBidirectional(viewModel.descriptionProperty());
+    subject_textField.textProperty().bindBidirectional(viewModel.subjectProperty());
+    location_textField.textProperty().bindBidirectional(viewModel.locationProperty());
+    startDate_textField.textProperty().bindBidirectional(viewModel.startDateProperty());
+    endDate_textField.textProperty().bindBidirectional(viewModel.endDateProperty());
+    price_textField.textProperty().bindBidirectional(viewModel.priceProperty());
+
+    setFieldsEditable(false);
     setUpButtons();
   }
 
-  private void setFieldsReadOnly()
+  private void setFieldsEditable(boolean editable)
   {
-    description_textArea.setEditable(false);
+    description_textArea.setEditable(editable);
+    subject_textField.setEditable(editable);
+    location_textField.setEditable(editable);
+    startDate_textField.setEditable(editable);
+    endDate_textField.setEditable(editable);
+    price_textField.setEditable(editable);
+    // tutor_textField is always read-only
     tutor_textField.setEditable(false);
-    subject_textField.setEditable(false);
-    location_textField.setEditable(false);
-    startDate_textField.setEditable(false);
-    endDate_textField.setEditable(false);
-    price_textField.setEditable(false);
   }
 
   public Region getRoot()
@@ -65,6 +71,42 @@ public class SessionTutorViewController
   private void setUpButtons()
   {
     back_button.setOnAction(event -> viewHandler.openTutorMainPageView());
-    edit_session_button.setOnAction(event -> System.out.println("Edit session"));
+    edit_session_button.setOnAction(event -> onEditOrSave());
+    delete_button.setOnAction(event -> onDelete());
+  }
+
+  private void onEditOrSave()
+  {
+    if (!editMode)
+    {
+      editMode = true;
+      setFieldsEditable(true);
+      edit_session_button.setText("Save");
+    }
+    else
+    {
+      boolean success = viewModel.editSession();
+      if (success)
+      {
+        viewHandler.openTutorMainPageView();
+      }
+      else
+      {
+        System.err.println("Failed to save session changes.");
+      }
+    }
+  }
+
+  private void onDelete()
+  {
+    boolean success = viewModel.deleteSession();
+    if (success)
+    {
+      viewHandler.openTutorMainPageView();
+    }
+    else
+    {
+      System.err.println("Failed to delete session.");
+    }
   }
 }

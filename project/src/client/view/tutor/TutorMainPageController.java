@@ -32,7 +32,6 @@ public class TutorMainPageController
   @FXML private Button viewDetails_btn;
   @FXML private Button create_btn;
   @FXML private Button cancel_btn;
-  @FXML private Button remove_btn;
 
 
   private Region root;
@@ -108,14 +107,5 @@ public class TutorMainPageController
         viewModel.cancelSession(selectedSession);
       }
     });
-    remove_btn.setOnAction(event -> {
-      Session selectedSession = mySessions_tView.getSelectionModel().getSelectedItem();
-      if(selectedSession != null)
-      {
-        viewModel.removeSession(selectedSession);
-      }
-    });
-
-
   }
 }

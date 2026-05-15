@@ -23,7 +23,6 @@
                         <Button fx:id="viewDetails_btn" layoutX="570.0" layoutY="528.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="View Details" />
                         <Button fx:id="create_btn" layoutX="460.0" layoutY="528.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Create session" />
                         <Button fx:id="cancel_btn" layoutX="680.0" layoutY="528.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Cancel" />
-                        <Button fx:id="remove_btn" layoutX="790.0" layoutY="528.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Remove" />
                      </children>
                   </AnchorPane>
             </content>
