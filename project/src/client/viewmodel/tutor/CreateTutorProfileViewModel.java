@@ -1,6 +1,8 @@
-package client.viewmodel;
+package client.viewmodel.tutor;
 
 import client.model.Model;
+import client.viewmodel.CreateProfileViewModel;
+import client.viewmodel.UserType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import server.model.Tutor;

@@ -1,4 +1,4 @@
-package client.viewmodel;
+package client.viewmodel.admin;
 
 import client.model.Model;
 import javafx.application.Platform;
