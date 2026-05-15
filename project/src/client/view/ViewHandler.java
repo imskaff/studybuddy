@@ -5,7 +5,7 @@ import client.view.student.SessionStudentViewController;
 import client.view.student.StudentMainPageViewController;
 import client.view.tutor.SessionTutorViewController;
 import client.view.tutor.CreateNewSessionController;
-import client.view.tutor.TutorProfileViewController;
+import client.view.student.TutorProfileViewController;
 import client.view.tutor.TutorMainPageController;
 import client.viewmodel.ViewModelFactory;
 import javafx.fxml.FXMLLoader;
@@ -208,6 +208,27 @@ public class ViewHandler
       primaryStage.show();
     }
     catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  public void openCreateProfile()
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("client/view/CreateProfile.fxml"));
+      Region root = loader.load();
+      CreateProfileController controller = loader.getController();
+      controller.init(this, viewModelFactory.getCreateProfileView(), root);
+
+      primaryStage.setTitle("Create Profile View");
+      primaryStage.setScene(new Scene(root));
+      primaryStage.setResizable(false);
+      primaryStage.show();
+    }
+    catch (IOException e)
     {
       e.printStackTrace();
     }

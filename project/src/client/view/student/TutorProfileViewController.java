@@ -1,4 +1,4 @@
-package client.view.tutor;
+package client.view.student;
 
 import client.viewmodel.student.TutorProfileViewModel;
 import javafx.fxml.FXML;
