@@ -14,25 +14,27 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class SessionViewModelTest {
-
+class SessionStudentViewModelTest
+{
     private Model mockModel;
-    private SessionViewModel viewModel;
+    private SessionStudentViewModel viewModel;
 
     private static final LocalDateTime START = LocalDateTime.of(2026, 6, 1, 10, 0);
     private static final LocalDateTime END   = LocalDateTime.of(2026, 6, 1, 12, 0);
 
     @BeforeEach
-    void setUp() {
+    void setUp()
+    {
         mockModel = mock(Model.class);
         when(mockModel.getAllSessions()).thenReturn(new ArrayList<>());
-        viewModel = new SessionViewModel(mockModel);
+        viewModel = new SessionStudentViewModel(mockModel);
     }
 
-    // --- viewing session details ---
+    // --- loading session details ---
 
     @Test
-    void loadSessionSetsSubjectProperty() {
+    void loadSessionSetsSubjectProperty()
+    {
         Session session = makeSession(1, "Mathematics");
 
         viewModel.loadSession(session);
@@ -41,7 +43,8 @@ class SessionViewModelTest {
     }
 
     @Test
-    void loadSessionSetsDescriptionProperty() {
+    void loadSessionSetsDescriptionProperty()
+    {
         Session session = makeSession(1, "Math");
 
         viewModel.loadSession(session);
@@ -50,7 +53,8 @@ class SessionViewModelTest {
     }
 
     @Test
-    void loadSessionSetsTutorNameProperty() {
+    void loadSessionSetsTutorNameProperty()
+    {
         Session session = makeSession(1, "Math");
 
         viewModel.loadSession(session);
@@ -59,7 +63,8 @@ class SessionViewModelTest {
     }
 
     @Test
-    void loadSessiosSetsFormattedDates() {
+    void loadSessionSetsFormattedDates()
+    {
         Session session = makeSession(1, "Math");
 
         viewModel.loadSession(session);
@@ -69,7 +74,8 @@ class SessionViewModelTest {
     }
 
     @Test
-    void loadSessionSetsPriceProperty() {
+    void loadSessionSetsPriceProperty()
+    {
         Session session = makeSession(1, "Math");
 
         viewModel.loadSession(session);
@@ -78,7 +84,18 @@ class SessionViewModelTest {
     }
 
     @Test
-    void loadSessionStoresSelectedSession() {
+    void loadSessionSetsLocationProperty()
+    {
+        Session session = makeSession(1, "Math");
+
+        viewModel.loadSession(session);
+
+        assertEquals("Room B", viewModel.locationProperty().get());
+    }
+
+    @Test
+    void loadSessionStoresSelectedSession()
+    {
         Session session = makeSession(1, "Math");
 
         viewModel.loadSession(session);
@@ -86,10 +103,9 @@ class SessionViewModelTest {
         assertEquals(session, viewModel.getSelectedSession());
     }
 
-    // --- viewing tutor profile through session details ---
-
     @Test
-    void getSelectedTutorReturnsTutorFromSelectedSession() {
+    void getSelectedTutorReturnsTutorFromLoadedSession()
+    {
         Session session = makeSession(1, "Math");
         viewModel.loadSession(session);
 
@@ -101,14 +117,16 @@ class SessionViewModelTest {
     }
 
     @Test
-    void checkIfGetSelectedTutorWhenNoSessionLoadedReturnsNull() {
+    void getSelectedTutorBeforeLoadReturnsNull()
+    {
         assertNull(viewModel.getSelectedTutor());
     }
 
-    // --- booking session ---
+    // booking session
 
     @Test
-    void bookSessionCallsModelWithCorrectStudentAndSession() throws Exception {
+    void bookSessionCallsModelWithCorrectStudentAndSession() throws Exception
+    {
         Session session = makeSession(1, "Math");
         Student student = makeStudent(5);
         when(mockModel.getLoggedInStudent()).thenReturn(student);
@@ -119,20 +137,44 @@ class SessionViewModelTest {
         verify(mockModel, times(1)).bookSession(student, session.getTutor(), session);
     }
 
-    // --- helpers ---
+    @Test
+    void bookSessionWithNoSessionLoadedDoesNotCallModel() throws Exception
+    {
+        when(mockModel.getLoggedInStudent()).thenReturn(makeStudent(5));
 
-    private static Tutor makeTutor() {
+        viewModel.bookSession();
+
+        verify(mockModel, never()).bookSession(any(), any(), any());
+    }
+
+    @Test
+    void bookSessionWithNoLoggedInStudentDoesNotCallModel() throws Exception
+    {
+        when(mockModel.getLoggedInStudent()).thenReturn(null);
+        viewModel.loadSession(makeSession(1, "Math"));
+
+        viewModel.bookSession();
+
+        verify(mockModel, never()).bookSession(any(), any(), any());
+    }
+
+    // helpers
+
+    private static Tutor makeTutor()
+    {
         return new Tutor("John", "Doe", LocalDate.of(1985, 1, 1),
                 "john@example.com", "111111111", "pass", "Male",
                 new ArrayList<>(), "Master's", "tutor", 10);
     }
 
-    private static Session makeSession(int id, String subject) {
+    private static Session makeSession(int id, String subject)
+    {
         return new Session(id, "Intro to calculus", 75.0, subject, "Room B",
                 START, END, makeTutor(), null);
     }
 
-    private static Student makeStudent(int id) {
+    private static Student makeStudent(int id)
+    {
         return new Student("Anna", "Brown", LocalDate.of(2000, 3, 15),
                 "anna@example.com", "222222222", "pass", "Female",
                 new ArrayList<>(), id, "student");

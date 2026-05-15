@@ -1,0 +1,19 @@
+{
+  "java.project.referencedLibraries": [
+    "project/lib/**/*.jar",
+    "C:/Users/skf/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.1/junit-jupiter-api-5.8.1.jar",
+    "C:/Users/skf/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.1/junit-jupiter-params-5.8.1.jar",
+    "C:/Users/skf/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.1/junit-jupiter-engine-5.8.1.jar",
+    "C:/Users/skf/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.1/junit-jupiter-5.8.1.jar",
+    "C:/Users/skf/.m2/repository/org/junit/platform/junit-platform-commons/1.8.1/junit-platform-commons-1.8.1.jar",
+    "C:/Users/skf/.m2/repository/org/junit/platform/junit-platform-engine/1.8.1/junit-platform-engine-1.8.1.jar",
+    "C:/Users/skf/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar",
+    "C:/Users/skf/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar",
+    "C:/Users/skf/.m2/repository/junit/junit/4.13.1/junit-4.13.1.jar",
+    "C:/Users/skf/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
+  ],
+  "java.project.sourcePaths": [
+    "project/src",
+    "project/test"
+  ]
+}

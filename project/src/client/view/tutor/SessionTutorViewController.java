@@ -1,16 +1,14 @@
-package client.view.student;
+package client.view.tutor;
 
 import client.view.ViewHandler;
-import client.viewmodel.student.SessionViewModel;
-import javafx.application.Platform;
+import client.viewmodel.tutor.SessionTutorViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
-import server.model.Tutor;
 
-public class SessionViewController
+public class SessionTutorViewController
 {
   @FXML private TextArea description_textArea;
   @FXML private TextField tutor_textField;
@@ -19,19 +17,18 @@ public class SessionViewController
   @FXML private TextField startDate_textField;
   @FXML private TextField endDate_textField;
   @FXML private TextField price_textField;
-  @FXML private Button view_profile_button;
-  @FXML private Button book_session_button;
   @FXML private Button back_button;
+  @FXML private Button edit_session_button;
 
   private Region root;
-  private SessionViewModel viewModel;
+  private SessionTutorViewModel viewModel;
   private ViewHandler viewHandler;
 
-  public SessionViewController()
+  public SessionTutorViewController()
   {
   }
 
-  public void init(ViewHandler viewHandler, SessionViewModel viewModel, Region root)
+  public void init(ViewHandler viewHandler, SessionTutorViewModel viewModel, Region root)
   {
     this.viewHandler = viewHandler;
     this.viewModel = viewModel;
@@ -67,28 +64,7 @@ public class SessionViewController
 
   private void setUpButtons()
   {
-    back_button.setOnAction(event -> viewHandler.openStudentMainPageView());
-    book_session_button.setOnAction(event -> onBookSession());
-    view_profile_button.setOnAction(event -> onViewTutorProfile());
-  }
-
-  @FXML private void onBookSession()
-  {
-    book_session_button.setDisable(true);
-    Thread t = new Thread(() -> {
-      viewModel.bookSession();
-      Platform.runLater(() -> viewHandler.openStudentMainPageView());
-    });
-    t.setDaemon(true);
-    t.start();
-  }
-
-  @FXML private void onViewTutorProfile()
-  {
-    Tutor tutor = viewModel.getSelectedTutor();
-    if (tutor != null)
-    {
-      viewHandler.openTutorProfileView(tutor);
-    }
+    back_button.setOnAction(event -> viewHandler.openTutorMainPageView());
+    edit_session_button.setOnAction(event -> System.out.println("Edit session"));
   }
 }

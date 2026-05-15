@@ -90,7 +90,7 @@ public class TutorMainPageController
       Session selected = mySessions_tView.getSelectionModel().getSelectedItem();
       if(selected != null)
       {
-        viewHandler.openSessionView(selected);
+        viewHandler.openTutorSessionView(selected);
       }
       else {
         System.out.println("No session selected.");
