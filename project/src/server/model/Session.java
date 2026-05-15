@@ -1,6 +1,5 @@
 package server.model;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.time.LocalDateTime;
@@ -18,8 +17,8 @@ public class Session {
 
     private boolean toBeCanceled;
     private boolean toBeRemoved;
-    private transient SessionState state;
-    private transient PropertyChangeSupport support;
+    private SessionState state;
+    private PropertyChangeSupport support;
 
     public Session(int id, String description, double price, String subject, String location, LocalDateTime start_date, LocalDateTime end_date, Tutor tutor, Student student) {
         this.id = id;
