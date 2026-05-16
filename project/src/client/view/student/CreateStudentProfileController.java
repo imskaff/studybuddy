@@ -55,5 +55,8 @@ public class CreateStudentProfileController
 
   private void setUpButtons()
   {
+
+    back_btn.setOnAction(event -> viewHandler.openCreateNewProfile());
+    rules_btn.setOnAction(event -> viewHandler.openRules());
   }
 }

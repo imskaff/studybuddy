@@ -213,17 +213,40 @@ public class ViewHandler
     }
   }
 
-  public void openCreateProfile()
+  public void openCreateNewProfile()
   {
     try
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource("client/view/CreateProfile.fxml"));
+      loader.setLocation(getClass().getResource(
+          "client/view/CreateNewProfile.fxml"));
       Region root = loader.load();
-      CreateProfileController controller = loader.getController();
-      controller.init(this, viewModelFactory.getCreateProfileView(), root);
+      CreateNewProfileController controller = loader.getController();
+      controller.init(this, viewModelFactory.getCreateNewProfileViewModel(), root);
 
       primaryStage.setTitle("Create Profile View");
+      primaryStage.setScene(new Scene(root));
+      primaryStage.setResizable(false);
+      primaryStage.show();
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  public void openRules()
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource(
+          "client/view/RulesView.fxml"));
+      Region root = loader.load();
+      RulesViewController controller = loader.getController();
+      controller.init(this, viewModelFactory.getRulesViewModel(), root);
+
+      primaryStage.setTitle("Rules View");
       primaryStage.setScene(new Scene(root));
       primaryStage.setResizable(false);
       primaryStage.show();
