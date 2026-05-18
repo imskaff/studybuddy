@@ -39,5 +39,12 @@ public abstract class CreateProfileViewModel
   public StringProperty passwordProperty(){ return password; }
   public StringProperty dateOfBirthProperty(){ return dateOfBirth; }
   public ObservableList<String> getLanguages()   { return languages; }
+
+  public StringProperty languageInputProperty()
+  {
+    return languageInput;
+  }
+
+
   public ReadOnlyObjectProperty<UserType> userTypeReadOnlyObjectProperty(){return userType;}
 }

@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.CreateNewProfileController">
    <children>
       <Separator layoutY="35.0" prefHeight="1.0" prefWidth="300.0" />
       <Separator layoutY="210.0" prefWidth="300.0" />
@@ -20,7 +20,7 @@
       <Text layoutX="79.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose one of the options" />
       <CheckBox fx:id="tutor_checkBtn" layoutX="28.0" layoutY="120.0" mnemonicParsing="false" text="Tutor Profile" />
       <CheckBox fx:id="student_checkBtn" layoutX="171.0" layoutY="120.0" mnemonicParsing="false" text="Student Profile" />
-      <Button fx:id="confirm_btn" layoutX="222.0" layoutY="218.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Confirm">
+      <Button fx:id="confirm_Btn" layoutX="222.0" layoutY="218.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Confirm">
          <font>
             <Font size="12.0" />
          </font>
