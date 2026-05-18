@@ -2,9 +2,6 @@ package server.mediator;
 
 import server.model.Session;
 
-// EditSessionRequest represents the updated
-// session information sent from the client
-// to the server when editing a session.
 public class EditSessionRequest
 {
   // Identifies the type of request sent to the server

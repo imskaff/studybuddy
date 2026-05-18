@@ -1,7 +1,5 @@
 package server.mediator;
-// DeleteSessionRequest represents the data
-// sent from the client to the server
-// when deleting a session.
+
 public class DeleteSessionRequest
 {
   // Identifies the type of request sent to the server
