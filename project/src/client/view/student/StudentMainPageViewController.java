@@ -42,6 +42,9 @@ public class StudentMainPageViewController {
     @FXML private TextArea dateOfBirth_textArea;
     @FXML private TextArea language_textArea;
 
+    @FXML private Button viewDetails_button;
+    @FXML private Button viewDetails_btn_bookedS;
+
     @FXML private ComboBox<String> subject_comboBox;
     @FXML private TextField minPrice_textField;
     @FXML private TextField maxPrice_textField;
@@ -73,6 +76,8 @@ public class StudentMainPageViewController {
             return new SimpleStringProperty(tutor.getFirst_name() + " " + tutor.getLast_name());
         });
         main_tableView.setItems(viewModel.getFilteredSessions());
+        viewDetails_button.disableProperty().bind(
+            main_tableView.getSelectionModel().selectedItemProperty().isNull());
 
         // booked sessions
         title_column_bookedS.setCellValueFactory(data ->
@@ -90,6 +95,8 @@ public class StudentMainPageViewController {
             new SimpleStringProperty(data.getValue().getState() != null
                 ? data.getValue().getState().getClass().getSimpleName() : ""));
         bookedSessions_tableView.setItems(viewModel.getBookedSessions());
+        viewDetails_btn_bookedS.disableProperty().bind(
+            bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());
 
         // profile fields
         fname_textArea.textProperty().bindBidirectional(viewModel.firstNameProperty());

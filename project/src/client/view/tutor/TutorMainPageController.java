@@ -54,6 +54,8 @@ public class TutorMainPageController
     description_column.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescription()));
 
     mySessions_tView.setItems(viewModel.getSessions());
+    viewDetails_btn.disableProperty().bind(
+        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
 
     //profile
     fname_textField.textProperty().bindBidirectional(viewModel.firstNameProperty());
