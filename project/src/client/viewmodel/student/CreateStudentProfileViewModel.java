@@ -3,11 +3,8 @@ package client.viewmodel.student;
 import client.model.Model;
 import client.viewmodel.CreateProfileViewModel;
 import client.viewmodel.UserType;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import server.dao.UserDAOImpl;
 import server.model.Student;
 
 import java.sql.SQLException;
@@ -23,7 +20,6 @@ public class CreateStudentProfileViewModel extends CreateProfileViewModel
   private final StringProperty phone;
   private final StringProperty gender;
   private final StringProperty languages;
-  private final BooleanProperty isSelected = new SimpleBooleanProperty(false);
 
 
   public CreateStudentProfileViewModel(Model model)
@@ -67,20 +63,5 @@ public class CreateStudentProfileViewModel extends CreateProfileViewModel
   public StringProperty genderProperty() { return gender; }
   public StringProperty languagesProperty() { return languages; }
 
-  //CheckBox
 
-  public BooleanProperty initProperty()
-  {
-    return isSelected;
-  }
-
-  public final Boolean getIsSelected()
-  {
-    return initProperty().get();
-  }
-
-  public final void setIsSelected(Boolean isSelected)
-  {
-    initProperty().set(isSelected);
-  }
 }

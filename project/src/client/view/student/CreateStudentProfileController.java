@@ -9,6 +9,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 
+import java.sql.SQLException;
+
 public class CreateStudentProfileController
 {
   @FXML private TextField fname_textField;
@@ -78,7 +80,14 @@ public class CreateStudentProfileController
 
       if(confirm_checkBtn.equals(true))
       {
-        viewHandler.register();
+        try
+        {
+          viewModel.register();
+        }
+        catch (SQLException e)
+        {
+          e.printStackTrace();
+        }
       }
       else
       {

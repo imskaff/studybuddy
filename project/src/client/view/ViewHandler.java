@@ -1,8 +1,10 @@
 package client.view;
 
 import client.view.admin.AdminViewController;
+import client.view.student.CreateStudentProfileController;
 import client.view.student.SessionStudentViewController;
 import client.view.student.StudentMainPageViewController;
+import client.view.tutor.CreateTutorProfileController;
 import client.view.tutor.SessionTutorViewController;
 import client.view.tutor.CreateNewSessionController;
 import client.view.student.TutorProfileViewController;
@@ -33,7 +35,7 @@ public class ViewHandler
     openWelcomeView();
   }
 
-  private void openWelcomeView()
+  public void openWelcomeView()
   {
     try
     {
@@ -257,10 +259,48 @@ public class ViewHandler
     }
   }
 
-  public void register()
+  public void openCreateStudentProfile()
   {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("client/view/student/CreateStudentProfile.fxml"));
+      Region root = loader.load();
+      CreateStudentProfileController controller = loader .getController();
+      controller.init(this, viewModelFactory.getCreateStudentViewModel(),root);
 
+      primaryStage.setTitle("Create Student Profile View");
+      primaryStage.setScene(new Scene(root));
+      primaryStage.setResizable(false);
+      primaryStage.show();
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
   }
+
+  public void openCreateTutorProfile()
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("client/view/tutor/CreateTutorProfile.fxml"));
+      Region root = loader.load();
+      CreateTutorProfileController controller = loader .getController();
+      controller.init(this, viewModelFactory.getCreateTutorViewModel(),root);
+
+      primaryStage.setTitle("Create Tutor Profile View");
+      primaryStage.setScene(new Scene(root));
+      primaryStage.setResizable(false);
+      primaryStage.show();
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
 
 }
 
