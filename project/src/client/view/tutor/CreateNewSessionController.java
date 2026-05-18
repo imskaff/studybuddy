@@ -1,11 +1,13 @@
 package client.view.tutor;
 
 import client.view.ViewHandler;
-import client.viewmodel.ViewState;
 import client.viewmodel.tutor.CreateNewSessionViewModel;
-import client.viewmodel.tutor.TutorMainPageViewModel;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
@@ -13,13 +15,9 @@ import javafx.stage.Stage;
 import server.model.Session;
 import server.model.Tutor;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-
 public class CreateNewSessionController
 {
-  @FXML private TextField subject_textField;
+  @FXML private ComboBox<String> subject_comboBox;
   @FXML private TextField price_textField;
   @FXML private TextField location_textField;
   @FXML private TextField startDate_textField;
@@ -41,7 +39,9 @@ public class CreateNewSessionController
     this.viewModel = viewModel;
     this.root = root;
 
-    subject_textField.textProperty().bindBidirectional(viewModel.subjectProperty());
+    viewModel.loadSubjects();
+    subject_comboBox.setItems(viewModel.getSubjectOptions());
+    subject_comboBox.valueProperty().bindBidirectional(viewModel.subjectProperty());
     price_textField.textProperty().bindBidirectional(viewModel.priceProperty());
     location_textField.textProperty().bindBidirectional(viewModel.locationProperty());
     startDate_textField.textProperty().bindBidirectional(viewModel.startDateProperty());

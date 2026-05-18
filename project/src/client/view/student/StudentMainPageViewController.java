@@ -5,10 +5,13 @@ import client.viewmodel.student.StudentMainPageViewModel;
 import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import server.model.Session;
 import server.model.Tutor;
@@ -39,6 +42,16 @@ public class StudentMainPageViewController {
     @FXML private TextArea dateOfBirth_textArea;
     @FXML private TextArea language_textArea;
 
+    @FXML private Button viewDetails_button;
+    @FXML private Button viewDetails_btn_bookedS;
+
+    @FXML private ComboBox<String> subject_comboBox;
+    @FXML private TextField minPrice_textField;
+    @FXML private TextField maxPrice_textField;
+    @FXML private TextField fromDate_textField;
+    @FXML private TextField toDate_textField;
+    @FXML private Button reset_btn;
+
     private Region root;
     private ViewHandler viewHandler;
     private StudentMainPageViewModel viewModel;
@@ -62,7 +75,9 @@ public class StudentMainPageViewController {
             Tutor tutor = data.getValue().getTutor();
             return new SimpleStringProperty(tutor.getFirst_name() + " " + tutor.getLast_name());
         });
-        main_tableView.setItems(viewModel.getSessions());
+        main_tableView.setItems(viewModel.getFilteredSessions());
+        viewDetails_button.disableProperty().bind(
+            main_tableView.getSelectionModel().selectedItemProperty().isNull());
 
         // booked sessions
         title_column_bookedS.setCellValueFactory(data ->
@@ -80,7 +95,10 @@ public class StudentMainPageViewController {
             new SimpleStringProperty(data.getValue().getState() != null
                 ? data.getValue().getState().getClass().getSimpleName() : ""));
         bookedSessions_tableView.setItems(viewModel.getBookedSessions());
+        viewDetails_btn_bookedS.disableProperty().bind(
+            bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());
 
+        // profile fields
         fname_textArea.textProperty().bindBidirectional(viewModel.firstNameProperty());
         lname_textArea.textProperty().bindBidirectional(viewModel.lastNameProperty());
         dateOfBirth_textArea.textProperty().bindBidirectional(viewModel.dateOfBirthProperty());
@@ -88,6 +106,15 @@ public class StudentMainPageViewController {
         phone_textArea.textProperty().bindBidirectional(viewModel.phoneProperty());
         gender_textArea.textProperty().bindBidirectional(viewModel.genderProperty());
         language_textArea.textProperty().bindBidirectional(viewModel.languagesProperty());
+
+        // filter bar
+        subject_comboBox.setItems(viewModel.getSubjectOptions());
+        subject_comboBox.valueProperty().bindBidirectional(viewModel.subjectFilterProperty());
+        minPrice_textField.textProperty().bindBidirectional(viewModel.minPriceProperty());
+        maxPrice_textField.textProperty().bindBidirectional(viewModel.maxPriceProperty());
+        fromDate_textField.textProperty().bindBidirectional(viewModel.fromDateProperty());
+        toDate_textField.textProperty().bindBidirectional(viewModel.toDateProperty());
+        reset_btn.setOnAction(e -> viewModel.resetFilters());
 
         setFieldsReadOnly();
         viewModel.loadData();
@@ -97,16 +124,15 @@ public class StudentMainPageViewController {
         return root;
     }
 
-  private void setFieldsReadOnly()
-  {
-    fname_textArea.setEditable(false);
-    lname_textArea.setEditable(false);
-    dateOfBirth_textArea.setEditable(false);
-    email_textArea.setEditable(false);
-    phone_textArea.setEditable(false);
-    gender_textArea.setEditable(false);
-    language_textArea.setEditable(false);
-  }
+    private void setFieldsReadOnly() {
+        fname_textArea.setEditable(false);
+        lname_textArea.setEditable(false);
+        dateOfBirth_textArea.setEditable(false);
+        email_textArea.setEditable(false);
+        phone_textArea.setEditable(false);
+        gender_textArea.setEditable(false);
+        language_textArea.setEditable(false);
+    }
 
     @FXML private void onViewDetailsButtonClicked() {
         Session selected = main_tableView.getSelectionModel().getSelectedItem();

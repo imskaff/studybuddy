@@ -8,6 +8,8 @@ import server.model.SessionModel;
 import server.model.SessionModelManager;
 import server.model.Student;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -87,6 +89,8 @@ public class ClientHandler implements Runnable {
       handleGetBookedSessions(clientText);
     } else if (requestType.getType().equals("GET_PENDING_TUTORS")) {
       handleGetPendingTutors();
+    } else if (requestType.getType().equals("GET_SUBJECTS")) {
+      handleGetSubjects();
     }else if(requestType.getType().equals("EDIT_STUDENT_PROFILE")){
       handleEditStudentProfile(clientText);
     }else if(requestType.getType().equals("EDIT_TUTOR_PROFILE")){
@@ -214,7 +218,7 @@ public class ClientHandler implements Runnable {
 
   // Handles a request to get all available (unbooked) sessions
   private void handleGetAvailableSessions() throws Exception {
-    java.util.ArrayList<Session> sessions = new java.util.ArrayList<>(SessionDAOImpl.getInstance().readAvailable());
+    ArrayList<Session> sessions = new ArrayList<>(SessionDAOImpl.getInstance().readAvailable());
     SessionListResponse response = new SessionListResponse("OK", "Available sessions", sessions);
     sendJsonResponse(response);
   }
@@ -222,15 +226,21 @@ public class ClientHandler implements Runnable {
   // Handles a request to get all sessions booked by a specific student
   private void handleGetBookedSessions(String clientText) throws Exception {
     GetBookedSessionsRequest request = gson.fromJson(clientText, GetBookedSessionsRequest.class);
-    java.util.ArrayList<Session> sessions = new java.util.ArrayList<>(
+    ArrayList<Session> sessions = new ArrayList<>(
         SessionDAOImpl.getInstance().readByStudent(request.getStudentId()));
     SessionListResponse response = new SessionListResponse("OK", "Booked sessions", sessions);
     sendJsonResponse(response);
   }
 
+  private void handleGetSubjects() throws Exception {
+    List<String> subjects = model.getSubjects();
+    SubjectsResponse response = new SubjectsResponse("OK", subjects);
+    sendJsonResponse(response);
+  }
+
   // Handles a request to get all pending tutor registrations
   private void handleGetPendingTutors() throws Exception {
-    java.util.ArrayList<server.model.Tutor> tutors = UserDAOImpl.getInstance().readPendingTutors();
+    ArrayList<server.model.Tutor> tutors = UserDAOImpl.getInstance().readPendingTutors();
     TutorListResponse response = new TutorListResponse("OK", "Pending tutors", tutors);
     sendJsonResponse(response);
   }

@@ -4,20 +4,19 @@ import client.view.admin.AdminViewController;
 import client.view.student.CreateStudentProfileController;
 import client.view.student.SessionStudentViewController;
 import client.view.student.StudentMainPageViewController;
+import client.view.student.TutorProfileViewController;
+import client.view.tutor.CreateNewSessionController;
 import client.view.tutor.CreateTutorProfileController;
 import client.view.tutor.SessionTutorViewController;
-import client.view.tutor.CreateNewSessionController;
-import client.view.student.TutorProfileViewController;
 import client.view.tutor.TutorMainPageController;
 import client.viewmodel.ViewModelFactory;
+import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import server.model.Session;
 import server.model.Tutor;
-
-import java.io.IOException;
 
 public class ViewHandler
 {
@@ -109,8 +108,8 @@ public class ViewHandler
       loader.setLocation(getClass().getResource("tutor/SessionTutorView.fxml"));
       Region root = loader.load();
       SessionTutorViewController controller = loader.getController();
-      viewModelFactory.getSessionTutorViewModel().loadSession(selected);
       controller.init(this, viewModelFactory.getSessionTutorViewModel(), root);
+      viewModelFactory.getSessionTutorViewModel().loadSession(selected);
 
       primaryStage.setTitle("Session");
       primaryStage.setScene(new Scene(root));
