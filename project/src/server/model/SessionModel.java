@@ -35,4 +35,8 @@ public interface SessionModel {
   boolean createTutorProfile(Tutor tutor);
 
   boolean handleTutorRegistration(int tutorId, String action);
+
+  boolean editStudentProfile(Student student);
+
+  boolean editTutorProfile(Tutor tutor);
 }
