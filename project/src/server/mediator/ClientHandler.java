@@ -87,7 +87,11 @@ public class ClientHandler implements Runnable {
       handleGetBookedSessions(clientText);
     } else if (requestType.getType().equals("GET_PENDING_TUTORS")) {
       handleGetPendingTutors();
-    } else {
+    }else if(requestType.getType().equals("EDIT_STUDENT_PROFILE")){
+      handleEditStudentProfile(clientText);
+    }else if(requestType.getType().equals("EDIT_TUTOR_PROFILE")){
+      handleEditTutorProfile(clientText);
+    }else {
       sendResponse(new Response("ERROR", "Unknown request type"));
     }
   }
@@ -97,9 +101,7 @@ public class ClientHandler implements Runnable {
     BookSessionRequest request =
         gson.fromJson(clientText, BookSessionRequest.class);
 
-    model.bookSession(
-        request.getStudentId(),
-        request.getSessionId());
+    model.bookSession(request.getStudentId(), request.getSessionId());
 
     sendResponse(new Response("OK", "Session booked"));
   }
@@ -108,10 +110,10 @@ public class ClientHandler implements Runnable {
     CreateSessionRequest request = gson.fromJson(clientText, CreateSessionRequest.class);
 
     boolean created = model.createSession(request.getSession());
-
     if (created) {
       sendResponse(new Response("OK", "Session created"));
-    } else {
+    }
+    else {
       sendResponse(new Response("ERROR", "Failed to create session"));
     }
   }
@@ -123,7 +125,8 @@ public class ClientHandler implements Runnable {
 
     if (edited) {
       sendResponse(new Response("OK", "Session updated"));
-    } else {
+    }
+    else {
       sendResponse(new Response("ERROR",
           "One or more edited fields are empty or invalid"));
     }
@@ -133,10 +136,10 @@ public class ClientHandler implements Runnable {
     DeleteSessionRequest request = gson.fromJson(clientText, DeleteSessionRequest.class);
 
     boolean deleted = model.deleteSession(request.getSessionId());
-
     if (deleted) {
       sendResponse(new Response("OK", "Session deleted"));
-    } else {
+    }
+    else {
       sendResponse(new Response("ERROR", "Deletion was not confirmed"));
     }
   }
@@ -145,28 +148,26 @@ public class ClientHandler implements Runnable {
     CreateStudentProfileRequest request = gson.fromJson(clientText, CreateStudentProfileRequest.class);
 
     if (!request.isRulesConfirmed()) {
-      sendResponse(new Response("ERROR",
-          "The rules must be confirmed before proceeding"));
-    } else if (model.createStudentProfile(request.getStudent())) {
+      sendResponse(new Response("ERROR", "The rules must be confirmed before proceeding"));
+    }
+    else if (model.createStudentProfile(request.getStudent())) {
       sendResponse(new Response("OK", "Student profile created"));
-    } else {
-      sendResponse(new Response("ERROR",
-          "One or more fields are wrong, missing, or already used"));
+    }
+    else {
+      sendResponse(new Response("ERROR", "One or more fields are wrong, missing, or already used"));
     }
   }
 
   private void handleCreateTutorProfile(String clientText) {
     CreateTutorProfileRequest request = gson.fromJson(clientText, CreateTutorProfileRequest.class);
 
-    if (!request.isRulesConfirmed()) {
-      sendResponse(new Response("ERROR",
-          "The rules must be confirmed before proceeding"));
-    } else if (model.createTutorProfile(request.getTutor())) {
-      sendResponse(new Response("OK",
-          "Tutor registration request sent for approval"));
+    if (!request.isRulesConfirmed()){
+      sendResponse(new Response("ERROR", "The rules must be confirmed before proceeding"));
+    }
+    else if (model.createTutorProfile(request.getTutor())) {
+      sendResponse(new Response("OK", "Tutor registration request sent for approval"));
     } else {
-      sendResponse(new Response("ERROR",
-          "One or more fields are wrong, missing, or already used"));
+      sendResponse(new Response("ERROR", "One or more fields are wrong, missing, or already used"));
     }
   }
 
@@ -181,6 +182,33 @@ public class ClientHandler implements Runnable {
       sendResponse(new Response("DECLINED", "Tutor profile declined"));
     } else {
       sendResponse(new Response("ERROR", "Unknown action"));
+    }
+  }
+
+  private void handleEditStudentProfile(String clientText)
+  {
+    EditStudentProfileRequest request = gson.fromJson(clientText, EditStudentProfileRequest.class);
+
+    boolean updated = model.editStudentProfile(request.getStudent());
+
+    if(updated){
+      sendResponse(new Response("OK", "Student profile updated"));
+    }
+    else{
+      sendResponse(new Response("ERROR", "Missing or invalid Student information"));
+    }
+  }
+
+  private void handleEditTutorProfile(String clientText){
+    EditTutorProfileRequest request = gson.fromJson(clientText, EditTutorProfileRequest.class);
+
+    boolean updated = model.editTutorProfile(request.getTutor());
+
+    if(updated) {
+      sendResponse(new Response("OK", "Tutor profile updated"));
+    }
+    else {
+      sendResponse(new Response("ERROR", "Missing or invalid tutor information"));
     }
   }
 
