@@ -3,10 +3,14 @@ package client.viewmodel.student;
 import client.model.Model;
 import client.viewmodel.CreateProfileViewModel;
 import client.viewmodel.UserType;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import server.dao.UserDAOImpl;
 import server.model.Student;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -19,6 +23,7 @@ public class CreateStudentProfileViewModel extends CreateProfileViewModel
   private final StringProperty phone;
   private final StringProperty gender;
   private final StringProperty languages;
+  private final BooleanProperty isSelected = new SimpleBooleanProperty(false);
 
 
   public CreateStudentProfileViewModel(Model model)
@@ -35,7 +40,9 @@ public class CreateStudentProfileViewModel extends CreateProfileViewModel
   }
 
   @Override
-  public void register() {
+  public void register() throws SQLException
+  {
+
     Student student = new Student(
         firstNameProperty().get().trim(),
         lastNameProperty().get().trim(),
@@ -47,7 +54,7 @@ public class CreateStudentProfileViewModel extends CreateProfileViewModel
         new ArrayList<>(getLanguages()),
         0,
         UserType.STUDENT.toString()
-    );
+   );
 
     model.registerStudent(student);
   }
@@ -59,4 +66,21 @@ public class CreateStudentProfileViewModel extends CreateProfileViewModel
   public StringProperty phoneProperty() { return phone; }
   public StringProperty genderProperty() { return gender; }
   public StringProperty languagesProperty() { return languages; }
+
+  //CheckBox
+
+  public BooleanProperty initProperty()
+  {
+    return isSelected;
+  }
+
+  public final Boolean getIsSelected()
+  {
+    return initProperty().get();
+  }
+
+  public final void setIsSelected(Boolean isSelected)
+  {
+    initProperty().set(isSelected);
+  }
 }

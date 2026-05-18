@@ -46,11 +46,27 @@ public class CreateStudentProfileController
     lname_textField.textProperty().bindBidirectional(viewModel.lastNameProperty());
     date_textField.textProperty().bindBidirectional(viewModel.dateOfBirthProperty());
     email_textField.textProperty().bindBidirectional(viewModel.emailProperty());
+    password_textField.textProperty().bindBidirectional(viewModel.passwordProperty());
     phone_textField.textProperty().bindBidirectional(viewModel.phoneProperty());
     gender_textField.textProperty().bindBidirectional(viewModel.genderProperty());
     languages_textArea.textProperty().bindBidirectional(viewModel.languagesProperty());
-    
+
+    confirm_checkBtn.setSelected(false);
+
+    setFieldsEditable(true);
     setUpButtons();
+  }
+
+  public void setFieldsEditable(boolean editable)
+  {
+    fname_textField.setEditable(editable);
+    lname_textField.setEditable(editable);
+    date_textField.setEditable(editable);
+    email_textField.setEditable(editable);
+    password_textField.setEditable(editable);
+    phone_textField.setEditable(editable);
+    gender_textField.setEditable(editable);
+    languages_textArea.setEditable(editable);
   }
 
   private void setUpButtons()
@@ -58,5 +74,21 @@ public class CreateStudentProfileController
 
     back_btn.setOnAction(event -> viewHandler.openCreateNewProfile());
     rules_btn.setOnAction(event -> viewHandler.openRules());
+    register_btn.setOnAction(event -> {
+
+      if(confirm_checkBtn.equals(true))
+      {
+        viewHandler.register();
+      }
+      else
+      {
+        System.err.println("Rules has to be confirmed to register");
+      }
+    });
+  }
+
+  public Region getRoot()
+  {
+    return root;
   }
 }
