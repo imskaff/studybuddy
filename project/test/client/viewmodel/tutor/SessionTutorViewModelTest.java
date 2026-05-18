@@ -3,6 +3,7 @@ package client.viewmodel.tutor;
 import client.model.Model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import server.model.Session;
 import server.model.Tutor;
 
@@ -126,6 +127,140 @@ class SessionTutorViewModelTest
 
         assertEquals("Chemistry", viewModel.subjectProperty().get());
         assertEquals(second, viewModel.getSelectedSession());
+    }
+
+    // --- editing session ---
+
+    @Test
+    void editSessionCallsModelWithUpdatedSession()
+    {
+        viewModel.loadSession(makeSession(1, "Physics"));
+        viewModel.subjectProperty().set("Chemistry");
+        viewModel.priceProperty().set("99.0");
+        when(mockModel.editSession(any(Session.class))).thenReturn(true);
+
+        viewModel.editSession();
+
+        ArgumentCaptor<Session> captor = ArgumentCaptor.forClass(Session.class);
+        verify(mockModel, times(1)).editSession(captor.capture());
+        assertEquals("Chemistry", captor.getValue().getSubject());
+        assertEquals(99.0, captor.getValue().getPrice());
+        assertEquals(1, captor.getValue().getId());
+    }
+
+    @Test
+    void editSessionPreservesSessionIdAndTutor()
+    {
+        Session original = makeSession(42, "Physics");
+        viewModel.loadSession(original);
+        viewModel.subjectProperty().set("Biology");
+        when(mockModel.editSession(any(Session.class))).thenReturn(true);
+
+        viewModel.editSession();
+
+        ArgumentCaptor<Session> captor = ArgumentCaptor.forClass(Session.class);
+        verify(mockModel).editSession(captor.capture());
+        assertEquals(42, captor.getValue().getId());
+        assertEquals(original.getTutor(), captor.getValue().getTutor());
+    }
+
+    @Test
+    void editSessionReturnsTrueOnSuccess()
+    {
+        viewModel.loadSession(makeSession(1, "Physics"));
+        when(mockModel.editSession(any(Session.class))).thenReturn(true);
+
+        boolean result = viewModel.editSession();
+
+        assertTrue(result);
+    }
+
+    @Test
+    void editSessionReturnsFalseWhenModelFails()
+    {
+        viewModel.loadSession(makeSession(1, "Physics"));
+        when(mockModel.editSession(any(Session.class))).thenReturn(false);
+
+        boolean result = viewModel.editSession();
+
+        assertFalse(result);
+    }
+
+    @Test
+    void editSessionWithNoSessionLoadedReturnsFalse()
+    {
+        boolean result = viewModel.editSession();
+
+        assertFalse(result);
+        verify(mockModel, never()).editSession(any());
+    }
+
+    @Test
+    void editSessionWithInvalidPriceReturnsFalse()
+    {
+        viewModel.loadSession(makeSession(1, "Physics"));
+        viewModel.priceProperty().set("not-a-number");
+
+        boolean result = viewModel.editSession();
+
+        assertFalse(result);
+        verify(mockModel, never()).editSession(any());
+    }
+
+    @Test
+    void editSessionWithInvalidDateReturnsFalse()
+    {
+        viewModel.loadSession(makeSession(1, "Physics"));
+        viewModel.startDateProperty().set("bad-date");
+
+        boolean result = viewModel.editSession();
+
+        assertFalse(result);
+        verify(mockModel, never()).editSession(any());
+    }
+
+    // --- deleting session ---
+
+    @Test
+    void deleteSessionCallsModelWithCorrectId()
+    {
+        viewModel.loadSession(makeSession(7, "Physics"));
+        when(mockModel.deleteSession(7)).thenReturn(true);
+
+        viewModel.deleteSession();
+
+        verify(mockModel, times(1)).deleteSession(7);
+    }
+
+    @Test
+    void deleteSessionReturnsTrueOnSuccess()
+    {
+        viewModel.loadSession(makeSession(1, "Physics"));
+        when(mockModel.deleteSession(anyInt())).thenReturn(true);
+
+        boolean result = viewModel.deleteSession();
+
+        assertTrue(result);
+    }
+
+    @Test
+    void deleteSessionReturnsFalseWhenModelFails()
+    {
+        viewModel.loadSession(makeSession(1, "Physics"));
+        when(mockModel.deleteSession(anyInt())).thenReturn(false);
+
+        boolean result = viewModel.deleteSession();
+
+        assertFalse(result);
+    }
+
+    @Test
+    void deleteSessionWithNoSessionLoadedReturnsFalse()
+    {
+        boolean result = viewModel.deleteSession();
+
+        assertFalse(result);
+        verify(mockModel, never()).deleteSession(anyInt());
     }
 
     // --- helpers ---

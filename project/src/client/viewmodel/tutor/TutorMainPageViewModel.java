@@ -99,12 +99,6 @@ public class TutorMainPageViewModel implements PropertyChangeListener
         }
     }
 
-    public void removeSession(Session session) {
-        if (session != null) {
-            model.remove(session);
-        }
-    }
-
     @Override public void propertyChange(PropertyChangeEvent evt)
     {
     }

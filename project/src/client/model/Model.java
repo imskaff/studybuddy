@@ -30,6 +30,10 @@ public interface Model {
 
   boolean createSession(Session session);
 
+  boolean editSession(Session session);
+
+  boolean deleteSession(int sessionId);
+
   boolean approveTutor(int tutorId);
 
   boolean declineTutor(int tutorId);

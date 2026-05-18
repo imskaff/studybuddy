@@ -2,14 +2,13 @@ package client.view.tutor;
 
 import client.view.ViewHandler;
 import client.viewmodel.tutor.TutorMainPageViewModel;
+import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import server.model.Session;
 import server.model.SessionState;
-
-import java.time.format.DateTimeFormatter;
 
 public class TutorMainPageController
 {
@@ -31,10 +30,6 @@ public class TutorMainPageController
 
   @FXML private Button viewDetails_btn;
   @FXML private Button create_btn;
-  @FXML private Button cancel_btn;
-  @FXML private Button remove_btn;
-
-
   private Region root;
   private ViewHandler viewHandler;
   private TutorMainPageViewModel viewModel;
@@ -101,21 +96,5 @@ public class TutorMainPageController
   {
     viewDetails_btn.setOnAction(event -> onViewDetails());
     create_btn.setOnAction(event -> viewHandler.openCreateNewSession());
-    cancel_btn.setOnAction(event -> {
-      Session selectedSession = mySessions_tView.getSelectionModel().getSelectedItem();
-      if(selectedSession != null)
-      {
-        viewModel.cancelSession(selectedSession);
-      }
-    });
-    remove_btn.setOnAction(event -> {
-      Session selectedSession = mySessions_tView.getSelectionModel().getSelectedItem();
-      if(selectedSession != null)
-      {
-        viewModel.removeSession(selectedSession);
-      }
-    });
-
-
   }
 }

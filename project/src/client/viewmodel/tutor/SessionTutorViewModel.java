@@ -3,6 +3,7 @@ package client.viewmodel.tutor;
 import client.model.Model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -53,6 +54,41 @@ public class SessionTutorViewModel implements PropertyChangeListener
             endDate.set(session.getEnd_date()   != null ? session.getEnd_date().format(FMT)   : "");
             price.set(String.valueOf(session.getPrice()));
         }
+    }
+
+    public boolean editSession()
+    {
+        if (selectedSession == null) return false;
+        try
+        {
+            double parsedPrice = Double.parseDouble(price.get());
+            LocalDateTime parsedStart = LocalDateTime.parse(startDate.get(), FMT);
+            LocalDateTime parsedEnd   = LocalDateTime.parse(endDate.get(),   FMT);
+
+            Session updated = new Session(
+                selectedSession.getId(),
+                description.get(),
+                parsedPrice,
+                subject.get(),
+                location.get(),
+                parsedStart,
+                parsedEnd,
+                selectedSession.getTutor(),
+                selectedSession.getStudent()
+            );
+            return model.editSession(updated);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Invalid input: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteSession()
+    {
+        if (selectedSession == null) return false;
+        return model.deleteSession(selectedSession.getId());
     }
 
     public Session getSelectedSession() { return selectedSession; }
