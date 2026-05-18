@@ -34,6 +34,10 @@ public interface ClientModel {
   // Sends a tutor registration handling request to the server.
   boolean handleTutorRegistration(int tutorId, String action, int adminId);
 
+  boolean editStudentProfile(Student student);
+
+  boolean editTutorProfile(Tutor tutor);
+
   // Retrieves all available (unbooked) sessions from the server.
   ArrayList<Session> getAvailableSessions();
 

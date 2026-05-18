@@ -195,8 +195,23 @@ public class Client implements ClientModel
 
   @Override public boolean handleTutorRegistration(int tutorId, String action, int adminId)
   {
-    HandleTutorRegistrationRequest request =
-        new HandleTutorRegistrationRequest(tutorId, action, adminId);
+    HandleTutorRegistrationRequest request = new HandleTutorRegistrationRequest(tutorId, action, adminId);
+
+    return sendRequest(request);
+  }
+
+  @Override
+  public boolean editStudentProfile(Student student)
+  {
+    EditStudentProfileRequest request = new EditStudentProfileRequest(student);
+
+    return sendRequest(request);
+  }
+
+  @Override
+  public boolean editTutorProfile(Tutor tutor)
+  {
+    EditTutorProfileRequest request = new EditTutorProfileRequest(tutor);
 
     return sendRequest(request);
   }
