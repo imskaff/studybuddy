@@ -257,5 +257,10 @@ public class ViewHandler
     }
   }
 
+  public void register()
+  {
+
+  }
+
 }
 
