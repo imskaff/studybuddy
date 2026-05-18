@@ -2,6 +2,7 @@ package client.mediator;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
@@ -42,6 +43,9 @@ public interface ClientModel {
 
   // Retrieves all pending tutor registrations from the server.
   ArrayList<Tutor> getPendingTutors();
+
+  // Retrieves all subjects from the server.
+  List<String> getSubjects();
 
   // Adds a property change listener to the client model.
   void addPropertyChangeListener(PropertyChangeListener listener);

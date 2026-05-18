@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.List;
 import server.dao.SessionDAOImpl;
 import server.dao.UserDAOImpl;
 
@@ -20,8 +21,6 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
     public void bookSession(Student student, Tutor tutor, Session sessionId) {
         list.addSession(sessionId);
     }
-
-
 
     @Override
     public ArrayList<Session> getAllSessions() {
@@ -136,6 +135,7 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
       // Updates the session data
       existing.setDescription(updatedSession.getDescription());
       existing.setPrice(updatedSession.getPrice());
+      existing.setSubject(updatedSession.getSubject());
       existing.setLocation(updatedSession.getLocation());
       existing.setStart_date(updatedSession.getStart_date());
       existing.setEnd_date(updatedSession.getEnd_date());
@@ -263,6 +263,20 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
     {
       e.printStackTrace();
       return false;
+    }
+  }
+
+  @Override
+  public List<String> getSubjects()
+  {
+    try
+    {
+      return SessionDAOImpl.getInstance().readSubjects();
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+      return new ArrayList<>();
     }
   }
 

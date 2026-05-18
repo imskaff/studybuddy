@@ -1,7 +1,6 @@
 package client.view;
 
 import client.viewmodel.CreateNewProfileViewModel;
-import client.viewmodel.CreateProfileViewModel;
 import javafx.scene.layout.Region;
 
 public class CreateNewProfileController

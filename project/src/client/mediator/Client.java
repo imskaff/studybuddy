@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -96,8 +97,6 @@ public class Client implements ClientModel
       System.out.println("Server> " + replyJson);
 
       Response reply = gson.fromJson(replyJson, Response.class);
-
-
 
       return "OK".equals(reply.getStatus())
           || "APPROVED".equals(reply.getStatus())
@@ -244,6 +243,20 @@ public class Client implements ClientModel
       return response.getSessions();
     }
 
+    return new ArrayList<>();
+  }
+
+  @Override
+  public List<String> getSubjects()
+  {
+    GetSubjectsRequest request = new GetSubjectsRequest();
+    String replyJson = sendRequestForResponse(request);
+    if (replyJson == null) return new ArrayList<>();
+    SubjectsResponse response = gson.fromJson(replyJson, SubjectsResponse.class);
+    if ("OK".equals(response.getStatus()) && response.getSubjects() != null)
+    {
+      return response.getSubjects();
+    }
     return new ArrayList<>();
   }
 

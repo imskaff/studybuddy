@@ -2,6 +2,7 @@ package server.model;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface SessionModel {
     void bookSession(Student student, Tutor tutor, Session sessionId);
@@ -9,8 +10,6 @@ public interface SessionModel {
     ArrayList<Session> getAllSessions();
 
     Session getSession(int index);
-
-    //Session getSessionById(int index);
 
     void removeSessionById(int id);
 
@@ -35,4 +34,6 @@ public interface SessionModel {
   boolean createTutorProfile(Tutor tutor);
 
   boolean handleTutorRegistration(int tutorId, String action);
+
+  List<String> getSubjects();
 }
