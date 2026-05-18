@@ -1,12 +1,11 @@
 package server.model;
 
-import server.dao.SessionDAOImpl;
-import server.dao.UserDAOImpl;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import server.dao.SessionDAOImpl;
+import server.dao.UserDAOImpl;
 
 public class SessionModelManager implements SessionModel, PropertyChangeListener {
     private final SessionList list;
