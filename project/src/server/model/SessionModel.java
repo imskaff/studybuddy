@@ -35,6 +35,8 @@ public interface SessionModel {
 
   boolean handleTutorRegistration(int tutorId, String action);
 
+  User login(String email, String password);
+
   List<String> getSubjects();
 
   boolean editStudentProfile(Student student);

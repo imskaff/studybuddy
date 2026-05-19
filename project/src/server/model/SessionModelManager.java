@@ -322,6 +322,24 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
   }
 
   @Override
+  public User login(String email, String password)
+  {
+    try {
+      if(email == null || email.isEmpty() || password == null || password.isEmpty())
+      {
+        return null;
+      }
+      // Searches for the user in the database
+      return UserDAOImpl.getInstance().readByEmailAndPassword(email, password);
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  @Override
   public List<String> getSubjects()
   {
     try

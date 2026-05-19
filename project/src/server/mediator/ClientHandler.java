@@ -3,10 +3,7 @@ package server.mediator;
 import com.google.gson.*;
 import server.dao.SessionDAOImpl;
 import server.dao.UserDAOImpl;
-import server.model.Session;
-import server.model.SessionModel;
-import server.model.SessionModelManager;
-import server.model.Student;
+import server.model.*;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -95,7 +92,10 @@ public class ClientHandler implements Runnable {
       handleEditStudentProfile(clientText);
     }else if(requestType.getType().equals("EDIT_TUTOR_PROFILE")){
       handleEditTutorProfile(clientText);
-    }else {
+    }else if(requestType.getType().equals("LOGIN")){
+      handleLogin(clientText);
+    }
+    else {
       sendResponse(new Response("ERROR", "Unknown request type"));
     }
   }
@@ -213,6 +213,39 @@ public class ClientHandler implements Runnable {
     }
     else {
       sendResponse(new Response("ERROR", "Missing or invalid tutor information"));
+    }
+  }
+
+  private void handleLogin(String clientText){
+    LoginRequest request = gson.fromJson(clientText, LoginRequest.class);
+
+    //Missing or invalid input
+    if(request.getEmail() == null || request.getEmail().isEmpty()
+        || request.getPassword() == null || request.getPassword().isEmpty())
+    {
+      LoginResponse response = LoginResponse.error("Missing or invalid login information");
+
+      out.println(gson.toJson(response));
+      return;
+    }
+
+  //sends the login info to the server-side model to check if the user exists in the database
+    User user = model.login(request.getEmail(), request.getPassword());
+
+    //valid credentials
+    if(user != null){
+      String userJson = gson.toJson(user);
+     //successful response
+      LoginResponse response = LoginResponse.ok(user.getType(), userJson);
+
+      //sends the response back to the client
+      out.println(gson.toJson(response));
+    }
+    //invalid credentials
+    else {
+      LoginResponse response = LoginResponse.error("Invalid credentials");
+
+      out.println(gson.toJson(response));
     }
   }
 
