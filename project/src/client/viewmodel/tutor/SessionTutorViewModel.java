@@ -7,12 +7,16 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import server.model.Session;
 
 public class SessionTutorViewModel implements PropertyChangeListener
 {
     private final Model model;
     private Session selectedSession;
+
+    private final ObservableList<String> subjectOptions;
 
     private final StringProperty description;
     private final StringProperty tutorName;
@@ -27,6 +31,8 @@ public class SessionTutorViewModel implements PropertyChangeListener
     public SessionTutorViewModel(Model model)
     {
         this.model = model;
+
+        this.subjectOptions = FXCollections.observableArrayList();
 
         this.description = new SimpleStringProperty("");
         this.tutorName   = new SimpleStringProperty("");
@@ -92,6 +98,14 @@ public class SessionTutorViewModel implements PropertyChangeListener
     }
 
     public Session getSelectedSession() { return selectedSession; }
+
+    public void loadSubjects()
+    {
+        subjectOptions.clear();
+        subjectOptions.addAll(model.getSubjects());
+    }
+
+    public ObservableList<String> getSubjectOptions() { return subjectOptions; }
 
     public StringProperty descriptionProperty() { return description; }
     public StringProperty tutorProperty()        { return tutorName;   }

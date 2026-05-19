@@ -11,6 +11,7 @@ import server.model.Tutor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ModelManager implements Model, PropertyChangeListener {
     private final ClientModel client;
@@ -121,6 +122,11 @@ public class ModelManager implements Model, PropertyChangeListener {
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public List<String> getSubjects() {
+        return client.getSubjects();
     }
 
     @Override

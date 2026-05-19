@@ -35,5 +35,47 @@ public class CreateTutorProfileViewModel extends CreateProfileViewModel
         );
         model.registerTutor(tutor);
   }
+
+  @Override public StringProperty firstNameProperty()
+  {
+    return super.firstNameProperty();
+  }
+
+  @Override public StringProperty lastNameProperty()
+  {
+    return super.lastNameProperty();
+  }
+
+  @Override public StringProperty dateOfBirthProperty()
+  {
+    return super.dateOfBirthProperty();
+  }
+
+  @Override public StringProperty emailProperty()
+  {
+    return super.emailProperty();
+  }
+
+  @Override public StringProperty genderProperty()
+  {
+    return super.genderProperty();
+  }
+
+  @Override public StringProperty phoneNoProperty()
+  {
+    return super.phoneNoProperty();
+  }
+
+
+  @Override public StringProperty passwordProperty()
+  {
+    return super.passwordProperty();
+  }
+
+  @Override public StringProperty languageInputProperty()
+  {
+    return super.languageInputProperty();
+  }
+
   public StringProperty educationLevelProperty() { return educationLevel; }
 }

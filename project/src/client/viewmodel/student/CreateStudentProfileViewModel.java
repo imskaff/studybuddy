@@ -3,7 +3,6 @@ package client.viewmodel.student;
 import client.model.Model;
 import client.viewmodel.CreateProfileViewModel;
 import client.viewmodel.UserType;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import server.model.Student;
 
@@ -13,26 +12,9 @@ import java.util.ArrayList;
 
 public class CreateStudentProfileViewModel extends CreateProfileViewModel
 {
-  private final StringProperty firstName;
-  private final StringProperty lastName;
-  private final StringProperty dateOfBirth;
-  private final StringProperty email;
-  private final StringProperty phone;
-  private final StringProperty gender;
-  private final StringProperty languages;
-
-
   public CreateStudentProfileViewModel(Model model)
   {
     super(model, UserType.STUDENT);
-
-    firstName = new SimpleStringProperty("");
-    lastName = new SimpleStringProperty("");
-    dateOfBirth = new SimpleStringProperty("");
-    email = new SimpleStringProperty("");
-    phone = new SimpleStringProperty("");
-    gender = new SimpleStringProperty("");
-    languages = new SimpleStringProperty("");
   }
 
   @Override
@@ -55,13 +37,42 @@ public class CreateStudentProfileViewModel extends CreateProfileViewModel
     model.registerStudent(student);
   }
 
-  public StringProperty firstNameProperty() { return firstName; }
-  public StringProperty lastNameProperty() { return lastName; }
-  public StringProperty dateOfBirthProperty() { return dateOfBirth; }
-  public StringProperty emailProperty() { return email; }
-  public StringProperty phoneProperty() { return phone; }
-  public StringProperty genderProperty() { return gender; }
-  public StringProperty languagesProperty() { return languages; }
+  @Override public StringProperty firstNameProperty()
+  {
+    return super.firstNameProperty();
+  }
 
+  @Override public StringProperty lastNameProperty()
+  {
+    return super.lastNameProperty();
+  }
+  @Override public StringProperty dateOfBirthProperty()
+  {
+    return super.dateOfBirthProperty();
+  }
 
+  @Override public StringProperty emailProperty()
+  {
+    return super.emailProperty();
+  }
+
+  @Override public StringProperty passwordProperty()
+  {
+    return super.passwordProperty();
+  }
+
+  @Override public StringProperty genderProperty()
+  {
+    return super.genderProperty();
+  }
+
+  @Override public StringProperty phoneNoProperty()
+  {
+    return super.phoneNoProperty();
+  }
+
+  @Override public StringProperty languageInputProperty()
+  {
+    return super.languageInputProperty();
+  }
 }

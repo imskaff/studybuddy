@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -20,7 +21,7 @@
                      <children>
                         <Text layoutX="11.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Subject" />
                         <Text layoutX="11.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price" wrappingWidth="41.513671875" />
-                        <TextField fx:id="subject_textField" layoutX="10.0" layoutY="22.0" prefHeight="25.0" prefWidth="590.0" />
+                        <ComboBox fx:id="subject_comboBox" layoutX="10.0" layoutY="22.0" prefHeight="25.0" prefWidth="590.0" />
                         <TextField fx:id="price_textField" layoutX="10.0" layoutY="67.0" prefHeight="25.0" prefWidth="590.0" />
                         <TextField fx:id="location_textField" layoutX="10.0" layoutY="207.0" prefHeight="25.0" prefWidth="590.0" />
                         <TextField fx:id="startDate_textField" layoutX="10.0" layoutY="113.0" prefHeight="25.0" prefWidth="590.0" />

@@ -3,6 +3,8 @@ package client.viewmodel.tutor;
 import client.model.Model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import server.model.Session;
 import server.model.Tutor;
 
@@ -13,6 +15,8 @@ public class CreateNewSessionViewModel implements PropertyChangeListener
 {
   private final Model model;
   private Tutor currentTutor;
+
+  private final ObservableList<String> subjectOptions;
 
   private final StringProperty subject;
   private final StringProperty price;
@@ -25,6 +29,8 @@ public class CreateNewSessionViewModel implements PropertyChangeListener
   {
     this.model = model;
 
+    subjectOptions = FXCollections.observableArrayList();
+
     subject = new SimpleStringProperty("");
     price = new SimpleStringProperty("");
     startDate = new SimpleStringProperty("");
@@ -33,6 +39,17 @@ public class CreateNewSessionViewModel implements PropertyChangeListener
     description = new SimpleStringProperty("");
 
     model.addPropertyChangeListener(this);
+  }
+
+  public void loadSubjects()
+  {
+    subjectOptions.clear();
+    subjectOptions.addAll(model.getSubjects());
+  }
+
+  public ObservableList<String> getSubjectOptions()
+  {
+    return subjectOptions;
   }
 
 

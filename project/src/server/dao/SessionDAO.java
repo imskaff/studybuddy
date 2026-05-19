@@ -22,4 +22,6 @@ public interface SessionDAO {
     List<Session> readAvailable() throws SQLException;
 
     List<Session> readByStudent(int studentId) throws SQLException;
+
+    List<String> readSubjects() throws SQLException;
 }

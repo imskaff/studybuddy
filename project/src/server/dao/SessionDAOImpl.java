@@ -29,6 +29,7 @@ public class SessionDAOImpl implements SessionDAO {
                 "password");
     }
 
+    // creating a session
     @Override
     public Session create(String description, double price, String subject, String location, LocalDateTime start_date,
             LocalDateTime end_date, Tutor tutor, Student student) throws SQLException {
@@ -86,6 +87,7 @@ public class SessionDAOImpl implements SessionDAO {
         }
     }
 
+    // updating a session
     @Override
     public void update(Session session) throws SQLException {
         Integer subjectId = findSubjectId(session.getSubject());
@@ -193,6 +195,18 @@ public class SessionDAOImpl implements SessionDAO {
             student = (Student) userDAO.readByInt(studentId);
         }
         return new Session(sessionId, description, price, subject, location, start_date, end_date, tutor, student);
+    }
+
+    @Override
+    public List<String> readSubjects() throws SQLException {
+        String sql = "SELECT name FROM subjects ORDER BY name";
+        try (Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet rs = statement.executeQuery();
+            List<String> subjects = new ArrayList<>();
+            while (rs.next()) subjects.add(rs.getString("name"));
+            return subjects;
+        }
     }
 
     // sessions table stores subject_id

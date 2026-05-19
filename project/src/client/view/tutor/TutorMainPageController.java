@@ -17,6 +17,7 @@ public class TutorMainPageController
   @FXML private TableColumn<Session, String>  price_column;
   @FXML private TableColumn<Session, String>  date_column;
   @FXML private TableColumn<Session, String>  state_column;
+  @FXML private TableColumn<Session, String>  description_column;
 
   @FXML private TextField fname_textField;
   @FXML private TextField lname_textField;
@@ -50,8 +51,11 @@ public class TutorMainPageController
         SessionState state = cellData.getValue().getState();
         return new SimpleStringProperty(state != null ? state.getClass().getSimpleName() : "");
     });
+    description_column.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescription()));
 
     mySessions_tView.setItems(viewModel.getSessions());
+    viewDetails_btn.disableProperty().bind(
+        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
 
     //profile
     fname_textField.textProperty().bindBidirectional(viewModel.firstNameProperty());

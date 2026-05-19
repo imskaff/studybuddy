@@ -49,9 +49,9 @@ public class CreateStudentProfileController
     date_textField.textProperty().bindBidirectional(viewModel.dateOfBirthProperty());
     email_textField.textProperty().bindBidirectional(viewModel.emailProperty());
     password_textField.textProperty().bindBidirectional(viewModel.passwordProperty());
-    phone_textField.textProperty().bindBidirectional(viewModel.phoneProperty());
+    phone_textField.textProperty().bindBidirectional(viewModel.phoneNoProperty());
     gender_textField.textProperty().bindBidirectional(viewModel.genderProperty());
-    languages_textArea.textProperty().bindBidirectional(viewModel.languagesProperty());
+    languages_textArea.textProperty().bindBidirectional(viewModel.languageInputProperty());
 
     confirm_checkBtn.setSelected(false);
 

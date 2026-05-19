@@ -4,6 +4,7 @@ import client.view.ViewHandler;
 import client.viewmodel.tutor.SessionTutorViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
@@ -12,7 +13,7 @@ public class SessionTutorViewController
 {
   @FXML private TextArea description_textArea;
   @FXML private TextField tutor_textField;
-  @FXML private TextField subject_textField;
+  @FXML private ComboBox<String> subject_comboBox;
   @FXML private TextField location_textField;
   @FXML private TextField startDate_textField;
   @FXML private TextField endDate_textField;
@@ -41,7 +42,9 @@ public class SessionTutorViewController
 
     // editable fields so user input flows back to ViewModel
     description_textArea.textProperty().bindBidirectional(viewModel.descriptionProperty());
-    subject_textField.textProperty().bindBidirectional(viewModel.subjectProperty());
+    viewModel.loadSubjects();
+    subject_comboBox.setItems(viewModel.getSubjectOptions());
+    subject_comboBox.valueProperty().bindBidirectional(viewModel.subjectProperty());
     location_textField.textProperty().bindBidirectional(viewModel.locationProperty());
     startDate_textField.textProperty().bindBidirectional(viewModel.startDateProperty());
     endDate_textField.textProperty().bindBidirectional(viewModel.endDateProperty());
@@ -54,7 +57,7 @@ public class SessionTutorViewController
   private void setFieldsEditable(boolean editable)
   {
     description_textArea.setEditable(editable);
-    subject_textField.setEditable(editable);
+    subject_comboBox.setDisable(!editable);
     location_textField.setEditable(editable);
     startDate_textField.setEditable(editable);
     endDate_textField.setEditable(editable);
