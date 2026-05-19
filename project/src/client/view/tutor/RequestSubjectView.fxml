@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="250.0" prefWidth="400.0"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="client.view.tutor.RequestSubjectViewController">
+    <children>
+        <Label layoutX="20.0" layoutY="20.0" text="Subject name:"/>
+        <TextField fx:id="subjectName_textField" layoutX="20.0" layoutY="40.0"
+                   prefWidth="360.0" promptText="e.g. Latin"/>
+
+        <Label layoutX="20.0" layoutY="90.0" text="Reason (optional):"/>
+        <TextArea fx:id="reason_textArea" layoutX="20.0" layoutY="110.0"
+                  prefWidth="360.0" prefHeight="90.0"
+                  promptText="Why should this subject be added?"/>
+
+        <Button fx:id="submit_btn" layoutX="290.0" layoutY="215.0"
+                text="Submit" mnemonicParsing="false"
+                onAction="#onSubmit"/>
+        <Button fx:id="cancel_btn" layoutX="220.0" layoutY="215.0"
+                text="Cancel" mnemonicParsing="false"
+                onAction="#onCancel"/>
+    </children>
+</AnchorPane>

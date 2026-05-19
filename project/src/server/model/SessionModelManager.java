@@ -322,6 +322,45 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
   }
 
   @Override
+  public boolean editStudentProfile(Student student) {
+    try {
+      if (student == null || student.getFirst_name() == null || student.getFirst_name().isEmpty()
+          || student.getLast_name() == null || student.getLast_name().isEmpty()
+          || student.getDate_of_birth() == null || student.getEmail() == null || student.getEmail().isEmpty()
+          || student.getPhone() == null || student.getPhone().isEmpty()
+          || student.getPassword() == null || student.getPassword().isEmpty()
+          || student.getGender() == null || student.getGender().isEmpty()
+          || student.getLanguages() == null || student.getLanguages().isEmpty())
+        return false;
+      UserDAOImpl.getInstance().update(student);
+      return true;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  @Override
+  public boolean editTutorProfile(Tutor tutor) {
+    try {
+      if (tutor == null || tutor.getFirst_name() == null || tutor.getFirst_name().isEmpty()
+          || tutor.getLast_name() == null || tutor.getLast_name().isEmpty()
+          || tutor.getDate_of_birth() == null || tutor.getEmail() == null || tutor.getEmail().isEmpty()
+          || tutor.getPhone() == null || tutor.getPhone().isEmpty()
+          || tutor.getPassword() == null || tutor.getPassword().isEmpty()
+          || tutor.getGender() == null || tutor.getGender().isEmpty()
+          || tutor.getLanguages() == null || tutor.getLanguages().isEmpty()
+          || tutor.getEducation_level() == null || tutor.getEducation_level().isEmpty())
+        return false;
+      UserDAOImpl.getInstance().update(tutor);
+      return true;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  @Override
     public void propertyChange(PropertyChangeEvent evt) {
         support.firePropertyChange(evt);
     }
