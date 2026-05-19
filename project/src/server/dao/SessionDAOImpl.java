@@ -2,6 +2,7 @@ package server.dao;
 
 import server.model.Session;
 import server.model.Student;
+import server.model.SubjectProposal;
 import server.model.Tutor;
 import server.model.User;
 
@@ -176,26 +177,6 @@ public class SessionDAOImpl implements SessionDAO {
         }
     }
 
-    private Session mapRow(ResultSet resultSet) throws SQLException {
-        int sessionId = resultSet.getInt("id");
-        String description = resultSet.getString("description");
-        double price = resultSet.getDouble("price");
-        String location = resultSet.getString("location");
-        LocalDateTime start_date = resultSet.getObject("start_date", LocalDateTime.class);
-        LocalDateTime end_date = resultSet.getObject("end_date", LocalDateTime.class);
-        int tutorId = resultSet.getInt("tutor_id");
-        int studentId = resultSet.getInt("student_id");
-        boolean studentWasNull = resultSet.wasNull();
-        String subject = resultSet.getString("subject_name");
-
-        UserDAOImpl userDAO = UserDAOImpl.getInstance();
-        Tutor tutor = (Tutor) userDAO.readByInt(tutorId);
-        Student student = null;
-        if (!studentWasNull) {
-            student = (Student) userDAO.readByInt(studentId);
-        }
-        return new Session(sessionId, description, price, subject, location, start_date, end_date, tutor, student);
-    }
 
     @Override
     public List<String> readSubjects() throws SQLException {
@@ -207,6 +188,76 @@ public class SessionDAOImpl implements SessionDAO {
             while (rs.next()) subjects.add(rs.getString("name"));
             return subjects;
         }
+    }
+
+    private void addSubject(String name, int adminId) throws SQLException {
+        String sql = "INSERT INTO subjects (name, added_by) VALUES (?, ?)";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, name);
+            statement.setInt(2, adminId);
+            statement.executeUpdate();
+        }
+    }
+
+    private String getSubjectProposalName(int id) throws SQLException {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                 "SELECT subject_name FROM subject_requests WHERE id = ?")) {
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            return rs.next() ? rs.getString("subject_name") : null;
+        }
+    }
+
+    @Override
+    public void saveSubjectProposal(String tutorEmail, String subjectName, String reason) throws SQLException {
+        String sql = "INSERT INTO subject_requests (tutor_email, subject_name, reason) VALUES (?, ?, ?)";
+        try (Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, tutorEmail);
+            statement.setString(2, subjectName);
+            statement.setString(3, reason);
+            statement.executeUpdate();
+        }
+    }
+
+    @Override
+    public List<SubjectProposal> readAllSubjectProposals() throws SQLException {
+        String sql = "SELECT id, tutor_email, subject_name, reason, status, requested_at FROM subject_requests ORDER BY requested_at DESC";
+        try (Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet rs = statement.executeQuery();
+            List<SubjectProposal> proposals = new ArrayList<>();
+            while (rs.next()) {
+                proposals.add(new SubjectProposal(
+                        rs.getInt("id"),
+                        rs.getString("tutor_email"),
+                        rs.getString("subject_name"),
+                        rs.getString("reason"),
+                        rs.getString("status"),
+                        rs.getObject("requested_at", LocalDateTime.class)
+                ));
+            }
+            return proposals;
+        }
+    }
+
+    @Override
+    public boolean updateSubjectProposalApproval(int id, boolean approved, int adminId) throws SQLException {
+        String status = approved ? "APPROVED" : "REJECTED";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                 "UPDATE subject_requests SET status = ? WHERE id = ?")) {
+            statement.setString(1, status);
+            statement.setInt(2, id);
+            statement.executeUpdate();
+        }
+        if (approved) {
+            String name = getSubjectProposalName(id);
+            if (name != null) addSubject(name, adminId);
+        }
+        return true;
     }
 
     // sessions table stores subject_id
@@ -226,5 +277,26 @@ public class SessionDAOImpl implements SessionDAO {
             }
             return null;
         }
+    }
+    
+    private Session mapRow(ResultSet resultSet) throws SQLException {
+        int sessionId = resultSet.getInt("id");
+        String description = resultSet.getString("description");
+        double price = resultSet.getDouble("price");
+        String location = resultSet.getString("location");
+        LocalDateTime start_date = resultSet.getObject("start_date", LocalDateTime.class);
+        LocalDateTime end_date = resultSet.getObject("end_date", LocalDateTime.class);
+        int tutorId = resultSet.getInt("tutor_id");
+        int studentId = resultSet.getInt("student_id");
+        boolean studentWasNull = resultSet.wasNull();
+        String subject = resultSet.getString("subject_name");
+
+        UserDAOImpl userDAO = UserDAOImpl.getInstance();
+        Tutor tutor = (Tutor) userDAO.readByInt(tutorId);
+        Student student = null;
+        if (!studentWasNull) {
+            student = (Student) userDAO.readByInt(studentId);
+        }
+        return new Session(sessionId, description, price, subject, location, start_date, end_date, tutor, student);
     }
 }

@@ -1,17 +1,16 @@
 package client.model;
 
-import java.beans.PropertyChangeSupport;
-
 import client.mediator.Client;
 import client.mediator.ClientModel;
-import server.model.Session;
-import server.model.Student;
-import server.model.Tutor;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+import server.model.Session;
+import server.model.Student;
+import server.model.SubjectProposal;
+import server.model.Tutor;
 
 public class ModelManager implements Model, PropertyChangeListener {
     private final ClientModel client;
@@ -139,25 +138,40 @@ public class ModelManager implements Model, PropertyChangeListener {
         client.createTutorProfile(tutor, true);
     }
 
-  @Override public void complete(Session session)
-  {
-    session.complete(session);
-  }
+    @Override
+    public boolean submitSubjectProposal(String tutorEmail, String subjectName, String reason) {
+        return client.submitSubjectProposal(tutorEmail, subjectName, reason);
+    }
 
-  @Override public void book(Session session)
-  {
-    session.book(session);
-  }
+    @Override
+    public List<SubjectProposal> getSubjectProposals() {
+        return client.getSubjectProposals();
+    }
 
-  @Override public void cancel(Session session)
-  {
-    session.cancel(session);
-  }
+    @Override
+    public boolean handleSubjectProposal(int proposalId, String action) {
+        return client.handleSubjectProposal(proposalId, action, loggedInAdminId);
+    }
 
-  @Override public void remove(Session session)
-  {
-    session.remove(session);
-  }
+    @Override public void complete(Session session)
+    {
+        session.complete(session);
+    }
+
+    @Override public void book(Session session)
+    {
+        session.book(session);
+    }
+
+    @Override public void cancel(Session session)
+    {
+        session.cancel(session);
+    }
+
+    @Override public void remove(Session session)
+    {
+        session.remove(session);
+    }
 
   @Override
     public void propertyChange(PropertyChangeEvent evt) {

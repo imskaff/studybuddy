@@ -3,7 +3,6 @@ package server.mediator;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDateTime;
-
 import server.model.SessionModelManager;
 // The BookingServer class acts as the connecting class.
 // It creates a server socket that listens on a specific port
@@ -49,7 +48,7 @@ public class ServerConnector implements Runnable{
                 String date = String.valueOf(now.getDayOfMonth()) + "." + String.valueOf(now.getMonthValue()) + "." + String.valueOf(now.getYear());
                 String time = String.valueOf(now.getHour()) + ":" + String.valueOf(now.getMinute()) + ":" + String.valueOf(now.getSecond());
 
-                System.out.println("[" + clientIp + "] Client connected at " + date + " " + time);
+                System.out.println("[" + clientIp + "] Client connected on " + date + " " + time);
 
                 // Creates a new ClientHandler object to handle this specific client.
                 // We pass the socket and the shared model.

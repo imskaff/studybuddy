@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import server.model.Session;
 import server.model.Student;
+import server.model.SubjectProposal;
 import server.model.Tutor;
 
 public interface Model {
@@ -50,6 +51,12 @@ public interface Model {
   void addPropertyChangeListener(PropertyChangeListener listener);
 
   List<String> getSubjects();
+
+  boolean submitSubjectProposal(String tutorEmail, String subjectName, String reason);
+  
+  List<SubjectProposal> getSubjectProposals();
+
+  boolean handleSubjectProposal(int proposalId, String action);
 
   public void complete(Session session);
   public void book(Session session);

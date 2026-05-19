@@ -36,4 +36,14 @@ public interface SessionModel {
   boolean handleTutorRegistration(int tutorId, String action);
 
   List<String> getSubjects();
+
+  boolean editStudentProfile(Student student);
+
+  boolean editTutorProfile(Tutor tutor);
+
+  boolean submitSubjectProposal(String tutorEmail, String subjectName, String reason);
+
+  List<SubjectProposal> getAllSubjectProposals();
+
+  boolean handleSubjectProposal(int proposalId, String action, int adminId);
 }

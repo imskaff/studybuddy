@@ -3,8 +3,11 @@ package client.view;
 import client.view.admin.AdminViewController;
 import client.view.student.SessionStudentViewController;
 import client.view.student.StudentMainPageViewController;
+import client.view.student.CreateStudentProfileController;
 import client.view.student.TutorProfileViewController;
 import client.view.tutor.CreateNewSessionController;
+import client.view.tutor.CreateTutorProfileController;
+import client.view.tutor.RequestSubjectViewController;
 import client.view.tutor.SessionTutorViewController;
 import client.view.tutor.TutorMainPageController;
 import client.viewmodel.ViewModelFactory;
@@ -196,7 +199,7 @@ public class ViewHandler
     try
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource("AdminView.fxml"));
+      loader.setLocation(getClass().getResource("admin/AdminView.fxml"));
       Region root = loader.load();
       AdminViewController controller = loader.getController();
       controller.init(this, viewModelFactory.getAdminViewModel(), root);
@@ -256,5 +259,66 @@ public class ViewHandler
     }
   }
 
+  public void openCreateStudentProfile()
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("client/view/student/CreateStudentProfile.fxml"));
+      Region root = loader.load();
+      CreateStudentProfileController controller = loader .getController();
+      controller.init(this, viewModelFactory.getCreateStudentViewModel(),root);
+
+      primaryStage.setTitle("Create Student Profile View");
+      primaryStage.setScene(new Scene(root));
+      primaryStage.setResizable(false);
+      primaryStage.show();
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  public void openCreateTutorProfile()
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("client/view/tutor/CreateTutorProfile.fxml"));
+      Region root = loader.load();
+      CreateTutorProfileController controller = loader .getController();
+      controller.init(this, viewModelFactory.getCreateTutorViewModel(),root);
+
+      primaryStage.setTitle("Create Tutor Profile View");
+      primaryStage.setScene(new Scene(root));
+      primaryStage.setResizable(false);
+      primaryStage.show();
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  public void openRequestSubjectPopup() {
+    try {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("tutor/RequestSubjectView.fxml"));
+        Region root = loader.load();
+        RequestSubjectViewController controller = loader.getController();
+
+        Stage popupStage = new Stage();
+        controller.init(popupStage, viewModelFactory.getRequestSubjectViewModel());
+
+        popupStage.setTitle("Request a New Subject");
+        popupStage.setScene(new Scene(root));
+        popupStage.setResizable(false);
+        popupStage.initOwner(primaryStage);
+        popupStage.show();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+  }
 }
 

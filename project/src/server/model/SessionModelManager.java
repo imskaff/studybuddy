@@ -245,17 +245,10 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
   {
     try
     {
-      // Approves the tutor
       if("APPROVE".equals(action))
-      {
         return UserDAOImpl.getInstance().updateTutorApproval(tutorId, true);
-      }
-
-      // Declines the tutor
       else if("DECLINE".equals(action))
-      {
         return UserDAOImpl.getInstance().updateTutorApproval(tutorId, false);
-      }
 
       return false;
     }
@@ -277,6 +270,54 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
     {
       e.printStackTrace();
       return new ArrayList<>();
+    }
+  }
+
+  @Override
+  public boolean submitSubjectProposal(String tutorEmail, String subjectName, String reason){
+    try
+    {
+      if(tutorEmail == null || tutorEmail.isEmpty()||
+      subjectName == null || subjectName.isEmpty())
+      {
+        return false;
+      }
+      SessionDAOImpl.getInstance().saveSubjectProposal(tutorEmail, subjectName, reason);
+
+      return true;
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  @Override
+  public List<SubjectProposal> getAllSubjectProposals() {
+    try
+    {
+      return SessionDAOImpl.getInstance().readAllSubjectProposals();
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+      return new ArrayList<>();
+    }
+  }
+
+  @Override
+  public boolean handleSubjectProposal(int proposalId, String action, int adminId) {
+    try {
+      if ("APPROVE".equals(action))
+        return SessionDAOImpl.getInstance().updateSubjectProposalApproval(proposalId, true, adminId);
+      else if ("REJECT".equals(action))
+        return SessionDAOImpl.getInstance().updateSubjectProposalApproval(proposalId, false, adminId);
+
+      return false;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
     }
   }
 

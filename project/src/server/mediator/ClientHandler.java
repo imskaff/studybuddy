@@ -7,6 +7,7 @@ import server.model.Session;
 import server.model.SessionModel;
 import server.model.SessionModelManager;
 import server.model.Student;
+import server.model.SubjectProposal;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class ClientHandler implements Runnable {
       String time = String.valueOf(now.getHour()) + ":" + String.valueOf(now.getMinute()) + ":"
           + String.valueOf(now.getSecond());
 
-      System.out.println("[" + clientIp + "] Client disconnected at " + date + " " + time);
+      System.out.println("[" + clientIp + "] Client disconnected on " + date + " " + time);
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
@@ -91,6 +92,16 @@ public class ClientHandler implements Runnable {
       handleGetPendingTutors();
     } else if (requestType.getType().equals("GET_SUBJECTS")) {
       handleGetSubjects();
+    } else if (requestType.getType().equals("EDIT_STUDENT_PROFILE")) {
+      handleEditStudentProfile(clientText);
+    } else if (requestType.getType().equals("EDIT_TUTOR_PROFILE")) {
+      handleEditTutorProfile(clientText);
+    } else if (requestType.getType().equals("SUBMIT_SUBJECT_PROPOSAL")) {
+      handleSubmitSubjectProposal(clientText);
+    } else if (requestType.getType().equals("GET_SUBJECT_PROPOSALS")) {
+      handleGetSubjectProposals();
+    } else if (requestType.getType().equals("HANDLE_SUBJECT_PROPOSAL")) {
+      handleHandleSubjectProposal(clientText);
     } else {
       sendResponse(new Response("ERROR", "Unknown request type"));
     }
@@ -216,6 +227,36 @@ public class ClientHandler implements Runnable {
     TutorListResponse response = new TutorListResponse("OK", "Pending tutors", tutors);
     sendJsonResponse(response);
   }
+
+  private void handleEditStudentProfile(String clientText) {
+    EditStudentProfileRequest request = gson.fromJson(clientText, EditStudentProfileRequest.class);
+    boolean ok = model.editStudentProfile(request.getStudent());
+    sendResponse(new Response(ok ? "OK" : "ERROR", ok ? "Student profile updated" : "Failed to update student profile"));
+  }
+
+  private void handleEditTutorProfile(String clientText) {
+    EditTutorProfileRequest request = gson.fromJson(clientText, EditTutorProfileRequest.class);
+    boolean ok = model.editTutorProfile(request.getTutor());
+    sendResponse(new Response(ok ? "OK" : "ERROR", ok ? "Tutor profile updated" : "Failed to update tutor profile"));
+  }
+
+  private void handleSubmitSubjectProposal(String clientText) {
+    SubmitSubjectProposalRequest request = gson.fromJson(clientText, SubmitSubjectProposalRequest.class);
+    boolean ok = model.submitSubjectProposal(request.getTutorEmail(), request.getSubjectName(), request.getReason());
+    sendResponse(new Response(ok ? "OK" : "ERROR", ok ? "Proposal submitted" : "Failed to submit proposal"));
+}
+
+private void handleGetSubjectProposals() {
+    List<SubjectProposal> proposals = model.getAllSubjectProposals();
+    sendJsonResponse(new SubjectProposalListResponse("OK", proposals));
+}
+
+private void handleHandleSubjectProposal(String clientText) {
+    HandleSubjectProposalRequest request = gson.fromJson(clientText, HandleSubjectProposalRequest.class);
+    boolean ok = model.handleSubjectProposal(request.getProposalId(), request.getAction(), request.getAdminId());
+    sendResponse(new Response(ok ? "OK" : "ERROR", ok ? "Proposal handled" : "Failed to handle proposal"));
+}
+
 
   private void sendResponse(Response response) {
     System.out.println("Reply: " + response);

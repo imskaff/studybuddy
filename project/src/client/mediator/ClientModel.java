@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import server.model.Session;
 import server.model.Student;
+import server.model.SubjectProposal;
 import server.model.Tutor;
 
 // client-side
@@ -49,4 +50,10 @@ public interface ClientModel {
 
   // Adds a property change listener to the client model.
   void addPropertyChangeListener(PropertyChangeListener listener);
+
+  boolean submitSubjectProposal(String tutorEmail, String subjectName, String reason);
+  
+  List<SubjectProposal> getSubjectProposals();
+
+  boolean handleSubjectProposal(int proposalId, String action, int adminId);
 }

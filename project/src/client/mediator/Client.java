@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import server.mediator.*;
 import server.model.Session;
 import server.model.Student;
+import server.model.SubjectProposal;
 import server.model.Tutor;
 
 public class Client implements ClientModel
@@ -112,7 +112,7 @@ public class Client implements ClientModel
 
   // This helper method sends a request and returns the raw JSON response.
   // Used by methods that need to parse data from the response
-  // (e.g., lists of sessions or tutors).
+  // (e.g. lists of sessions or tutors).
   private String sendRequestForResponse(Object request)
   {
     try
@@ -282,4 +282,28 @@ public class Client implements ClientModel
 
     return new ArrayList<>();
   }
+
+  @Override
+  public boolean submitSubjectProposal(String tutorEmail, String subjectName, String reason) {
+      SubmitSubjectProposalRequest request = new SubmitSubjectProposalRequest(tutorEmail, subjectName, reason);
+      return sendRequest(request);
+  }
+
+  @Override
+  public List<SubjectProposal> getSubjectProposals() {
+      GetSubjectProposalsRequest request = new GetSubjectProposalsRequest();
+      String replyJson = sendRequestForResponse(request);
+      if (replyJson == null) return new ArrayList<>();
+      SubjectProposalListResponse response = gson.fromJson(replyJson, SubjectProposalListResponse.class);
+      if ("OK".equals(response.getStatus()) && response.getProposals() != null)
+          return response.getProposals();
+      return new ArrayList<>();
+  }
+
+  @Override
+  public boolean handleSubjectProposal(int proposalId, String action, int adminId) {
+      HandleSubjectProposalRequest request = new HandleSubjectProposalRequest(proposalId, action, adminId);
+      return sendRequest(request);
+  }
+
 }

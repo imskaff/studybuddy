@@ -8,6 +8,7 @@ import client.viewmodel.student.StudentMainPageViewModel;
 import client.viewmodel.student.TutorProfileViewModel;
 import client.viewmodel.tutor.CreateNewSessionViewModel;
 import client.viewmodel.tutor.CreateTutorProfileViewModel;
+import client.viewmodel.tutor.RequestSubjectViewModel;
 import client.viewmodel.tutor.SessionTutorViewModel;
 import client.viewmodel.tutor.TutorMainPageViewModel;
 
@@ -25,6 +26,7 @@ public class ViewModelFactory
     private AdminViewModel adminViewModel;
     private CreateNewProfileViewModel createNewProfileViewModel;
     private RulesViewModel rulesViewModel;
+    private RequestSubjectViewModel requestSubjectViewModel;
 
     private ViewState viewState;
 
@@ -43,7 +45,7 @@ public class ViewModelFactory
         createNewSessionViewModel = new CreateNewSessionViewModel(model);
         createNewProfileViewModel = new CreateNewProfileViewModel(model);
         rulesViewModel = new RulesViewModel(model);
-
+        requestSubjectViewModel = new RequestSubjectViewModel(model);
     }
 
     public WelcomeViewModel getWelcomeViewModel() {
@@ -93,5 +95,10 @@ public class ViewModelFactory
   public RulesViewModel getRulesViewModel()
   {
     return rulesViewModel;
+  }
+
+  public RequestSubjectViewModel getRequestSubjectViewModel()
+  {
+    return requestSubjectViewModel;
   }
 }

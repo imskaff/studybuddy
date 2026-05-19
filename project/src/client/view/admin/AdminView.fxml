@@ -2,6 +2,8 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -12,23 +14,56 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="client.view.admin.AdminViewController">
     <children>
-        <Label layoutX="14.0" layoutY="14.0"
-               text="Pending Tutor Registrations"
-               style="-fx-font-size: 18; -fx-font-weight: bold;"/>
-        <TableView fx:id="pendingTutors_tableView" layoutX="0.0" layoutY="46.0"
-                   prefHeight="500.0" prefWidth="900.0">
-            <columns>
-                <TableColumn fx:id="name_column" prefWidth="225.0" text="Name"/>
-                <TableColumn fx:id="email_column" prefWidth="225.0" text="Email"/>
-                <TableColumn fx:id="education_column" prefWidth="225.0" text="Education Level"/>
-                <TableColumn fx:id="languages_column" prefWidth="225.0" text="Languages"/>
-            </columns>
-        </TableView>
-        <Button fx:id="approve_btn" layoutX="676.0" layoutY="558.0"
-                mnemonicParsing="false" text="Approve"
-                onAction="#onApproveButtonClicked"/>
-        <Button fx:id="decline_btn" layoutX="790.0" layoutY="558.0"
-                mnemonicParsing="false" text="Decline"
-                onAction="#onDeclineButtonClicked"/>
+        <TabPane prefHeight="600.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="Tutor Registrations">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="570.0" prefWidth="900.0">
+                            <children>
+                                <TableView fx:id="pendingTutors_tableView" layoutX="0.0" layoutY="0.0"
+                                           prefHeight="520.0" prefWidth="900.0">
+                                    <columns>
+                                        <TableColumn fx:id="name_column" prefWidth="225.0" text="Name"/>
+                                        <TableColumn fx:id="email_column" prefWidth="225.0" text="Email"/>
+                                        <TableColumn fx:id="education_column" prefWidth="225.0" text="Education Level"/>
+                                        <TableColumn fx:id="languages_column" prefWidth="225.0" text="Languages"/>
+                                    </columns>
+                                </TableView>
+                                <Button fx:id="approve_btn" layoutX="676.0" layoutY="524.0"
+                                        mnemonicParsing="false" text="Approve"
+                                        onAction="#onApproveButtonClicked"/>
+                                <Button fx:id="decline_btn" layoutX="790.0" layoutY="524.0"
+                                        mnemonicParsing="false" text="Decline"
+                                        onAction="#onDeclineButtonClicked"/>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Subject Requests">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="570.0" prefWidth="900.0">
+                            <children>
+                                <TableView fx:id="subjectProposals_tableView" layoutX="0.0" layoutY="0.0"
+                                           prefHeight="520.0" prefWidth="900.0">
+                                    <columns>
+                                        <TableColumn fx:id="proposalTutor_column" prefWidth="200.0" text="Tutor Email"/>
+                                        <TableColumn fx:id="proposalSubject_column" prefWidth="200.0" text="Subject Name"/>
+                                        <TableColumn fx:id="proposalReason_column" prefWidth="280.0" text="Reason"/>
+                                        <TableColumn fx:id="proposalStatus_column" prefWidth="120.0" text="Status"/>
+                                        <TableColumn fx:id="proposalDate_column" prefWidth="100.0" text="Requested At"/>
+                                    </columns>
+                                </TableView>
+                                <Button fx:id="approveProposal_btn" layoutX="676.0" layoutY="528.0"
+                                        mnemonicParsing="false" text="Approve"
+                                        onAction="#onApproveProposalClicked"/>
+                                <Button fx:id="rejectProposal_btn" layoutX="790.0" layoutY="528.0"
+                                        mnemonicParsing="false" text="Reject"
+                                        onAction="#onRejectProposalClicked"/>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
     </children>
 </AnchorPane>

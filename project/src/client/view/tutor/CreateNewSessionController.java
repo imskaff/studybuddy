@@ -51,6 +51,10 @@ public class CreateNewSessionController
     setUpButtons();
   }
 
+  @FXML private void onRequestNewSubject() {
+    viewHandler.openRequestSubjectPopup();
+  }
+
   private void setUpButtons()
   {
     back_btn.setOnAction(event -> popup.close());

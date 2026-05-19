@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import server.model.Session;
 import server.model.Student;
+import server.model.SubjectProposal;
 import server.model.Tutor;
 
 public interface SessionDAO {
@@ -24,4 +25,10 @@ public interface SessionDAO {
     List<Session> readByStudent(int studentId) throws SQLException;
 
     List<String> readSubjects() throws SQLException;
+
+    void saveSubjectProposal(String tutorEmail, String subjectName, String reason) throws SQLException;
+
+    List<SubjectProposal> readAllSubjectProposals() throws SQLException;
+
+    boolean updateSubjectProposalApproval(int id, boolean approved, int adminId) throws SQLException;
 }
