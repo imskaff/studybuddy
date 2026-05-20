@@ -31,6 +31,8 @@ public class TutorMainPageController
 
   @FXML private Button viewDetails_btn;
   @FXML private Button create_btn;
+  @FXML private Button edit_btn;
+
   private Region root;
   private ViewHandler viewHandler;
   private TutorMainPageViewModel viewModel;
@@ -100,5 +102,7 @@ public class TutorMainPageController
   {
     viewDetails_btn.setOnAction(event -> onViewDetails());
     create_btn.setOnAction(event -> viewHandler.openCreateNewSession());
+    edit_btn.setOnAction(event -> viewHandler.openTutorProfileDetails());
+
   }
 }

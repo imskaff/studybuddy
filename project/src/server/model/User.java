@@ -97,6 +97,7 @@ public abstract class User {
         this.languages = languages;
     }
 
+
     public String getType() {
         return type;
     }
@@ -113,4 +114,5 @@ public abstract class User {
         + '\'' + ", password='" + password + '\'' + ", gender='" + gender + '\''
         + ", languages=" + languages + ", type='" + type + '\'' + '}';
   }
+
 }

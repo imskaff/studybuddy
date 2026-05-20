@@ -4,9 +4,7 @@ import com.google.gson.*;
 import server.dao.SessionDAOImpl;
 import server.dao.UserDAOImpl;
 import server.model.Session;
-import server.model.SessionModel;
-import server.model.SessionModelManager;
-import server.model.Student;
+import server.model.ModelManager;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -22,11 +20,11 @@ import java.time.LocalDateTime;
 public class ClientHandler implements Runnable {
   private final BufferedReader in;
   private final PrintWriter out;
-  private final SessionModelManager model;
+  private final ModelManager model;
   private final Socket socket;
   private final Gson gson;
 
-  public ClientHandler(Socket socket, SessionModelManager model) throws IOException {
+  public ClientHandler(Socket socket, ModelManager model) throws IOException {
     this.socket = socket;
     this.model = model;
     this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));

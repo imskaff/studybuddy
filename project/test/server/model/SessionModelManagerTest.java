@@ -11,7 +11,7 @@ import static org.mockito.Mockito.*;
 
 public class SessionModelManagerTest {
 
-  private SessionModelManager manager;
+  private ModelManager manager;
   private Session mockSession;
   private Session existingSession;
   private Tutor mockTutor;
@@ -20,7 +20,7 @@ public class SessionModelManagerTest {
 
   @BeforeEach
   void setUp() {
-    manager = new SessionModelManager();
+    manager = new ModelManager();
 
     mockSession = mock(Session.class);
     existingSession = mock(Session.class);

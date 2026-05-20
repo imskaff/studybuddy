@@ -1,14 +1,8 @@
 package client.view;
 
 import client.view.admin.AdminViewController;
-import client.view.student.CreateStudentProfileController;
-import client.view.student.SessionStudentViewController;
-import client.view.student.StudentMainPageViewController;
-import client.view.student.TutorProfileViewController;
-import client.view.tutor.CreateNewSessionController;
-import client.view.tutor.CreateTutorProfileController;
-import client.view.tutor.SessionTutorViewController;
-import client.view.tutor.TutorMainPageController;
+import client.view.student.*;
+import client.view.tutor.*;
 import client.viewmodel.ViewModelFactory;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +14,7 @@ import server.model.Tutor;
 
 public class ViewHandler
 {
-  private final ViewModelFactory viewModelFactory;
+  private ViewModelFactory viewModelFactory;
   private Stage primaryStage;
 
   public ViewHandler(ViewModelFactory viewModelFactory)
@@ -28,6 +22,10 @@ public class ViewHandler
     this.viewModelFactory = viewModelFactory;
   }
 
+  public ViewHandler()
+  {
+    //Created empty constructor to connect ViewHandler with StudentProfileDetails
+  }
   public void start(Stage primaryStage)
   {
     this.primaryStage = primaryStage;
@@ -300,6 +298,76 @@ public class ViewHandler
     }
   }
 
+  public void openEditStudentProfileDetails()
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("client/view/student/EditStudentProfile.fxml"));
+      Region root = loader.load();
+      EditStudentProfileController controller = loader.getController();
+      Stage popupStage = new Stage();
+      controller.init(popupStage, viewModelFactory.getEditStudentProfileViewModel(), root);
 
+      popupStage.setTitle("Edit Student Profile Details");
+      popupStage.setScene(new Scene(root));
+      popupStage.setResizable(false);
+      popupStage.initOwner(primaryStage);
+      popupStage.show();
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  public void openStudentProfileDetails()
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("client/view/student/StudentProfileDetails.fxml"));
+      Region root = loader.load();
+      StudentProfileDetailsController controller = loader.getController();
+
+      Stage popupStage = new Stage();
+      controller.init(popupStage, viewModelFactory.getEditStudentProfileViewModel(), root);
+
+      popupStage.setTitle("Student Profile Details");
+      popupStage.setScene(new Scene(root));
+      popupStage.setResizable(false);
+      popupStage.initOwner(primaryStage);
+      popupStage.show();
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  public void openTutorProfileDetails()
+  {
+    try
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(
+          getClass().getResource("client/view/tutor/TutorProfileDetails.fxml"));
+      Region root = loader.load();
+      TutorProfileDetailsController controller = loader.getController();
+
+      Stage popupStage = new Stage();
+      controller.init(popupStage,viewModelFactory.getTutorMainPageViewModel(), root);
+
+      popupStage.setTitle("Tutor Profile Details");
+      popupStage.setScene(new Scene(root));
+      popupStage.setResizable(false);
+      popupStage.initOwner(primaryStage);
+      popupStage.show();
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+  }
 }
 

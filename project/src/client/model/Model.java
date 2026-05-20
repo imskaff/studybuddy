@@ -47,6 +47,8 @@ public interface Model {
 
   Tutor getLoggedInTutor();
 
+  boolean editStudentProfile(Student student);
+
   void addPropertyChangeListener(PropertyChangeListener listener);
 
   List<String> getSubjects();
@@ -55,4 +57,5 @@ public interface Model {
   public void book(Session session);
   public void cancel(Session session);
   public void remove(Session session);
+  boolean editTutorProfile(Tutor tutor);
 }
