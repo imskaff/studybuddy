@@ -324,6 +324,45 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
   }
 
   @Override
+  public boolean cancelSession(int userId, int sessionId, String type)
+  {
+    try
+    {
+      Session session = SessionDAOImpl.getInstance().readByInt(sessionId);
+
+      if(session == null)
+      {
+        return false;
+      }
+
+      // Student cancellation
+      if(type.equalsIgnoreCase("student"))
+      {
+        session.setStudent(null);
+        // FORCE state back to Available so other students can see it
+        session.setState(new Available());
+        SessionDAOImpl.getInstance().update(session);
+        return true;
+      }
+      // Tutor cancellation
+      else if(type.equalsIgnoreCase("tutor"))
+      {
+        // FORCE state to Cancelled
+        session.setState(new Cancel());
+        SessionDAOImpl.getInstance().update(session);
+        return true;
+      }
+
+      return false;
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  @Override
   public User login(String email, String password)
   {
     try {
@@ -341,59 +380,6 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
     }
   }
 
-  @Override
-  public boolean cancelSession(int userId,
-      int sessionId,
-      String type)
-  {
-    try
-    {
-      // Reads the selected session from the database
-      Session session =
-          SessionDAOImpl.getInstance()
-              .readByInt(sessionId);
-
-      // Checks if the session does not exist
-      if(session == null)
-      {
-        return false;
-      }
-
-      // Student cancellation
-      if(type.equalsIgnoreCase("student"))
-      {
-        // Removes the student from the booking
-        session.setStudent(null);
-
-        // Makes the session available again
-        session.cancel(session);
-
-        // Updates the session in the database
-        SessionDAOImpl.getInstance().update(session);
-
-        return true;
-      }
-
-      // Tutor cancellation
-      else if(type.equalsIgnoreCase("tutor"))
-      {
-        // Changes the session state to cancelled
-        session.cancel(session);
-
-        // Updates the session in the database
-        SessionDAOImpl.getInstance().update(session);
-
-        return true;
-      }
-
-      return false;
-    }
-    catch(Exception e)
-    {
-      e.printStackTrace();
-      return false;
-    }
-  }
 
   @Override
   public List<String> getSubjects()

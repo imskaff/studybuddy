@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.tutor.TutorMainPageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.tutor.TutorMainPageController">
    <children>
       <TabPane layoutX="-4.0" layoutY="-5.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="905.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -23,6 +23,8 @@
                         </TableView>
                         <Button fx:id="create_btn" layoutX="675.0" layoutY="528.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Create session" />
                         <Button fx:id="viewDetails_btn" layoutX="795.0" layoutY="528.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="View Details" />
+                        <Button fx:id="remove_btn" layoutX="553.0" layoutY="528.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Remove" />
+                        <Button fx:id="cancel_btn" layoutX="430.0" layoutY="528.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Cancel" />
                      </children>
                   </AnchorPane>
             </content>

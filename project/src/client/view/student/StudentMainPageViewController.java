@@ -115,16 +115,41 @@ public class StudentMainPageViewController {
     private void setUpButtons()
     {
       viewProfileDetails_btn.setOnAction(event -> viewHandler.openStudentProfileDetails());
+
       //Available sessions
       viewDetails_button.disableProperty().bind(
           main_tableView.getSelectionModel().selectedItemProperty().isNull());
+
       //Booked Sessions
       viewDetails_btn_bookedS.disableProperty().bind(
           bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());
+
       //Filtering
       reset_btn.setOnAction(e -> viewModel.resetFilters());
-      //Cancel Session
 
+      //Cancel Session
+      cancel_btn.disableProperty().bind(
+          bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());
+
+      cancel_btn.setOnAction(event -> {
+        Session selected = bookedSessions_tableView.getSelectionModel().getSelectedItem();
+
+        if(selected != null)
+        {
+          Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+              "Are you sure you want to cancel this session?",
+              ButtonType.YES, ButtonType.NO);
+              alert.setTitle("Cancel Session");
+              alert.setHeaderText("Confirm Cancellation");
+
+              alert.showAndWait().ifPresent(response -> {
+                if(response == ButtonType.YES) {
+                  viewModel.cancelSession(selected);
+                  bookedSessions_tableView.getSelectionModel().clearSelection();
+                }
+              });
+        }
+      });
     }
 
 

@@ -13,11 +13,11 @@ import server.model.SessionState;
 public class TutorMainPageController
 {
   @FXML private TableView<Session> mySessions_tView;
-  @FXML private TableColumn<Session, String>  subject_column;
-  @FXML private TableColumn<Session, String>  price_column;
-  @FXML private TableColumn<Session, String>  date_column;
-  @FXML private TableColumn<Session, String>  state_column;
-  @FXML private TableColumn<Session, String>  description_column;
+  @FXML private TableColumn<Session, String> subject_column;
+  @FXML private TableColumn<Session, String> price_column;
+  @FXML private TableColumn<Session, String> date_column;
+  @FXML private TableColumn<Session, String> state_column;
+  @FXML private TableColumn<Session, String> description_column;
 
   @FXML private TextField fname_textField;
   @FXML private TextField lname_textField;
@@ -32,42 +32,55 @@ public class TutorMainPageController
   @FXML private Button viewDetails_btn;
   @FXML private Button create_btn;
   @FXML private Button edit_btn;
+  @FXML private Button remove_btn;
+  @FXML private Button cancel_btn;
 
   private Region root;
   private ViewHandler viewHandler;
   private TutorMainPageViewModel viewModel;
 
-  public void init(ViewHandler viewHandler, TutorMainPageViewModel viewModel, Region root)
+  public void init(ViewHandler viewHandler, TutorMainPageViewModel viewModel,
+      Region root)
   {
     this.viewHandler = viewHandler;
     this.viewModel = viewModel;
     this.root = root;
 
     //main
-    subject_column.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSubject()));
-    price_column.setCellValueFactory(data -> new SimpleStringProperty(String.format("%.2f", data.getValue().getPrice())));
-    date_column.setCellValueFactory(data ->
-        new SimpleStringProperty(data.getValue().getStart_date()
+    subject_column.setCellValueFactory(
+        data -> new SimpleStringProperty(data.getValue().getSubject()));
+    price_column.setCellValueFactory(data -> new SimpleStringProperty(
+        String.format("%.2f", data.getValue().getPrice())));
+    date_column.setCellValueFactory(data -> new SimpleStringProperty(
+        data.getValue().getStart_date()
             .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
     state_column.setCellValueFactory(cellData -> {
-        SessionState state = cellData.getValue().getState();
-        return new SimpleStringProperty(state != null ? state.getClass().getSimpleName() : "");
+      SessionState state = cellData.getValue().getState();
+      return new SimpleStringProperty(
+          state != null ? state.getClass().getSimpleName() : "");
     });
-    description_column.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescription()));
+    description_column.setCellValueFactory(
+        data -> new SimpleStringProperty(data.getValue().getDescription()));
 
     mySessions_tView.setItems(viewModel.getSessions());
     viewDetails_btn.disableProperty().bind(
         mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
 
     //profile
-    fname_textField.textProperty().bindBidirectional(viewModel.firstNameProperty());
-    lname_textField.textProperty().bindBidirectional(viewModel.lastNameProperty());
-    dateOfBirth_textField.textProperty().bindBidirectional(viewModel.dateOfBirthProperty());
+    fname_textField.textProperty()
+        .bindBidirectional(viewModel.firstNameProperty());
+    lname_textField.textProperty()
+        .bindBidirectional(viewModel.lastNameProperty());
+    dateOfBirth_textField.textProperty()
+        .bindBidirectional(viewModel.dateOfBirthProperty());
     email_textField.textProperty().bindBidirectional(viewModel.emailProperty());
     phone_textField.textProperty().bindBidirectional(viewModel.phoneProperty());
-    gender_textField.textProperty().bindBidirectional(viewModel.genderProperty());
-    language_textArea.textProperty().bindBidirectional(viewModel.languagesProperty());
-    education_textArea.textProperty().bindBidirectional(viewModel.educationProperty());
+    gender_textField.textProperty()
+        .bindBidirectional(viewModel.genderProperty());
+    language_textArea.textProperty()
+        .bindBidirectional(viewModel.languagesProperty());
+    education_textArea.textProperty()
+        .bindBidirectional(viewModel.educationProperty());
 
     setFieldsReadOnly();
     viewModel.loadData();
@@ -88,21 +101,63 @@ public class TutorMainPageController
 
   @FXML private void onViewDetails()
   {
-      Session selected = mySessions_tView.getSelectionModel().getSelectedItem();
-      if(selected != null)
-      {
-        viewHandler.openTutorSessionView(selected);
-      }
-      else {
-        System.out.println("No session selected.");
-      }
+    Session selected = mySessions_tView.getSelectionModel().getSelectedItem();
+    if (selected != null)
+    {
+      viewHandler.openTutorSessionView(selected);
+    }
+    else
+    {
+      System.out.println("No session selected.");
+    }
   }
 
   private void setUpButtons()
   {
+    //View session details
+
+    viewDetails_btn.disableProperty().bind(
+        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
+
     viewDetails_btn.setOnAction(event -> onViewDetails());
+
+    //Create session
     create_btn.setOnAction(event -> viewHandler.openCreateNewSession());
+
+    //Edit session
+    edit_btn.disableProperty().bind(
+        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
+
     edit_btn.setOnAction(event -> viewHandler.openTutorProfileDetails());
 
+    //Remove session
+
+    remove_btn.disableProperty().bind(
+        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
+
+    //Cancel session
+
+    cancel_btn.disableProperty().bind(
+        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
+
+    cancel_btn.setOnAction(event -> {
+      Session selected = mySessions_tView.getSelectionModel().getSelectedItem();
+      if (selected != null)
+      {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+            "Are you sure you want to cancel this session?", ButtonType.YES,
+            ButtonType.NO);
+        alert.setTitle("Cancel Session");
+        alert.setHeaderText("Confirm Cancellation");
+
+        alert.showAndWait().ifPresent(response -> {
+          if (response == ButtonType.YES)
+          {
+            viewModel.cancelSession(selected);
+            mySessions_tView.getSelectionModel().clearSelection();
+          }
+        });
+      }
+    });
   }
 }

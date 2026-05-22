@@ -113,7 +113,20 @@ public class ModelManager implements Model, PropertyChangeListener {
         return client.editSession(loggedInTutor.getId(), session);
     }
 
-    @Override
+  @Override public boolean cancelSession(int userId, int sessionId,
+      String userType)
+  {
+    boolean success = client.cancelSession(userId, sessionId, userType);
+    {
+      if(success)
+      {
+        support.firePropertyChange("SessionsUpdated", null, null);
+      }
+    }
+    return success;
+  }
+
+  @Override
     public boolean deleteSession(int sessionId) {
         return client.deleteSession(sessionId, loggedInTutor.getId());
     }
@@ -162,6 +175,8 @@ public class ModelManager implements Model, PropertyChangeListener {
   {
     session.cancel(session);
   }
+
+
 
   @Override public void remove(Session session)
   {

@@ -137,6 +137,8 @@ public class TutorMainPageViewModel implements PropertyChangeListener
     return false;
   }
 
+
+
     public ObservableList<Session> getSessions() { return sessions; }
     public StringProperty firstNameProperty() { return firstName; }
     public StringProperty lastNameProperty() { return lastName; }
@@ -163,11 +165,16 @@ public class TutorMainPageViewModel implements PropertyChangeListener
         }
     }
 
-    public void cancelSession(Session session) {
-        if (session != null) {
-            model.cancel(session);
-        }
+  public void cancelSession(Session session) {
+    Tutor tutor = model.getLoggedInTutor();
+    if (session != null && tutor != null) {
+      boolean success = model.cancelSession(tutor.getId(), session.getId(), "tutor");
+
+      if (success) {
+        Platform.runLater(this::loadSessions);
+      }
     }
+  }
 
     @Override public void propertyChange(PropertyChangeEvent evt)
     {
