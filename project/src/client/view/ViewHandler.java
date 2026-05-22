@@ -125,7 +125,7 @@ public class ViewHandler
     public void openTutorProfileView(Tutor tutor) {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("tutor/TutorProfileView.fxml"));
+            loader.setLocation(getClass().getResource("student/TutorProfileView.fxml"));
             Region root = loader.load();
             TutorProfileViewController controller = loader.getController();
             viewModelFactory.getTutorProfileViewModel().loadTutor(tutor);
@@ -198,7 +198,7 @@ public class ViewHandler
     try
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource("AdminView.fxml"));
+      loader.setLocation(getClass().getResource("admin/AdminView.fxml"));
       Region root = loader.load();
       AdminViewController controller = loader.getController();
       controller.init(this, viewModelFactory.getAdminViewModel(), root);
@@ -219,8 +219,7 @@ public class ViewHandler
     try
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource(
-          "client/view/CreateNewProfile.fxml"));
+      loader.setLocation(getClass().getResource("CreateNewProfile.fxml"));
       Region root = loader.load();
       CreateNewProfileController controller = loader.getController();
       controller.init(this, viewModelFactory.getCreateNewProfileViewModel(), root);
@@ -241,8 +240,7 @@ public class ViewHandler
     try
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource(
-          "client/view/RulesView.fxml"));
+      loader.setLocation(getClass().getResource("RulesView.fxml"));
       Region root = loader.load();
       RulesViewController controller = loader.getController();
       controller.init(this, viewModelFactory.getRulesViewModel(), root);
@@ -263,7 +261,7 @@ public class ViewHandler
     try
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource("client/view/student/CreateStudentProfile.fxml"));
+      loader.setLocation(getClass().getResource("student/CreateStudentProfile.fxml"));
       Region root = loader.load();
       CreateStudentProfileController controller = loader .getController();
       controller.init(this, viewModelFactory.getCreateStudentViewModel(),root);
@@ -284,7 +282,7 @@ public class ViewHandler
     try
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource("client/view/tutor/CreateTutorProfile.fxml"));
+      loader.setLocation(getClass().getResource("tutor/CreateTutorProfile.fxml"));
       Region root = loader.load();
       CreateTutorProfileController controller = loader .getController();
       controller.init(this, viewModelFactory.getCreateTutorViewModel(),root);

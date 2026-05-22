@@ -26,25 +26,28 @@ public class CreateNewProfileController
     this.viewModel = viewModel;
 
     back_Btn.setOnAction(event -> viewHandler.openWelcomeView());
+    confirm_Btn.setOnAction(event -> chooseUserType());
 
-    chooseUserType();
     tutor_checkBtn.setSelected(false);
     student_checkBtn.setSelected(false);
+
+    tutor_checkBtn.setOnAction(event -> { if (tutor_checkBtn.isSelected()) student_checkBtn.setSelected(false); });
+    student_checkBtn.setOnAction(event -> { if (student_checkBtn.isSelected()) tutor_checkBtn.setSelected(false); });
   }
 
   private void chooseUserType()
   {
-    if(tutor_checkBtn.equals(true))
+    if (tutor_checkBtn.isSelected())
     {
-      confirm_Btn.setOnAction(event -> viewHandler.openCreateTutorProfile());
+      viewHandler.openCreateTutorProfile();
     }
-    else if (student_checkBtn.equals(true))
+    else if (student_checkBtn.isSelected())
     {
-      confirm_Btn.setOnAction(event -> viewHandler.openCreateStudentProfile());
+      viewHandler.openCreateStudentProfile();
     }
     else
     {
-      confirm_Btn.setOnAction(event -> userTypeNotChosenAlert());
+      userTypeNotChosenAlert();
     }
   }
 

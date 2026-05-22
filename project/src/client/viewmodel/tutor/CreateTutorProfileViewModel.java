@@ -19,21 +19,37 @@ public class CreateTutorProfileViewModel extends CreateProfileViewModel
     super(model, UserType.TUTOR);
   }
 
-  public void register(){
-    Tutor tutor = new Tutor(
-            firstNameProperty().get().trim(),
-            lastNameProperty().get().trim(),
-            LocalDate.parse(dateOfBirthProperty().get()),
-            emailProperty().get().trim(),
-            phoneNoProperty().get().trim(),
-            passwordProperty().get(),
-            genderProperty().get().trim(),
-            new ArrayList<>(getLanguages()),
-            educationLevelProperty().get().trim(),
-            UserType.TUTOR.toString(),
-            0
-        );
-        model.registerTutor(tutor);
+  @Override
+  public boolean register() {
+    String dob = dateOfBirthProperty().get();
+    if (firstNameProperty().get().isBlank() || lastNameProperty().get().isBlank()
+        || dob.isBlank() || emailProperty().get().isBlank()
+        || phoneNoProperty().get().isBlank() || passwordProperty().get().isBlank()
+        || genderProperty().get().isBlank() || educationLevelProperty().get().isBlank()) {
+      return false;
+    }
+    try {
+      ArrayList<String> langs = new ArrayList<>();
+      for (String l : languageInputProperty().get().split(",")) {
+        if (!l.isBlank()) langs.add(l.trim());
+      }
+      Tutor tutor = new Tutor(
+          firstNameProperty().get().trim(),
+          lastNameProperty().get().trim(),
+          LocalDate.parse(dob.trim()),
+          emailProperty().get().trim(),
+          phoneNoProperty().get().trim(),
+          passwordProperty().get(),
+          genderProperty().get().trim(),
+          langs,
+          educationLevelProperty().get().trim(),
+          UserType.TUTOR.toString(),
+          0
+      );
+      return model.registerTutor(tutor);
+    } catch (Exception e) {
+      return false;
+    }
   }
 
   @Override public StringProperty firstNameProperty()

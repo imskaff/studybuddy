@@ -215,6 +215,15 @@ public class Client implements ClientModel
     return sendRequest(request);
   }
 
+  @Override
+  public LoginResponse login(String email, String password)
+  {
+    LoginRequest request = new LoginRequest(email, password);
+    String replyJson = sendRequestForResponse(request);
+    if (replyJson == null) return LoginResponse.error("Connection error");
+    return gson.fromJson(replyJson, LoginResponse.class);
+  }
+
   // Retrieves all available (unbooked) sessions from the server
   @Override
   public ArrayList<Session> getAvailableSessions()

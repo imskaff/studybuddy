@@ -10,7 +10,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import server.model.Session;
@@ -34,16 +33,17 @@ public class StudentMainPageViewController {
     @FXML private Tab main_tab;
     @FXML private Tab profile_tab;
     @FXML private Tab bookedSessions_tab;
-    @FXML private TextArea fname_textArea;
-    @FXML private TextArea lname_textArea;
-    @FXML private TextArea email_textArea;
-    @FXML private TextArea phone_textArea;
-    @FXML private TextArea gender_textArea;
-    @FXML private TextArea dateOfBirth_textArea;
-    @FXML private TextArea language_textArea;
+    @FXML private TextField fname_textArea;
+    @FXML private TextField lname_textArea;
+    @FXML private TextField email_textArea;
+    @FXML private TextField phone_textArea;
+    @FXML private ComboBox<String> gender_comboBox;
+    @FXML private TextField dateOfBirth_textArea;
+    @FXML private TextField language_textArea;
 
     @FXML private Button viewDetails_button;
     @FXML private Button viewDetails_btn_bookedS;
+    @FXML private Button edit_button;
 
     @FXML private ComboBox<String> subject_comboBox;
     @FXML private TextField minPrice_textField;
@@ -104,7 +104,9 @@ public class StudentMainPageViewController {
         dateOfBirth_textArea.textProperty().bindBidirectional(viewModel.dateOfBirthProperty());
         email_textArea.textProperty().bindBidirectional(viewModel.emailProperty());
         phone_textArea.textProperty().bindBidirectional(viewModel.phoneProperty());
-        gender_textArea.textProperty().bindBidirectional(viewModel.genderProperty());
+        gender_comboBox.getItems().addAll("male", "female");
+        gender_comboBox.valueProperty().bindBidirectional(viewModel.genderProperty());
+        gender_comboBox.setDisable(true);
         language_textArea.textProperty().bindBidirectional(viewModel.languagesProperty());
 
         // filter bar
@@ -130,7 +132,7 @@ public class StudentMainPageViewController {
         dateOfBirth_textArea.setEditable(false);
         email_textArea.setEditable(false);
         phone_textArea.setEditable(false);
-        gender_textArea.setEditable(false);
+        gender_comboBox.setDisable(true);
         language_textArea.setEditable(false);
     }
 
@@ -144,6 +146,33 @@ public class StudentMainPageViewController {
     }
 
     @FXML private void onEditButtonClicked() {
-        // TODO: implement profile editing
+        boolean editing = fname_textArea.isEditable();
+        if (editing) {
+            boolean success = viewModel.saveProfile();
+            if (success) {
+                setFieldsReadOnly();
+                edit_button.setText("Edit");
+            } else {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                    javafx.scene.control.Alert.AlertType.ERROR);
+                alert.setTitle("Save Failed");
+                alert.setHeaderText(null);
+                alert.setContentText("Could not save profile. Please check your input and try again.");
+                alert.showAndWait();
+            }
+        } else {
+            setFieldsEditable();
+            edit_button.setText("Save");
+        }
+    }
+
+    private void setFieldsEditable() {
+        fname_textArea.setEditable(true);
+        lname_textArea.setEditable(true);
+        dateOfBirth_textArea.setEditable(true);
+        email_textArea.setEditable(true);
+        phone_textArea.setEditable(true);
+        gender_comboBox.setDisable(false);
+        language_textArea.setEditable(true);
     }
 }

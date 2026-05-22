@@ -197,7 +197,7 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
       // Creates the student profile in the database
       UserDAOImpl.getInstance().create(student.getFirst_name(), student.getLast_name(),
           student.getDate_of_birth(), student.getEmail(), student.getPhone(),
-          student.getPassword(), student.getGender(), student.getLanguages(), "Student");
+          student.getPassword(), student.getGender(), student.getLanguages(), "Student", null);
 
       return true;
     }
@@ -229,7 +229,7 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
       }
       UserDAOImpl.getInstance().create(tutor.getFirst_name(), tutor.getLast_name(), tutor.getDate_of_birth(),
           tutor.getEmail(), tutor.getPhone(), tutor.getPassword(), tutor.getGender(),
-          tutor.getLanguages(), "Tutor");
+          tutor.getLanguages(), "Tutor", tutor.getEducation_level());
 
       return true;
     }

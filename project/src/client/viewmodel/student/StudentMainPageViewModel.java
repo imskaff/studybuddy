@@ -6,6 +6,8 @@ import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -98,6 +100,29 @@ public class StudentMainPageViewModel implements PropertyChangeListener {
         phone.set(student.getPhone());
         gender.set(student.getGender());
         languages.set(String.join(", ", student.getLanguages()));
+    }
+
+    public boolean saveProfile() {
+        Student current = model.getLoggedInStudent();
+        if (current == null) return false;
+
+        LocalDate date;
+        try {
+            date = LocalDate.parse(dateOfBirth.get());
+        } catch (Exception e) {
+            return false;
+        }
+
+        ArrayList<String> langList = new ArrayList<>(
+            Arrays.asList(languages.get().split("\\s*,\\s*")));
+
+        Student updated = new Student(
+            firstName.get().trim(), lastName.get().trim(), date,
+            email.get().trim(), phone.get().trim(),
+            current.getPassword(), gender.get().trim(),
+            langList, current.getId(), "Student");
+
+        return model.editStudentProfile(updated);
     }
 
     public void resetFilters() {

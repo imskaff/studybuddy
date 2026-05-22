@@ -1,6 +1,7 @@
 package client.view;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -39,6 +40,12 @@ public class WelcomeViewController {
             viewHandler.openTutorMainPageView();
         } else if ("admin".equals(userType)) {
             viewHandler.openAdminView();
+        } else if ("tutor_pending".equals(userType)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Account Pending Approval");
+            alert.setHeaderText(null);
+            alert.setContentText("Your tutor account has not been approved yet. Please wait for an administrator to review your application.");
+            alert.showAndWait();
         } else {
             error_label.setText("Invalid email or password.");
             error_label.setVisible(true);
@@ -47,6 +54,6 @@ public class WelcomeViewController {
     }
 
     @FXML private void onRegisterButtonClicked() {
-        // TODO: navigate to register view
+        viewHandler.openCreateNewProfile();
     }
 }
