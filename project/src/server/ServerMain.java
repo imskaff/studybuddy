@@ -2,13 +2,13 @@ package server;
 
 import server.mediator.ServerConnector;
 import server.model.SessionModel;
-import server.model.SessionModelManager;
+import server.model.ModelManager;
 
 public class ServerMain {
     public static void main(String[] args) {
-        SessionModel model = new SessionModelManager();
+        SessionModel model = new ModelManager();
         ServerConnector server = new ServerConnector(
-            (SessionModelManager) model);
+            (ModelManager) model);
         Thread serverThread = new Thread(server);
         serverThread.start();
     }

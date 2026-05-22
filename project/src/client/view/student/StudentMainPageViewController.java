@@ -7,10 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import server.model.Session;
@@ -31,19 +28,10 @@ public class StudentMainPageViewController {
     @FXML private TableColumn<Session, String> tutor_column_bookedS;
     @FXML private TableColumn<Session, String> status_column_bookedS;
 
-    @FXML private Tab main_tab;
-    @FXML private Tab profile_tab;
-    @FXML private Tab bookedSessions_tab;
-    @FXML private TextArea fname_textArea;
-    @FXML private TextArea lname_textArea;
-    @FXML private TextArea email_textArea;
-    @FXML private TextArea phone_textArea;
-    @FXML private TextArea gender_textArea;
-    @FXML private TextArea dateOfBirth_textArea;
-    @FXML private TextArea language_textArea;
 
     @FXML private Button viewDetails_button;
     @FXML private Button viewDetails_btn_bookedS;
+    @FXML private Button viewProfileDetails_btn;
 
     @FXML private ComboBox<String> subject_comboBox;
     @FXML private TextField minPrice_textField;
@@ -76,8 +64,7 @@ public class StudentMainPageViewController {
             return new SimpleStringProperty(tutor.getFirst_name() + " " + tutor.getLast_name());
         });
         main_tableView.setItems(viewModel.getFilteredSessions());
-        viewDetails_button.disableProperty().bind(
-            main_tableView.getSelectionModel().selectedItemProperty().isNull());
+
 
         // booked sessions
         title_column_bookedS.setCellValueFactory(data ->
@@ -95,17 +82,7 @@ public class StudentMainPageViewController {
             new SimpleStringProperty(data.getValue().getState() != null
                 ? data.getValue().getState().getClass().getSimpleName() : ""));
         bookedSessions_tableView.setItems(viewModel.getBookedSessions());
-        viewDetails_btn_bookedS.disableProperty().bind(
-            bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());
 
-        // profile fields
-        fname_textArea.textProperty().bindBidirectional(viewModel.firstNameProperty());
-        lname_textArea.textProperty().bindBidirectional(viewModel.lastNameProperty());
-        dateOfBirth_textArea.textProperty().bindBidirectional(viewModel.dateOfBirthProperty());
-        email_textArea.textProperty().bindBidirectional(viewModel.emailProperty());
-        phone_textArea.textProperty().bindBidirectional(viewModel.phoneProperty());
-        gender_textArea.textProperty().bindBidirectional(viewModel.genderProperty());
-        language_textArea.textProperty().bindBidirectional(viewModel.languagesProperty());
 
         // filter bar
         subject_comboBox.setItems(viewModel.getSubjectOptions());
@@ -114,9 +91,8 @@ public class StudentMainPageViewController {
         maxPrice_textField.textProperty().bindBidirectional(viewModel.maxPriceProperty());
         fromDate_textField.textProperty().bindBidirectional(viewModel.fromDateProperty());
         toDate_textField.textProperty().bindBidirectional(viewModel.toDateProperty());
-        reset_btn.setOnAction(e -> viewModel.resetFilters());
 
-        setFieldsReadOnly();
+        setUpButtons();
         viewModel.loadData();
     }
 
@@ -124,15 +100,7 @@ public class StudentMainPageViewController {
         return root;
     }
 
-    private void setFieldsReadOnly() {
-        fname_textArea.setEditable(false);
-        lname_textArea.setEditable(false);
-        dateOfBirth_textArea.setEditable(false);
-        email_textArea.setEditable(false);
-        phone_textArea.setEditable(false);
-        gender_textArea.setEditable(false);
-        language_textArea.setEditable(false);
-    }
+
 
     @FXML private void onViewDetailsButtonClicked() {
         Session selected = main_tableView.getSelectionModel().getSelectedItem();
@@ -143,7 +111,18 @@ public class StudentMainPageViewController {
         }
     }
 
-    @FXML private void onEditButtonClicked() {
-        // TODO: implement profile editing
+    private void setUpButtons()
+    {
+      viewProfileDetails_btn.setOnAction(event -> viewHandler.openStudentProfileDetails());
+      //Available sessions
+      viewDetails_button.disableProperty().bind(
+          main_tableView.getSelectionModel().selectedItemProperty().isNull());
+      //Booked Sessions
+      viewDetails_btn_bookedS.disableProperty().bind(
+          bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());
+      //Filtering
+      reset_btn.setOnAction(e -> viewModel.resetFilters());
     }
+
+
 }

@@ -8,11 +8,11 @@ import java.util.List;
 import server.dao.SessionDAOImpl;
 import server.dao.UserDAOImpl;
 
-public class SessionModelManager implements SessionModel, PropertyChangeListener {
+public class ModelManager implements SessionModel, PropertyChangeListener {
     private final SessionList list;
     private PropertyChangeSupport support;
 
-    public SessionModelManager() {
+    public ModelManager() {
         list = new SessionList();
         support = new PropertyChangeSupport(this);
     }
