@@ -7,7 +7,7 @@ import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
 
-public interface Model {
+public interface Model extends StudentModel, TutorModel, AdminModel {
 
   void connect() throws Exception;
 

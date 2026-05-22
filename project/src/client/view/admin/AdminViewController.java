@@ -31,7 +31,7 @@ public class AdminViewController {
         this.root = root;
 
         name_column.setCellValueFactory(data ->
-            new SimpleStringProperty(data.getValue().getFirst_name() + " " + data.getValue().getLast_name()));
+            new SimpleStringProperty(viewModel.formatTutorName(data.getValue())));
         email_column.setCellValueFactory(data ->
             new SimpleStringProperty(data.getValue().getEmail()));
         education_column.setCellValueFactory(data ->

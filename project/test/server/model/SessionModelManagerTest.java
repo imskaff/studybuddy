@@ -1,8 +1,8 @@
 package server.model;
 
 import org.junit.jupiter.api.*;
-import org.mockito.MockedStatic;
-import server.dao.SessionDAOImpl;
+import server.dao.SessionDAO;
+import server.dao.UserDAO;
 
 import java.sql.SQLException;
 
@@ -15,27 +15,18 @@ public class SessionModelManagerTest {
   private Session mockSession;
   private Session existingSession;
   private Tutor mockTutor;
-  private SessionDAOImpl mockDao;
-  private MockedStatic<SessionDAOImpl> mockedStaticDao;
+  private SessionDAO mockDao;
+  private UserDAO mockUserDao;
 
   @BeforeEach
   void setUp() {
-    manager = new SessionModelManager();
+    mockDao = mock(SessionDAO.class);
+    mockUserDao = mock(UserDAO.class);
+    manager = new SessionModelManager(mockDao, mockUserDao);
 
     mockSession = mock(Session.class);
     existingSession = mock(Session.class);
     mockTutor = mock(Tutor.class);
-    mockDao = mock(SessionDAOImpl.class);
-
-    mockedStaticDao = mockStatic(SessionDAOImpl.class);
-    mockedStaticDao.when(SessionDAOImpl::getInstance).thenReturn(mockDao);
-  }
-
-  @AfterEach
-  void tearDown() {
-    if (mockedStaticDao != null) {
-      mockedStaticDao.close();
-    }
   }
 
   @Nested

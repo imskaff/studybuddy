@@ -11,17 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SessionDAOImpl implements SessionDAO {
-    private static SessionDAOImpl instance;
+    private final UserDAO userDAO;
 
-    private SessionDAOImpl() throws SQLException {
+    public SessionDAOImpl(UserDAO userDAO) throws SQLException {
+        this.userDAO = userDAO;
         DriverManager.registerDriver(new org.postgresql.Driver());
-    }
-
-    public static synchronized SessionDAOImpl getInstance() throws SQLException {
-        if (instance == null) {
-            instance = new SessionDAOImpl();
-        }
-        return instance;
     }
 
     private Connection getConnection() throws SQLException {
@@ -176,6 +170,24 @@ public class SessionDAOImpl implements SessionDAO {
         }
     }
 
+    @Override
+    public List<Session> readByTutor(int tutorId) throws SQLException {
+        String sql = "SELECT s.id, s.description, s.price, s.location, s.start_date, s.end_date, "
+                + "s.tutor_id, s.student_id, sub.name AS subject_name "
+                + "FROM sessions s LEFT JOIN subjects sub ON s.subject_id = sub.id "
+                + "WHERE s.tutor_id = ?";
+        try (Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, tutorId);
+            ResultSet resultSet = statement.executeQuery();
+            List<Session> sessions = new ArrayList<>();
+            while (resultSet.next()) {
+                sessions.add(mapRow(resultSet));
+            }
+            return sessions;
+        }
+    }
+
     private Session mapRow(ResultSet resultSet) throws SQLException {
         int sessionId = resultSet.getInt("id");
         String description = resultSet.getString("description");
@@ -188,11 +200,10 @@ public class SessionDAOImpl implements SessionDAO {
         boolean studentWasNull = resultSet.wasNull();
         String subject = resultSet.getString("subject_name");
 
-        UserDAOImpl userDAO = UserDAOImpl.getInstance();
-        Tutor tutor = (Tutor) userDAO.readByInt(tutorId);
+        Tutor tutor = (Tutor) this.userDAO.readByInt(tutorId);
         Student student = null;
         if (!studentWasNull) {
-            student = (Student) userDAO.readByInt(studentId);
+            student = (Student) this.userDAO.readByInt(studentId);
         }
         return new Session(sessionId, description, price, subject, location, start_date, end_date, tutor, student);
     }

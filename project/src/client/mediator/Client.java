@@ -1,5 +1,6 @@
 package client.mediator;
 
+import client.model.LoginResult;
 import com.google.gson.Gson;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -216,12 +217,26 @@ public class Client implements ClientModel
   }
 
   @Override
-  public LoginResponse login(String email, String password)
+  public LoginResult login(String email, String password)
   {
     LoginRequest request = new LoginRequest(email, password);
     String replyJson = sendRequestForResponse(request);
-    if (replyJson == null) return LoginResponse.error("Connection error");
-    return gson.fromJson(replyJson, LoginResponse.class);
+    if (replyJson == null) return LoginResult.error();
+    LoginResponse response = gson.fromJson(replyJson, LoginResponse.class);
+    
+    if (!"OK".equals(response.getStatus())) return LoginResult.error();
+    String userType = response.getUserType();
+    
+    if ("student".equals(userType)) {
+        return LoginResult.student(gson.fromJson(response.getUserJson(), Student.class));
+    } else if ("tutor".equals(userType)) {
+        return LoginResult.tutor(gson.fromJson(response.getUserJson(), Tutor.class));
+    } else if ("tutor_pending".equals(userType)) {
+        return LoginResult.tutorPending(gson.fromJson(response.getUserJson(), Tutor.class));
+    } else if ("admin".equals(userType)) {
+        return LoginResult.admin(Integer.parseInt(response.getUserJson()));
+    }
+    return LoginResult.error();
   }
 
   // Retrieves all available (unbooked) sessions from the server
@@ -253,6 +268,29 @@ public class Client implements ClientModel
   {
     // Creates the request object with the student ID
     GetBookedSessionsRequest request = new GetBookedSessionsRequest(studentId);
+
+    // Sends the request and receives the raw JSON response
+    String replyJson = sendRequestForResponse(request);
+
+    if (replyJson == null) return new ArrayList<>();
+
+    // Parses the response to extract the list of sessions
+    SessionListResponse response = gson.fromJson(replyJson, SessionListResponse.class);
+
+    if ("OK".equals(response.getStatus()) && response.getSessions() != null)
+    {
+      return response.getSessions();
+    }
+
+    return new ArrayList<>();
+  }
+
+  // Retrieves all sessions created by a specific tutor from the server
+  @Override
+  public ArrayList<Session> getTutorSessions(int tutorId)
+  {
+    // Creates the request object with the tutor ID
+    GetTutorSessionsRequest request = new GetTutorSessionsRequest(tutorId);
 
     // Sends the request and receives the raw JSON response
     String replyJson = sendRequestForResponse(request);

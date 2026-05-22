@@ -1,8 +1,9 @@
 package client.viewmodel.student;
 
-import client.model.Model;
+import client.model.StudentModel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -14,9 +15,10 @@ import server.model.Student;
 
 public class SessionStudentViewModel implements PropertyChangeListener
 {
-    private Model model;
+    private StudentModel model;
     private ObservableList<Session> sessions;
     private Session selectedSession;
+    private final PropertyChangeSupport support;
 
     private final StringProperty description;
     private final StringProperty tutorName;
@@ -28,10 +30,11 @@ public class SessionStudentViewModel implements PropertyChangeListener
 
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-    public SessionStudentViewModel(Model model)
+    public SessionStudentViewModel(StudentModel model)
     {
         this.model = model;
         this.sessions = FXCollections.observableArrayList();
+        this.support = new PropertyChangeSupport(this);
 
         this.description = new SimpleStringProperty("");
         this.tutorName   = new SimpleStringProperty("");
@@ -41,6 +44,10 @@ public class SessionStudentViewModel implements PropertyChangeListener
         this.endDate     = new SimpleStringProperty("");
         this.price       = new SimpleStringProperty("");
         model.addPropertyChangeListener(this);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
     }
 
     public void loadSession(Session session)
@@ -80,29 +87,19 @@ public class SessionStudentViewModel implements PropertyChangeListener
 
     public void bookSession()
     {
-        if (selectedSession == null)
-        {
-            System.out.println("No session selected");
-            return;
-        }
+        if (selectedSession == null || model.getLoggedInStudent() == null) return;
 
         Student loggedInStudent = model.getLoggedInStudent();
-
-        if (loggedInStudent == null)
-        {
-            System.out.println("No student logged in");
-            return;
-        }
-
-        try
-        {
-            model.bookSession(loggedInStudent, selectedSession.getTutor(), selectedSession);
-            System.out.println("Session booked");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        Thread t = new Thread(() -> {
+            try {
+                model.bookSession(loggedInStudent, selectedSession.getTutor(), selectedSession);
+                support.firePropertyChange("bookingSucceeded", false, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        t.setDaemon(true);
+        t.start();
     }
 
     @Override

@@ -1,11 +1,9 @@
 package client.viewmodel.student;
 
-import client.model.Model;
+import client.model.StudentModel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.application.Platform;
@@ -20,17 +18,13 @@ import server.model.Student;
 public class StudentMainPageViewModel implements PropertyChangeListener {
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    private final Model model;
+    private final StudentModel model;
     private final ObservableList<Session> sessions;
     private final FilteredList<Session> filteredSessions;
     private final ObservableList<Session> bookedSessions;
     private final ObservableList<String> subjectOptions;
 
-    private final StringProperty subjectFilter;
-    private final StringProperty minPrice;
-    private final StringProperty maxPrice;
-    private final StringProperty fromDate;
-    private final StringProperty toDate;
+    private final SessionFilterService filterService;
 
     private final StringProperty firstName;
     private final StringProperty lastName;
@@ -40,18 +34,14 @@ public class StudentMainPageViewModel implements PropertyChangeListener {
     private final StringProperty gender;
     private final StringProperty languages;
 
-    public StudentMainPageViewModel(Model model) {
+    public StudentMainPageViewModel(StudentModel model) {
         this.model = model;
         this.sessions = FXCollections.observableArrayList();
         this.filteredSessions = new FilteredList<>(sessions, s -> true);
         this.bookedSessions = FXCollections.observableArrayList();
         this.subjectOptions = FXCollections.observableArrayList();
 
-        subjectFilter = new SimpleStringProperty("All");
-        minPrice = new SimpleStringProperty("");
-        maxPrice = new SimpleStringProperty("");
-        fromDate = new SimpleStringProperty("");
-        toDate = new SimpleStringProperty("");
+        filterService = new SessionFilterService(filteredSessions);
 
         firstName = new SimpleStringProperty("");
         lastName = new SimpleStringProperty("");
@@ -60,12 +50,6 @@ public class StudentMainPageViewModel implements PropertyChangeListener {
         phone = new SimpleStringProperty("");
         gender = new SimpleStringProperty("");
         languages = new SimpleStringProperty("");
-
-        subjectFilter.addListener((obs, o, n) -> applyFilter());
-        minPrice.addListener((obs, o, n) -> applyFilter());
-        maxPrice.addListener((obs, o, n) -> applyFilter());
-        fromDate.addListener((obs, o, n) -> applyFilter());
-        toDate.addListener((obs, o, n) -> applyFilter());
 
         model.addPropertyChangeListener(this);
     }
@@ -106,9 +90,9 @@ public class StudentMainPageViewModel implements PropertyChangeListener {
         Student current = model.getLoggedInStudent();
         if (current == null) return false;
 
-        LocalDate date;
+        java.time.LocalDate date;
         try {
-            date = LocalDate.parse(dateOfBirth.get());
+            date = java.time.LocalDate.parse(dateOfBirth.get());
         } catch (Exception e) {
             return false;
         }
@@ -126,57 +110,7 @@ public class StudentMainPageViewModel implements PropertyChangeListener {
     }
 
     public void resetFilters() {
-        subjectFilter.set("All");
-        minPrice.set("");
-        maxPrice.set("");
-        fromDate.set("");
-        toDate.set("");
-    }
-
-    private void applyFilter() {
-        filteredSessions.setPredicate(session -> {
-            // Subject filter
-            String subject = subjectFilter.get();
-            if (subject != null && !subject.equals("All") && !subject.isBlank()) {
-                if (!subject.equals(session.getSubject())) return false;
-            }
-
-            // Min price filter
-            String minP = minPrice.get();
-            if (minP != null && !minP.isBlank()) {
-                try {
-                    if (session.getPrice() < Double.parseDouble(minP)) return false;
-                } catch (NumberFormatException ignored) {}
-            }
-
-            // Max price filter
-            String maxP = maxPrice.get();
-            if (maxP != null && !maxP.isBlank()) {
-                try {
-                    if (session.getPrice() > Double.parseDouble(maxP)) return false;
-                } catch (NumberFormatException ignored) {}
-            }
-
-            // From date filter
-            String from = fromDate.get();
-            if (from != null && !from.isBlank()) {
-                try {
-                    LocalDate fd = LocalDate.parse(from, DATE_FMT);
-                    if (session.getStart_date().toLocalDate().isBefore(fd)) return false;
-                } catch (DateTimeParseException ignored) {}
-            }
-
-            // To date filter
-            String to = toDate.get();
-            if (to != null && !to.isBlank()) {
-                try {
-                    LocalDate td = LocalDate.parse(to, DATE_FMT);
-                    if (session.getStart_date().toLocalDate().isAfter(td)) return false;
-                } catch (DateTimeParseException ignored) {}
-            }
-
-            return true;
-        });
+        filterService.resetFilters();
     }
 
     public FilteredList<Session> getFilteredSessions() {
@@ -195,11 +129,16 @@ public class StudentMainPageViewModel implements PropertyChangeListener {
         return subjectOptions;
     }
 
-    public StringProperty subjectFilterProperty() { return subjectFilter; }
-    public StringProperty minPriceProperty() { return minPrice; }
-    public StringProperty maxPriceProperty() { return maxPrice; }
-    public StringProperty fromDateProperty() { return fromDate; }
-    public StringProperty toDateProperty() { return toDate; }
+    public String formatPrice(double price) { return String.format("%.2f", price); }
+    public String formatDate(java.time.LocalDateTime date) { return date.format(DATE_FMT); }
+    public String formatTutorName(server.model.Tutor tutor) { return tutor.getFirst_name() + " " + tutor.getLast_name(); }
+    public String formatSessionState(Session session) { return session.getState() != null ? session.getState().getClass().getSimpleName() : ""; }
+
+    public StringProperty subjectFilterProperty() { return filterService.subjectFilterProperty(); }
+    public StringProperty minPriceProperty() { return filterService.minPriceProperty(); }
+    public StringProperty maxPriceProperty() { return filterService.maxPriceProperty(); }
+    public StringProperty fromDateProperty() { return filterService.fromDateProperty(); }
+    public StringProperty toDateProperty() { return filterService.toDateProperty(); }
 
     public StringProperty firstNameProperty() { return firstName; }
     public StringProperty lastNameProperty() { return lastName; }

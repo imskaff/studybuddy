@@ -1,6 +1,6 @@
 package client.viewmodel.tutor;
 
-import client.model.Model;
+import client.model.TutorModel;
 import client.viewmodel.ViewState;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -17,7 +17,7 @@ import server.model.Tutor;
 
 public class TutorMainPageViewModel implements PropertyChangeListener
 {
-  private final Model model;
+  private final TutorModel model;
   private final ViewState viewState;
 
     private final ObservableList<Session> sessions;
@@ -32,8 +32,9 @@ public class TutorMainPageViewModel implements PropertyChangeListener
   private final StringProperty education;
   private final StringProperty description;
 
-  public TutorMainPageViewModel(Model model, ViewState viewState) {
-      this.model = model;
+  public TutorMainPageViewModel(TutorModel model, ViewState viewState)
+  {
+    this.model = model;
       this.viewState = viewState;
       sessions = FXCollections.observableArrayList();
       firstName = new SimpleStringProperty("");
@@ -57,7 +58,7 @@ public class TutorMainPageViewModel implements PropertyChangeListener
 
     public void loadSessions()
     {
-        sessions.setAll(model.getAllSessions());
+        sessions.setAll(model.getTutorSessions());
     }
 
     public void loadProfile(Tutor tutor)

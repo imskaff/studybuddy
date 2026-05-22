@@ -5,7 +5,7 @@ public record Available() implements SessionState
 
   @Override public void complete(Session session)
   {
-    System.out.println("Session cannot be completed if it's not booked");
+    throw new IllegalStateException("Session cannot be completed if it's not booked");
   }
 
   @Override public void book(Session session)
@@ -15,7 +15,7 @@ public record Available() implements SessionState
 
   @Override public void cancel(Session session)
   {
-    System.out.println("Session cannot be canceled if it wasn't booked");
+    throw new IllegalStateException("Session cannot be canceled if it wasn't booked");
   }
 
   @Override

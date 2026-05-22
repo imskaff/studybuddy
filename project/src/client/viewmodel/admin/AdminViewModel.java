@@ -1,16 +1,16 @@
 package client.viewmodel.admin;
 
-import client.model.Model;
+import client.model.AdminModel;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import server.model.Tutor;
 
 public class AdminViewModel {
-    private final Model model;
+    private final AdminModel model;
     private final ObservableList<Tutor> pendingTutors;
 
-    public AdminViewModel(Model model) {
+    public AdminViewModel(AdminModel model) {
         this.model = model;
         this.pendingTutors = FXCollections.observableArrayList();
     }
@@ -42,4 +42,6 @@ public class AdminViewModel {
     public ObservableList<Tutor> getPendingTutors() {
         return pendingTutors;
     }
+
+    public String formatTutorName(Tutor tutor) { return tutor.getFirst_name() + " " + tutor.getLast_name(); }
 }

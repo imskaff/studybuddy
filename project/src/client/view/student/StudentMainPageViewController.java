@@ -2,7 +2,6 @@ package client.view.student;
 
 import client.view.ViewHandler;
 import client.viewmodel.student.StudentMainPageViewModel;
-import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,7 +12,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import server.model.Session;
-import server.model.Tutor;
 
 public class StudentMainPageViewController {
     @FXML private TableView<Session> main_tableView;
@@ -67,14 +65,11 @@ public class StudentMainPageViewController {
         main_column_title.setCellValueFactory(data ->
             new SimpleStringProperty(data.getValue().getSubject()));
         main_column_price.setCellValueFactory(data ->
-            new SimpleStringProperty(String.format("%.2f", data.getValue().getPrice())));
+            new SimpleStringProperty(viewModel.formatPrice(data.getValue().getPrice())));
         main_column_date.setCellValueFactory(data ->
-            new SimpleStringProperty(data.getValue().getStart_date()
-                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
-        main_column_tutor.setCellValueFactory(data -> {
-            Tutor tutor = data.getValue().getTutor();
-            return new SimpleStringProperty(tutor.getFirst_name() + " " + tutor.getLast_name());
-        });
+            new SimpleStringProperty(viewModel.formatDate(data.getValue().getStart_date())));
+        main_column_tutor.setCellValueFactory(data ->
+            new SimpleStringProperty(viewModel.formatTutorName(data.getValue().getTutor())));
         main_tableView.setItems(viewModel.getFilteredSessions());
         viewDetails_button.disableProperty().bind(
             main_tableView.getSelectionModel().selectedItemProperty().isNull());
@@ -83,17 +78,13 @@ public class StudentMainPageViewController {
         title_column_bookedS.setCellValueFactory(data ->
             new SimpleStringProperty(data.getValue().getSubject()));
         price_column_bookedS.setCellValueFactory(data ->
-            new SimpleStringProperty(String.format("%.2f", data.getValue().getPrice())));
+            new SimpleStringProperty(viewModel.formatPrice(data.getValue().getPrice())));
         date_column_bookedS.setCellValueFactory(data ->
-            new SimpleStringProperty(data.getValue().getStart_date()
-                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
-        tutor_column_bookedS.setCellValueFactory(data -> {
-            Tutor tutor = data.getValue().getTutor();
-            return new SimpleStringProperty(tutor.getFirst_name() + " " + tutor.getLast_name());
-        });
+            new SimpleStringProperty(viewModel.formatDate(data.getValue().getStart_date())));
+        tutor_column_bookedS.setCellValueFactory(data ->
+            new SimpleStringProperty(viewModel.formatTutorName(data.getValue().getTutor())));
         status_column_bookedS.setCellValueFactory(data ->
-            new SimpleStringProperty(data.getValue().getState() != null
-                ? data.getValue().getState().getClass().getSimpleName() : ""));
+            new SimpleStringProperty(viewModel.formatSessionState(data.getValue())));
         bookedSessions_tableView.setItems(viewModel.getBookedSessions());
         viewDetails_btn_bookedS.disableProperty().bind(
             bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());

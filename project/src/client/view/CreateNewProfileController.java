@@ -1,6 +1,5 @@
 package client.view;
 
-import client.viewmodel.CreateNewProfileViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -17,13 +16,11 @@ public class CreateNewProfileController
 
   private Region root;
   private ViewHandler viewHandler;
-  private CreateNewProfileViewModel viewModel;
 
-  public void init(ViewHandler viewHandler, CreateNewProfileViewModel viewModel, Region root)
+  public void init(ViewHandler viewHandler, Region root)
   {
     this.root = root;
     this.viewHandler = viewHandler;
-    this.viewModel = viewModel;
 
     back_Btn.setOnAction(event -> viewHandler.openWelcomeView());
     confirm_Btn.setOnAction(event -> chooseUserType());

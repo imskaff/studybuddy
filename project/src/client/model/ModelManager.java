@@ -4,10 +4,6 @@ import java.beans.PropertyChangeSupport;
 
 import client.mediator.Client;
 import client.mediator.ClientModel;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import server.mediator.LocalDateAdapter;
-import server.mediator.LoginResponse;
 import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
@@ -61,6 +57,12 @@ public class ModelManager implements Model, PropertyChangeListener {
     public ArrayList<Session> getBookedSessions() {
         if (loggedInStudent == null) return new ArrayList<>();
         return client.getBookedSessions(loggedInStudent.getId());
+    }
+
+    @Override
+    public ArrayList<Session> getTutorSessions() {
+        if (loggedInTutor == null) return new ArrayList<>();
+        return client.getTutorSessions(loggedInTutor.getId());
     }
 
    @Override public void setLoggedInStudent(Student student)
@@ -153,18 +155,16 @@ public class ModelManager implements Model, PropertyChangeListener {
 
     @Override
     public String login(String email, String password) {
-        LoginResponse response = client.login(email, password);
-        if (!"OK".equals(response.getStatus())) return null;
-        String userType = response.getUserType();
-        Gson gson = new GsonBuilder()
-            .registerTypeAdapter(java.time.LocalDate.class, new LocalDateAdapter())
-            .create();
+        LoginResult result = client.login(email, password);
+        String userType = result.getUserType();
+        if ("error".equals(userType)) return null;
+
         if ("student".equals(userType)) {
-            loggedInStudent = gson.fromJson(response.getUserJson(), Student.class);
-        } else if ("tutor".equals(userType)) {
-            loggedInTutor = gson.fromJson(response.getUserJson(), Tutor.class);
+            loggedInStudent = result.getStudent();
+        } else if ("tutor".equals(userType) || "tutor_pending".equals(userType)) {
+            loggedInTutor = result.getTutor();
         } else if ("admin".equals(userType)) {
-            loggedInAdminId = Integer.parseInt(response.getUserJson());
+            loggedInAdminId = result.getAdminId();
         }
         return userType;
     }
@@ -181,22 +181,22 @@ public class ModelManager implements Model, PropertyChangeListener {
 
   @Override public void complete(Session session)
   {
-    session.complete(session);
+    try { session.complete(session); } catch (IllegalStateException ignored) {}
   }
 
   @Override public void book(Session session)
   {
-    session.book(session);
+    try { session.book(session); } catch (IllegalStateException ignored) {}
   }
 
   @Override public void cancel(Session session)
   {
-    session.cancel(session);
+    try { session.cancel(session); } catch (IllegalStateException ignored) {}
   }
 
   @Override public void remove(Session session)
   {
-    session.remove(session);
+    try { session.remove(session); } catch (IllegalStateException ignored) {}
   }
 
   @Override

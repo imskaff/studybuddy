@@ -23,7 +23,6 @@ public class ViewModelFactory
     private CreateStudentProfileViewModel createStudentViewModel;
     private CreateTutorProfileViewModel createTutorViewModel;
     private AdminViewModel adminViewModel;
-    private CreateNewProfileViewModel createNewProfileViewModel;
     private RulesViewModel rulesViewModel;
     private CreateStudentProfileViewModel createStudentProfileViewModel;
 
@@ -42,7 +41,6 @@ public class ViewModelFactory
         createTutorViewModel = new CreateTutorProfileViewModel(model);
         adminViewModel = new AdminViewModel(model);
         createNewSessionViewModel = new CreateNewSessionViewModel(model);
-        createNewProfileViewModel = new CreateNewProfileViewModel(model);
         rulesViewModel = new RulesViewModel(model);
         createStudentProfileViewModel = new CreateStudentProfileViewModel(model);
 
@@ -86,11 +84,6 @@ public class ViewModelFactory
     public AdminViewModel getAdminViewModel() {
         return adminViewModel;
     }
-
-  public CreateNewProfileViewModel getCreateNewProfileViewModel()
-  {
-    return createNewProfileViewModel;
-  }
 
   public RulesViewModel getRulesViewModel()
   {

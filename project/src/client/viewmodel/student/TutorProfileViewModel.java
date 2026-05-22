@@ -1,6 +1,6 @@
 package client.viewmodel.student;
 
-import client.model.Model;
+import client.model.StudentModel;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javafx.beans.property.SimpleStringProperty;
@@ -8,7 +8,7 @@ import javafx.beans.property.StringProperty;
 import server.model.Tutor;
 
 public class TutorProfileViewModel {
-    private Model model;
+    private StudentModel model;
 
     private final StringProperty firstName = new SimpleStringProperty("");
     private final StringProperty lastName = new SimpleStringProperty("");
@@ -19,7 +19,7 @@ public class TutorProfileViewModel {
     private final StringProperty educationLevel = new SimpleStringProperty("");
     private final StringProperty languages = new SimpleStringProperty("");
 
-    public TutorProfileViewModel(Model model) {
+    public TutorProfileViewModel(StudentModel model) {
         this.model = model;
     }
 

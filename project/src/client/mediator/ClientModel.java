@@ -3,7 +3,7 @@ package client.mediator;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-import server.mediator.LoginResponse;
+import client.model.LoginResult;
 import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
@@ -40,13 +40,16 @@ public interface ClientModel {
 
   boolean editTutorProfile(Tutor tutor);
 
-  LoginResponse login(String email, String password);
+  LoginResult login(String email, String password);
 
   // Retrieves all available (unbooked) sessions from the server.
   ArrayList<Session> getAvailableSessions();
 
   // Retrieves all sessions booked by a specific student from the server.
   ArrayList<Session> getBookedSessions(int studentId);
+
+  // Retrieves all sessions created by a specific tutor from the server.
+  ArrayList<Session> getTutorSessions(int tutorId);
 
   // Retrieves all pending tutor registrations from the server.
   ArrayList<Tutor> getPendingTutors();

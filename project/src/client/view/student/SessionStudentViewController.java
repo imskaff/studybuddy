@@ -27,9 +27,7 @@ public class SessionStudentViewController
   private SessionStudentViewModel viewModel;
   private ViewHandler viewHandler;
 
-  public SessionStudentViewController()
-  {
-  }
+  public SessionStudentViewController() {}
 
   public void init(ViewHandler viewHandler, SessionStudentViewModel viewModel, Region root)
   {
@@ -44,6 +42,12 @@ public class SessionStudentViewController
     startDate_textField.textProperty().bind(viewModel.startDateProperty());
     endDate_textField.textProperty().bind(viewModel.endDateProperty());
     price_textField.textProperty().bind(viewModel.priceProperty());
+
+    viewModel.addPropertyChangeListener(evt -> {
+      if ("bookingSucceeded".equals(evt.getPropertyName())) {
+        Platform.runLater(() -> viewHandler.openStudentMainPageView());
+      }
+    });
 
     setFieldsReadOnly();
     setUpButtons();
@@ -75,12 +79,7 @@ public class SessionStudentViewController
   @FXML private void onBookSession()
   {
     book_session_button.setDisable(true);
-    Thread t = new Thread(() -> {
-      viewModel.bookSession();
-      Platform.runLater(() -> viewHandler.openStudentMainPageView());
-    });
-    t.setDaemon(true);
-    t.start();
+    viewModel.bookSession();
   }
 
   @FXML private void onViewTutorProfile()

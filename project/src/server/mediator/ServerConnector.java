@@ -4,7 +4,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDateTime;
 
-import server.model.SessionModelManager;
+import server.model.SessionModel;
 // The BookingServer class acts as the connecting class.
 // It creates a server socket that listens on a specific port
 // and waits for incoming client connections. When a client connects,
@@ -12,9 +12,9 @@ import server.model.SessionModelManager;
 // allowing the server to handle multiple clients simultaneously.
 public class ServerConnector implements Runnable{
     private static final int PORT = 4025;
-    private SessionModelManager model;
+    private SessionModel model;
 
-    public ServerConnector(SessionModelManager model)
+    public ServerConnector(SessionModel model)
     {
         // Initializes the server-side model that contains the booking logic
         this.model = model;

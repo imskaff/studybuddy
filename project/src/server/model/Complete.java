@@ -18,14 +18,13 @@ public record Complete() implements SessionState
     @Override
     public void book(Session session)
     {
-        System.out.println("Session cannot be booked if it's completed");
+        throw new IllegalStateException("Session cannot be booked if it's completed");
     }
 
     @Override
     public void cancel(Session session)
     {
-        session.setToBeCanceled(false);
-        System.out.println("Session cannot be canceled if it's completed");
+        throw new IllegalStateException("Session cannot be canceled if it's completed");
     }
 
     @Override

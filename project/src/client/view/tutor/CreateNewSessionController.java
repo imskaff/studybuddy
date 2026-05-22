@@ -2,9 +2,6 @@ package client.view.tutor;
 
 import client.view.ViewHandler;
 import client.viewmodel.tutor.CreateNewSessionViewModel;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -12,8 +9,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import server.model.Session;
-import server.model.Tutor;
 
 public class CreateNewSessionController
 {
@@ -59,43 +54,14 @@ public class CreateNewSessionController
 
   private void setCreate_btn()
   {
-    try
+    boolean success = viewModel.createSessionFromInput();
+    if (success)
     {
-      String subject = viewModel.subjectProperty().get();
-      double price = Double.parseDouble(viewModel.priceProperty().get());
-      String location = viewModel.locationProperty().get();
-      String description = viewModel.descriptionProperty().get();
-
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-          "yyyy-MM-dd HH:mm");
-
-      LocalDateTime startDate = LocalDateTime.parse(
-          viewModel.startDateProperty().get(), formatter);
-      LocalDateTime endDate = LocalDateTime.parse(
-          viewModel.endDateProperty().get(), formatter);
-
-      Tutor currentTutor = viewModel.getCurrentTutor();
-      Session session = new Session(description, price, subject, location,
-          startDate, endDate, currentTutor);
-
-      boolean success = viewModel.createSession(session);
-
-      if (success)
-      {
-        popup.close();
-      }
-      else
-      {
-        System.err.println("Database error: Could not create session.");
-      }
+      popup.close();
     }
-  catch (NumberFormatException e) {
-  System.err.println("Invalid input: Price must be a valid number.");
-} catch (DateTimeParseException e) {
-  // This catches errors if the user types the date in the wrong format!
-  System.err.println("Invalid date format! Please use: yyyy-MM-dd HH:mm (e.g., 2024-05-20 14:30)");
-} catch (Exception e) {
-  e.printStackTrace();
-}
+    else
+    {
+      System.err.println(viewModel.errorProperty().get());
+    }
   }
 }

@@ -1,6 +1,6 @@
 package client.viewmodel.tutor;
 
-import client.model.Model;
+import client.model.TutorModel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import server.model.Session;
 
 public class SessionTutorViewModel implements PropertyChangeListener
 {
-    private final Model model;
+    private final TutorModel model;
     private Session selectedSession;
 
     private final ObservableList<String> subjectOptions;
@@ -28,7 +28,7 @@ public class SessionTutorViewModel implements PropertyChangeListener
 
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-    public SessionTutorViewModel(Model model)
+    public SessionTutorViewModel(TutorModel model)
     {
         this.model = model;
 

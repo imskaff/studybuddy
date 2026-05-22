@@ -9,17 +9,8 @@ import server.model.Tutor;
 import server.model.User;
 
 public class UserDAOImpl implements UserDAO {
-    private static UserDAOImpl instance;
-
-    private UserDAOImpl() throws SQLException {
+    public UserDAOImpl() throws SQLException {
         DriverManager.registerDriver(new org.postgresql.Driver());
-    }
-
-    public static synchronized UserDAOImpl getInstance() throws SQLException {
-        if (instance == null) {
-            instance = new UserDAOImpl();
-        }
-        return instance;
     }
 
     private Connection getConnection() throws SQLException {

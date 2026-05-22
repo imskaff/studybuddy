@@ -222,7 +222,7 @@ public class ViewHandler
       loader.setLocation(getClass().getResource("CreateNewProfile.fxml"));
       Region root = loader.load();
       CreateNewProfileController controller = loader.getController();
-      controller.init(this, viewModelFactory.getCreateNewProfileViewModel(), root);
+      controller.init(this, root);
 
       primaryStage.setTitle("Create Profile View");
       primaryStage.setScene(new Scene(root));
@@ -298,6 +298,20 @@ public class ViewHandler
     }
   }
 
-
+  public void openViewForUserType(String userType) {
+    if ("student".equals(userType)) {
+      openStudentMainPageView();
+    } else if ("tutor".equals(userType)) {
+      openTutorMainPageView();
+    } else if ("admin".equals(userType)) {
+      openAdminView();
+    } else if ("tutor_pending".equals(userType)) {
+      javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.WARNING);
+      alert.setTitle("Account Pending Approval");
+      alert.setHeaderText(null);
+      alert.setContentText("Your tutor account has not been approved yet. Please wait for an administrator to review your application.");
+      alert.showAndWait();
+    }
+  }
 }
 

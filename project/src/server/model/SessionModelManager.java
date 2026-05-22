@@ -3,23 +3,23 @@ package server.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import server.dao.SessionDAOImpl;
-import server.dao.UserDAOImpl;
+import server.dao.SessionDAO;
+import server.dao.UserDAO;
 
 public class SessionModelManager implements SessionModel, PropertyChangeListener {
     private final SessionList list;
     private PropertyChangeSupport support;
+    private final SessionDAO sessionDAO;
+    private final UserDAO userDAO;
 
-    public SessionModelManager() {
+    public SessionModelManager(SessionDAO sessionDAO, UserDAO userDAO) {
         list = new SessionList();
         support = new PropertyChangeSupport(this);
-    }
-
-    @Override
-    public void bookSession(Student student, Tutor tutor, Session sessionId) {
-        list.addSession(sessionId);
+        this.sessionDAO = sessionDAO;
+        this.userDAO = userDAO;
     }
 
     @Override
@@ -61,9 +61,9 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
   {
     try {
       // Reads the selected session from the database
-      Session session = SessionDAOImpl.getInstance().readByInt(sessionId);
+      Session session = this.sessionDAO.readByInt(sessionId);
       // Reads the student from the database
-      Student student = (Student) UserDAOImpl.getInstance().readByInt(studentId);
+      Student student = (Student) this.userDAO.readByInt(studentId);
       // Checks if the session or student does not exist
       if(session == null || student == null)
       {
@@ -77,7 +77,7 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
       // Assigns the student to the session
       session.setStudent(student);
       // Updates the session in the database
-      SessionDAOImpl.getInstance().update(session);
+      this.sessionDAO.update(session);
 
       return true;
     }
@@ -100,7 +100,7 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
         return false;
       }
       // Creates the session in the database
-      SessionDAOImpl.getInstance().create(session.getDescription(), session.getPrice(),
+      this.sessionDAO.create(session.getDescription(), session.getPrice(),
           session.getSubject(), session.getLocation(), session.getStart_date(),
           session.getEnd_date(), session.getTutor(), session.getStudent());
 
@@ -125,7 +125,7 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
         return false;
       }
       // Reads the existing session from the database
-      Session existing = SessionDAOImpl.getInstance().readByInt(updatedSession.getId());
+      Session existing = this.sessionDAO.readByInt(updatedSession.getId());
 
       // Checks if the session exists
       if(existing == null)
@@ -140,7 +140,7 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
       existing.setStart_date(updatedSession.getStart_date());
       existing.setEnd_date(updatedSession.getEnd_date());
       // Updates the session in the database
-      SessionDAOImpl.getInstance().update(existing);
+      this.sessionDAO.update(existing);
 
       return true;
     }
@@ -156,14 +156,14 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
   {
     try {
       // Reads the session from the database
-      Session session = SessionDAOImpl.getInstance().readByInt(sessionId);
+      Session session = this.sessionDAO.readByInt(sessionId);
       // Checks if the session exists
       if(session == null)
       {
         return false;
       }
       // Deletes the session from the database
-      SessionDAOImpl.getInstance().delete(session);
+      this.sessionDAO.delete(session);
 
       return true;
     }
@@ -190,12 +190,12 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
         return false;
       }
       // Checks if the email already exists in the database
-      if(UserDAOImpl.getInstance().readByEmail(student.getEmail()) != null)
+      if(this.userDAO.readByEmail(student.getEmail()) != null)
       {
         return false;
       }
       // Creates the student profile in the database
-      UserDAOImpl.getInstance().create(student.getFirst_name(), student.getLast_name(),
+      this.userDAO.create(student.getFirst_name(), student.getLast_name(),
           student.getDate_of_birth(), student.getEmail(), student.getPhone(),
           student.getPassword(), student.getGender(), student.getLanguages(), "Student", null);
 
@@ -223,11 +223,11 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
         return false;
       }
       // Checks if the email already exists in the database
-      if(UserDAOImpl.getInstance().readByEmail(tutor.getEmail()) != null)
+      if(this.userDAO.readByEmail(tutor.getEmail()) != null)
       {
         return false;
       }
-      UserDAOImpl.getInstance().create(tutor.getFirst_name(), tutor.getLast_name(), tutor.getDate_of_birth(),
+      this.userDAO.create(tutor.getFirst_name(), tutor.getLast_name(), tutor.getDate_of_birth(),
           tutor.getEmail(), tutor.getPhone(), tutor.getPassword(), tutor.getGender(),
           tutor.getLanguages(), "Tutor", tutor.getEducation_level());
 
@@ -241,20 +241,22 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
   }
 
   @Override
-  public boolean handleTutorRegistration(int tutorId, String action)
+  public boolean handleTutorRegistration(int tutorId, String action, int adminId)
   {
     try
     {
       // Approves the tutor
       if("APPROVE".equals(action))
       {
-        return UserDAOImpl.getInstance().updateTutorApproval(tutorId, true);
+        this.userDAO.updateApprovalStatus(tutorId, true, adminId);
+        return true;
       }
 
       // Declines the tutor
       else if("DECLINE".equals(action))
       {
-        return UserDAOImpl.getInstance().updateTutorApproval(tutorId, false);
+        this.userDAO.declineTutor(tutorId);
+        return true;
       }
 
       return false;
@@ -282,7 +284,7 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
         return false;
       }
       // Updates the student profile in the database
-      UserDAOImpl.getInstance().update(student);
+      this.userDAO.update(student);
 
       return true;
     }
@@ -310,7 +312,7 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
         return false;
       }
       // Updates the common user information in the database
-      UserDAOImpl.getInstance().update(tutor);
+      this.userDAO.update(tutor);
 
       return true;
     }
@@ -326,7 +328,7 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
   {
     try
     {
-      return SessionDAOImpl.getInstance().readSubjects();
+      return this.sessionDAO.readSubjects();
     }
     catch (Exception e)
     {
@@ -339,4 +341,34 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
     public void propertyChange(PropertyChangeEvent evt) {
         support.firePropertyChange(evt);
     }
+
+  @Override
+  public ArrayList<Session> getAvailableSessions() throws SQLException {
+      return new ArrayList<>(this.sessionDAO.readAvailable());
+  }
+
+  @Override
+  public ArrayList<Session> getBookedSessions(int studentId) throws SQLException {
+      return new ArrayList<>(this.sessionDAO.readByStudent(studentId));
+  }
+
+  @Override
+  public ArrayList<Session> getTutorSessions(int tutorId) throws SQLException {
+      return new ArrayList<>(this.sessionDAO.readByTutor(tutorId));
+  }
+
+  @Override
+  public ArrayList<Tutor> getPendingTutors() throws SQLException {
+      return this.userDAO.readPendingTutors();
+  }
+
+  @Override
+  public User login(String email, String password) throws SQLException {
+      return this.userDAO.readByEmailAndPassword(email, password);
+  }
+
+  @Override
+  public int getAdminId(String email, String password) throws SQLException {
+      return this.userDAO.getAdminId(email, password);
+  }
 }

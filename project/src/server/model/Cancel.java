@@ -5,13 +5,13 @@ public record Cancel() implements SessionState {
  @Override
  public void complete(Session session)
  {
-     System.out.println("Session cannot be completed if it was canceled");
+     throw new IllegalStateException("Session cannot be completed if it was canceled");
  }
 
  @Override
  public void book(Session session)
  {
-     System.out.println("Session cannot be booked if it was canceled");
+     throw new IllegalStateException("Session cannot be booked if it was canceled");
  }
 
  @Override
@@ -27,4 +27,3 @@ public record Cancel() implements SessionState {
   }
 
 }
-
