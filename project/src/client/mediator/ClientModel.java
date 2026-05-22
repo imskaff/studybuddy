@@ -43,6 +43,8 @@ public interface ClientModel {
 
   LoginResponse login(String email, String password);
 
+  boolean cancelSession(int userId, int sessionId, String userType);
+
   // Retrieves all available (unbooked) sessions from the server.
   ArrayList<Session> getAvailableSessions();
 

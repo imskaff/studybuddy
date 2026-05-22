@@ -241,6 +241,16 @@ public class Client implements ClientModel
     }
   }
 
+  @Override
+  public boolean cancelSession(int userId, int sessionId, String userType)
+  {
+    // Creates the cancel session request object
+    CancelSessionRequest request = new CancelSessionRequest(userId, sessionId, userType);
+
+    // Sends the request to the server
+    return sendRequest(request);
+  }
+
   // Retrieves all available (unbooked) sessions from the server
   @Override
   public ArrayList<Session> getAvailableSessions()

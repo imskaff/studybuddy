@@ -76,6 +76,8 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
       }
       // Assigns the student to the session
       session.setStudent(student);
+      // Changes the session state to booked
+      session.book(session);
       // Updates the session in the database
       SessionDAOImpl.getInstance().update(session);
 
@@ -336,6 +338,60 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
     {
       e.printStackTrace();
       return null;
+    }
+  }
+
+  @Override
+  public boolean cancelSession(int userId,
+      int sessionId,
+      String type)
+  {
+    try
+    {
+      // Reads the selected session from the database
+      Session session =
+          SessionDAOImpl.getInstance()
+              .readByInt(sessionId);
+
+      // Checks if the session does not exist
+      if(session == null)
+      {
+        return false;
+      }
+
+      // Student cancellation
+      if(type.equalsIgnoreCase("student"))
+      {
+        // Removes the student from the booking
+        session.setStudent(null);
+
+        // Makes the session available again
+        session.cancel(session);
+
+        // Updates the session in the database
+        SessionDAOImpl.getInstance().update(session);
+
+        return true;
+      }
+
+      // Tutor cancellation
+      else if(type.equalsIgnoreCase("tutor"))
+      {
+        // Changes the session state to cancelled
+        session.cancel(session);
+
+        // Updates the session in the database
+        SessionDAOImpl.getInstance().update(session);
+
+        return true;
+      }
+
+      return false;
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+      return false;
     }
   }
 
