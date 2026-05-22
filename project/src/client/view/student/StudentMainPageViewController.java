@@ -32,6 +32,7 @@ public class StudentMainPageViewController {
     @FXML private Button viewDetails_button;
     @FXML private Button viewDetails_btn_bookedS;
     @FXML private Button viewProfileDetails_btn;
+    @FXML private Button cancel_btn;
 
     @FXML private ComboBox<String> subject_comboBox;
     @FXML private TextField minPrice_textField;
@@ -122,6 +123,8 @@ public class StudentMainPageViewController {
           bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());
       //Filtering
       reset_btn.setOnAction(e -> viewModel.resetFilters());
+      //Cancel Session
+
     }
 
 
