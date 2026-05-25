@@ -13,143 +13,117 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="600.0" prefWidth="900.0"
-            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="client.view.tutor.TutorMainPageController">
+<AnchorPane fx:id="main_aPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="632.0" prefWidth="965.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.tutor.TutorMainPageController">
     <children>
-        <TabPane layoutX="-4.0" layoutY="-5.0" minHeight="-Infinity" minWidth="-Infinity"
-                 prefHeight="599.0" prefWidth="905.0" tabClosingPolicy="UNAVAILABLE">
+        <TabPane fx:id="tabPane" layoutY="-2.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="965.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-
-                <!-- My Sessions tab -->
                 <Tab text="My Sessions">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <TableView fx:id="mySessions_tView" layoutX="1.0" prefHeight="508.0" prefWidth="906.0">
-                                    <columns>
-                                        <TableColumn fx:id="subject_column" prefWidth="181.0" text="Subject"/>
-                                        <TableColumn fx:id="price_column" prefWidth="81.0" text="Price"/>
-                                        <TableColumn fx:id="date_column" prefWidth="121.0" text="Date Published"/>
-                                        <TableColumn fx:id="state_column" prefWidth="181.0" text="State"/>
-                                        <TableColumn fx:id="description_column" prefWidth="342.0" text="Description"/>
-                                    </columns>
-                                </TableView>
-                                <Button fx:id="cancel_btn" layoutX="430.0" layoutY="528.0"
-                                        mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0"
-                                        text="Cancel"/>
-                                <Button fx:id="remove_btn" layoutX="553.0" layoutY="528.0"
-                                        mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0"
-                                        text="Remove"/>
-                                <Button fx:id="create_btn" layoutX="675.0" layoutY="528.0"
-                                        mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0"
-                                        text="Create session"/>
-                                <Button fx:id="viewDetails_btn" layoutX="795.0" layoutY="528.0"
-                                        mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0"
-                                        text="View Details"/>
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
+                                <VBox spacing="0.0" style="-fx-background-color: #f9f9f9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <children>
+                                        <HBox prefHeight="50.0" style="-fx-background-color: #3a7ebf; -fx-padding: 12 20 12 20;">
+                                            <children>
+                                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="My Published Sessions" />
+                                            </children>
+                                        </HBox>
 
-                <!-- Profile tab -->
-                <Tab fx:id="profile_tView" text="Profile">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="570.0" prefWidth="905.0">
-                            <children>
-                                <VBox spacing="0.0"
-                                      AnchorPane.topAnchor="0.0"
-                                      AnchorPane.bottomAnchor="0.0"
-                                      AnchorPane.leftAnchor="0.0"
-                                      AnchorPane.rightAnchor="0.0"
-                                      style="-fx-background-color: #f9f9f9;">
+                                        <TableView fx:id="mySessions_tView" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="subject_column" prefWidth="150.0" text="Subject" />
+                                                <TableColumn fx:id="price_column" prefWidth="100.0" text="Price" />
+                                                <TableColumn fx:id="date_column" prefWidth="150.0" text="Date Published" />
+                                                <TableColumn fx:id="state_column" prefWidth="150.0" text="State" />
+                                                <TableColumn fx:id="description_column" prefWidth="410.0" text="Description" />
+                                            </columns>
+                                        </TableView>
 
-                                    <!-- Header bar -->
-                                    <HBox prefHeight="50.0"
-                                          style="-fx-background-color: #3a7ebf; -fx-padding: 12 20 12 20;">
-                                        <Label text="My Profile"
-                                               style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                                    </HBox>
-
-                                    <!-- Form -->
-                                    <GridPane hgap="16.0" vgap="14.0"
-                                              style="-fx-padding: 24 60 16 60;">
-                                        <columnConstraints>
-                                            <ColumnConstraints minWidth="140.0" prefWidth="140.0" halignment="RIGHT"/>
-                                            <ColumnConstraints hgrow="ALWAYS" minWidth="200.0"/>
-                                        </columnConstraints>
-
-                                        <Label text="First Name:"
-                                               style="-fx-font-weight: bold;"
-                                               GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                                        <TextField fx:id="fname_textField" prefWidth="400.0"
-                                                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-
-                                        <Label text="Last Name:"
-                                               style="-fx-font-weight: bold;"
-                                               GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                                        <TextField fx:id="lname_textField" prefWidth="400.0"
-                                                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-
-                                        <Label text="Date of Birth:"
-                                               style="-fx-font-weight: bold;"
-                                               GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                                        <TextField fx:id="dateOfBirth_textField" prefWidth="400.0"
-                                                   promptText="yyyy-MM-dd"
-                                                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-
-                                        <Label text="Email:"
-                                               style="-fx-font-weight: bold;"
-                                               GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                                        <TextField fx:id="email_textField" prefWidth="400.0"
-                                                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-
-                                        <Label text="Phone:"
-                                               style="-fx-font-weight: bold;"
-                                               GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                                        <TextField fx:id="phone_textField" prefWidth="400.0"
-                                                   GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-
-                                        <Label text="Gender:"
-                                               style="-fx-font-weight: bold;"
-                                               GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-                                        <ComboBox fx:id="gender_comboBox" prefWidth="400.0"
-                                                  GridPane.rowIndex="5" GridPane.columnIndex="1"/>
-
-                                        <Label text="Languages:"
-                                               style="-fx-font-weight: bold;"
-                                               GridPane.rowIndex="6" GridPane.columnIndex="0"/>
-                                        <TextField fx:id="language_textField" prefWidth="400.0"
-                                                   promptText="e.g. English, Danish"
-                                                   GridPane.rowIndex="6" GridPane.columnIndex="1"/>
-
-                                        <Label text="Education:"
-                                               style="-fx-font-weight: bold;"
-                                               GridPane.rowIndex="7" GridPane.columnIndex="0"/>
-                                        <TextArea fx:id="education_textArea" prefWidth="400.0"
-                                                  prefHeight="80.0" wrapText="true"
-                                                  GridPane.rowIndex="7" GridPane.columnIndex="1"/>
-                                    </GridPane>
-
-                                    <!-- Save/Edit button -->
-                                    <HBox alignment="CENTER_RIGHT"
-                                          style="-fx-padding: 10 60 10 60;">
-                                        <Button fx:id="edit_btn"
-                                                mnemonicParsing="false"
-                                                prefHeight="32.0" prefWidth="100.0"
-                                                text="Edit"
-                                                onAction="#onEditButtonClicked"
-                                                style="-fx-background-color: #3a7ebf; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;"/>
-                                    </HBox>
+                                        <HBox alignment="CENTER_RIGHT" prefHeight="65.0" spacing="12.0" style="-fx-padding: 15 20 15 20; -fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-width: 1 0 0 0;">
+                                            <children>
+                                                <Button fx:id="cancel_btn" mnemonicParsing="false" prefHeight="32.0" prefWidth="100.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" text="Cancel" />
+                                                <Button fx:id="remove_btn" mnemonicParsing="false" prefHeight="32.0" prefWidth="100.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" text="Remove" />
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Button fx:id="create_btn" mnemonicParsing="false" prefHeight="32.0" prefWidth="140.0" style="-fx-background-color: #3a7ebf; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" text="Create Session" />
+                                                <Button fx:id="viewDetails_btn" mnemonicParsing="false" prefHeight="32.0" prefWidth="120.0" style="-fx-background-color: #3a7ebf; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" text="View Details" />
+                                            </children>
+                                        </HBox>
+                                    </children>
                                 </VBox>
                             </children>
                         </AnchorPane>
                     </content>
                 </Tab>
 
+                <Tab fx:id="profile_tView" text="Profile">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <VBox spacing="0.0" style="-fx-background-color: #f9f9f9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <children>
+                                        <HBox prefHeight="50.0" style="-fx-background-color: #3a7ebf; -fx-padding: 12 20 12 20;">
+                                            <children>
+                                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Tutor Profile" />
+                                            </children>
+                                        </HBox>
+
+                                        <GridPane hgap="16.0" style="-fx-padding: 28 60 20 60;" vgap="12.0" VBox.vgrow="ALWAYS">
+                                            <columnConstraints>
+                                                <ColumnConstraints halignment="RIGHT" minWidth="140.0" prefWidth="140.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="200.0" />
+                                            </columnConstraints>
+                                            <children>
+                                                <Label style="-fx-font-weight: bold;" text="First Name:" GridPane.rowIndex="0" />
+                                                <TextField fx:id="fname_textField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                                <Label style="-fx-font-weight: bold;" text="Last Name:" GridPane.rowIndex="1" />
+                                                <TextField fx:id="lname_textField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                                <Label style="-fx-font-weight: bold;" text="Date of Birth:" GridPane.rowIndex="2" />
+                                                <TextField fx:id="dateOfBirth_textField" promptText="yyyy-MM-dd" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                                <Label style="-fx-font-weight: bold;" text="Email:" GridPane.rowIndex="3" />
+                                                <TextField fx:id="email_textField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                                                <Label style="-fx-font-weight: bold;" text="Phone:" GridPane.rowIndex="4" />
+                                                <TextField fx:id="phone_textField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                                                <Label style="-fx-font-weight: bold;" text="Gender:" GridPane.rowIndex="5" />
+                                                <ComboBox fx:id="gender_comboBox" prefWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                                                <Label style="-fx-font-weight: bold;" text="Languages:" GridPane.rowIndex="6" />
+                                                <TextField fx:id="language_textField" promptText="e.g. English, Danish" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+                                                <Label style="-fx-font-weight: bold;" text="Education:" GridPane.rowIndex="7" GridPane.valignment="TOP" />
+                                                <TextArea fx:id="education_textArea" prefHeight="100.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                            </children>
+                                            <rowConstraints>
+                                                <RowConstraints vgrow="NEVER" />
+                                                <RowConstraints vgrow="NEVER" />
+                                                <RowConstraints vgrow="NEVER" />
+                                                <RowConstraints vgrow="NEVER" />
+                                                <RowConstraints vgrow="NEVER" />
+                                                <RowConstraints vgrow="NEVER" />
+                                                <RowConstraints vgrow="NEVER" />
+                                                <RowConstraints vgrow="ALWAYS" />
+                                            </rowConstraints>
+                                        </GridPane>
+
+                                        <HBox alignment="CENTER_RIGHT" prefHeight="65.0" style="-fx-padding: 10 60 10 60; -fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-width: 1 0 0 0;">
+                                            <children>
+                                                <Button fx:id="edit_btn" mnemonicParsing="false" onAction="#onEditButtonClicked" prefHeight="32.0" prefWidth="100.0" style="-fx-background-color: #3a7ebf; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" text="Edit" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
     </children>

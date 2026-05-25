@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Separator layoutY="39.0" prefWidth="600.0" />
-      <Separator layoutY="350.0" prefWidth="600.0" />
-      <Text fx:id="rules_text" layoutX="180.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Community Guidelines &amp; User Agreement">
-         <font>
-            <Font name="System Bold" size="13.0" />
-         </font>
-      </Text>
-      <Text fx:id="welcome_text" layoutX="19.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!" />
-      <TextArea fx:id="rules_textArea" layoutX="16.0" layoutY="72.0" prefHeight="257.0" prefWidth="568.0" text="BEFORE YOU START:&#10;Please read and agree to our community rules before booking tutors.&#10;&#10;1. ACCOUNT INTEGRITY &amp; SAFETY&#10;- Be Truthful: Provide accurate information on your profile.&#10;- Age Requirements: You must be at least 13 years old to create an account.&#10;- No Shared Accounts: Your profile is for your personal use only.&#10;&#10;2. RESPECTFUL BEHAVIOR&#10;- Zero Tolerance for Harassment: Any harassment toward tutors will result in an immediate account ban.&#10;- Professional Environment: All interactions must remain professional and focused on learning.&#10;&#10;3. CANCELLATIONS &amp; ATTENDANCE&#10;- 24-Hour Cancellation Policy: Cancellations within 24 hours may be subject to a charge.&#10;- Punctuality: Tutors will only wait 15 minutes. Missing this window results in a &quot;No-Show&quot; charge.&#10;&#10;4. ACADEMIC INTEGRITY&#10;- No Cheating: You agree not to ask tutors to take exams or complete graded assignments for you.&#10;" wrapText="true" />
-      <Button fx:id="back_btn" layoutX="514.0" layoutY="362.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Back" />
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.RulesViewController">
+    <children>
+        <VBox spacing="0.0" style="-fx-background-color: #f9f9f9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+            <HBox alignment="CENTER_LEFT" prefHeight="50.0" style="-fx-background-color: #3a7ebf; -fx-padding: 12 20 12 20;">
+                <children>
+                    <Label fx:id="rules_label" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Community Guidelines &amp; User Agreement" />
+                </children>
+            </HBox>
+
+            <VBox spacing="10.0" style="-fx-padding: 20 25 20 25;" VBox.vgrow="ALWAYS">
+                <children>
+                    <Label fx:id="welcome_label" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Welcome!" />
+
+                    <TextArea fx:id="rules_textArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS" text="BEFORE YOU START:&#10;Please read and agree to our community rules before booking tutors.&#10;&#10;1. ACCOUNT INTEGRITY &amp; SAFETY&#10;- Be Truthful: Provide accurate information on your profile.&#10;- Age Requirements: You must be at least 13 years old to create an account.&#10;- No Shared Accounts: Your profile is for your personal use only.&#10;&#10;2. RESPECTFUL BEHAVIOR&#10;- Zero Tolerance for Harassment: Any harassment toward tutors will result in an immediate account ban.&#10;- Professional Environment: All interactions must remain professional and focused on learning.&#10;&#10;3. CANCELLATIONS &amp; ATTENDANCE&#10;- 24-Hour Cancellation Policy: Cancellations within 24 hours may be subject to a charge.&#10;- Punctuality: Tutors will only wait 15 minutes. Missing this window results in a &quot;No-Show&quot; charge.&#10;&#10;4. ACADEMIC INTEGRITY&#10;- No Cheating: You agree not to ask tutors to take exams or complete graded assignments for you." />
+                </children>
+            </VBox>
+
+            <HBox alignment="CENTER_RIGHT" prefHeight="65.0" spacing="12.0" style="-fx-padding: 15 20 15 20; -fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-width: 1 0 0 0;">
+                <children>
+                    <Button fx:id="back_btn" mnemonicParsing="false" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #3a7ebf; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" text="Back" />
+                </children>
+            </HBox>
+
+        </VBox>
+    </children>
 </AnchorPane>

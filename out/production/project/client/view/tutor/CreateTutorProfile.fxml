@@ -1,39 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="758.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.tutor.CreateTutorProfileController">
-   <children>
-      <Text layoutX="90.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create Tutor Profile" textAlignment="CENTER" textOrigin="CENTER">
-         <font>
-            <Font name="System Bold" size="13.0" />
-         </font>
-      </Text>
-      <Separator layoutY="35.0" minHeight="-Infinity" minWidth="-Infinity" prefWidth="300.0" />
-      <Text layoutX="71.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First name *" />
-      <TextField fx:id="fname_textField" layoutX="70.0" layoutY="70.0" />
-      <Text layoutX="71.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last name *" />
-      <TextField fx:id="lname_textField" layoutX="70.0" layoutY="130.0" />
-      <Text layoutX="71.0" layoutY="420.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gender *" />
-      <TextField fx:id="email_textField" layoutX="70.0" layoutY="190.0" promptText="user@email.com" />
-      <Text layoutX="71.0" layoutY="360.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date of birth *" />
-      <Text layoutX="71.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone number *" />
-      <TextField fx:id="password_textField" layoutX="70.0" layoutY="250.0" />
-      <Text layoutX="71.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-mail address *" />
-      <Text layoutX="71.0" layoutY="240.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password *" />
-      <TextField fx:id="phone_textField" layoutX="70.0" layoutY="310.0" promptText="+4512345678" />
-      <TextField fx:id="date_textField" layoutX="70.0" layoutY="370.0" promptText="YYYY-mm-dd" />
-      <TextField fx:id="gender_textField" layoutX="70.0" layoutY="430.0" />
-      <Separator layoutY="705.0" prefHeight="3.0" prefWidth="300.0" />
-      <Button fx:id="register_Btn" layoutX="230.0" layoutY="720.0" mnemonicParsing="false" text="Register" />
-      <Button fx:id="back_Btn" layoutX="179.0" layoutY="720.0" mnemonicParsing="false" text="Back" />
-      <Text layoutX="71.0" layoutY="480.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Languages*" />
-      <TextArea fx:id="languages_textArea" layoutX="70.0" layoutY="490.0" prefHeight="67.0" prefWidth="160.0" promptText="English - C1" />
-      <CheckBox fx:id="rules_checkBox" layoutX="85.0" layoutY="670.0" mnemonicParsing="false" text="Confirm the rules" />
-      <Button fx:id="rules_Btn" layoutX="127.0" layoutY="720.0" mnemonicParsing="false" text="Rules" />
-      <Text layoutX="71.0" layoutY="580.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Education level *" />
-      <TextArea fx:id="education_textArea" layoutX="70.0" layoutY="590.0" prefHeight="67.0" prefWidth="160.0" promptText="High School Diploma" />
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.tutor.CreateTutorProfileController">
+    <children>
+        <VBox spacing="0.0" style="-fx-background-color: #f9f9f9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+            <HBox alignment="CENTER_LEFT" prefHeight="50.0" style="-fx-background-color: #3a7ebf; -fx-padding: 12 20 12 20;">
+                <children>
+                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Create Tutor Profile" />
+                </children>
+            </HBox>
+
+            <GridPane hgap="16.0" style="-fx-padding: 20 30 20 30;" vgap="12.0" VBox.vgrow="ALWAYS">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT" minWidth="120.0" prefWidth="120.0" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="200.0" />
+                </columnConstraints>
+
+                <children>
+                    <Label style="-fx-font-weight: bold;" text="First name *" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <TextField fx:id="fname_textField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                    <Label style="-fx-font-weight: bold;" text="Last name *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <TextField fx:id="lname_textField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label style="-fx-font-weight: bold;" text="E-mail address *" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <TextField fx:id="email_textField" promptText="user@email.com" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                    <Label style="-fx-font-weight: bold;" text="Password *" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                    <TextField fx:id="password_textField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                    <Label style="-fx-font-weight: bold;" text="Phone number *" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                    <TextField fx:id="phone_textField" promptText="+4512345678" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                    <Label style="-fx-font-weight: bold;" text="Date of birth *" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                    <TextField fx:id="date_textField" promptText="YYYY-mm-dd" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                    <Label style="-fx-font-weight: bold;" text="Gender *" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+                    <TextField fx:id="gender_textField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+                    <Label style="-fx-font-weight: bold;" text="Languages *" GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.valignment="TOP">
+                        <GridPane.margin><Insets top="4.0" /></GridPane.margin>
+                    </Label>
+                    <TextArea fx:id="languages_textArea" prefRowCount="2" promptText="English - C1" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+                    <Label style="-fx-font-weight: bold;" text="Education Level *" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.valignment="TOP">
+                        <GridPane.margin><Insets top="4.0" /></GridPane.margin>
+                    </Label>
+                    <TextArea fx:id="education_textArea" prefRowCount="2" promptText="High School Diploma / Bachelor" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+
+                    <CheckBox fx:id="rules_checkBox" mnemonicParsing="false" text="Confirm the rules" GridPane.columnIndex="1" GridPane.rowIndex="9">
+                        <GridPane.margin><Insets top="5.0" /></GridPane.margin>
+                    </CheckBox>
+                </children>
+
+                <rowConstraints>
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="SOMETIMES" />
+                    <RowConstraints vgrow="SOMETIMES" />
+                    <RowConstraints vgrow="NEVER" />
+                </rowConstraints>
+            </GridPane>
+
+            <HBox alignment="CENTER_LEFT" prefHeight="65.0" spacing="12.0" style="-fx-padding: 15 20 15 20; -fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-width: 1 0 0 0;">
+                <children>
+                    <Button fx:id="rules_Btn" mnemonicParsing="false" prefHeight="32.0" prefWidth="80.0" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" text="Rules" />
+
+                    <Region HBox.hgrow="ALWAYS" />
+
+                    <Button fx:id="back_Btn" mnemonicParsing="false" prefHeight="32.0" prefWidth="80.0" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" text="Back" />
+                    <Button fx:id="register_Btn" mnemonicParsing="false" prefHeight="32.0" prefWidth="100.0" style="-fx-background-color: #3a7ebf; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;" text="Register" />
+                </children>
+            </HBox>
+
+        </VBox>
+    </children>
 </AnchorPane>
