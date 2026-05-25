@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -40,14 +41,11 @@ public class TutorMainPageController
   @FXML private Button remove_btn;
   @FXML private Button cancel_btn;
 
-  @FXML private Button edit_btn;
-
   private Region root;
   private ViewHandler viewHandler;
   private TutorMainPageViewModel viewModel;
 
-  public void init(ViewHandler viewHandler, TutorMainPageViewModel viewModel,
-      Region root)
+  public void init(ViewHandler viewHandler, TutorMainPageViewModel viewModel, Region root)
   {
     this.viewHandler = viewHandler;
     this.viewModel = viewModel;
@@ -60,15 +58,12 @@ public class TutorMainPageController
             .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
     state_column.setCellValueFactory(cellData -> {
       SessionState state = cellData.getValue().getState();
-      return new SimpleStringProperty(
-          state != null ? state.getClass().getSimpleName() : "");
+      return new SimpleStringProperty(state != null ? state.getClass().getSimpleName() : "");
     });
     description_column.setCellValueFactory(
         data -> new SimpleStringProperty(data.getValue().getDescription()));
 
     mySessions_tView.setItems(viewModel.getSessions());
-    viewDetails_btn.disableProperty().bind(
-        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
 
     fname_textField.textProperty().bindBidirectional(viewModel.firstNameProperty());
     lname_textField.textProperty().bindBidirectional(viewModel.lastNameProperty());
@@ -77,15 +72,82 @@ public class TutorMainPageController
     phone_textField.textProperty().bindBidirectional(viewModel.phoneProperty());
     gender_comboBox.getItems().addAll("male", "female");
     gender_comboBox.valueProperty().bindBidirectional(viewModel.genderProperty());
-    gender_comboBox.setDisable(true);
     language_textField.textProperty().bindBidirectional(viewModel.languagesProperty());
     education_textArea.textProperty().bindBidirectional(viewModel.educationProperty());
 
     setFieldsReadOnly();
+    setUpButtons();
     viewModel.loadData();
+  }
 
+  private void setUpButtons()
+  {
+    viewDetails_btn.disableProperty().bind(
+        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
     viewDetails_btn.setOnAction(event -> onViewDetails());
+
     create_btn.setOnAction(event -> viewHandler.openCreateNewSession());
+
+    edit_btn.setOnAction(event -> onEditButtonClicked());
+
+    remove_btn.disableProperty().bind(
+        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
+
+    cancel_btn.disableProperty().bind(
+        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
+    cancel_btn.setOnAction(event -> {
+      Session selected = mySessions_tView.getSelectionModel().getSelectedItem();
+      if (selected != null)
+      {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+            "Are you sure you want to cancel this session?", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Cancel Session");
+        alert.setHeaderText("Confirm Cancellation");
+        alert.showAndWait().ifPresent(response -> {
+          if (response == ButtonType.YES)
+          {
+            viewModel.cancelSession(selected);
+            mySessions_tView.getSelectionModel().clearSelection();
+          }
+        });
+      }
+    });
+  }
+
+  @FXML private void onViewDetails()
+  {
+    Session selected = mySessions_tView.getSelectionModel().getSelectedItem();
+    if (selected != null)
+    {
+      viewHandler.openTutorSessionView(selected);
+    }
+  }
+
+  @FXML private void onEditButtonClicked()
+  {
+    boolean editing = fname_textField.isEditable();
+    if (editing)
+    {
+      boolean success = viewModel.saveProfile();
+      if (success)
+      {
+        setFieldsReadOnly();
+        edit_btn.setText("Edit");
+      }
+      else
+      {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Save Failed");
+        alert.setHeaderText(null);
+        alert.setContentText("Could not save profile. Please check your input and try again.");
+        alert.showAndWait();
+      }
+    }
+    else
+    {
+      setFieldsEditable();
+      edit_btn.setText("Save");
+    }
   }
 
   private void setFieldsReadOnly()
@@ -112,90 +174,8 @@ public class TutorMainPageController
     education_textArea.setEditable(true);
   }
 
-  @FXML private void onViewDetails()
+  public Region getRoot()
   {
-    Session selected = mySessions_tView.getSelectionModel().getSelectedItem();
-    if (selected != null)
-    {
-      viewHandler.openTutorSessionView(selected);
-    }
-    else
-    {
-      System.out.println("No session selected.");
-    }
-  }
-
-  private void setUpButtons()
-  {
-    //View session details
-
-    viewDetails_btn.disableProperty().bind(
-        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
-
-    viewDetails_btn.setOnAction(event -> onViewDetails());
-
-    //Create session
-    create_btn.setOnAction(event -> viewHandler.openCreateNewSession());
-
-    //Edit session
-    edit_btn.disableProperty().bind(
-        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
-
-    edit_btn.setOnAction(event -> viewHandler.openTutorProfileDetails());
-
-    //Remove session
-
-    remove_btn.disableProperty().bind(
-        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
-
-    //Cancel session
-
-    cancel_btn.disableProperty().bind(
-        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
-
-    cancel_btn.setOnAction(event -> {
-      Session selected = mySessions_tView.getSelectionModel().getSelectedItem();
-      if (selected != null)
-      {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-            "Are you sure you want to cancel this session?", ButtonType.YES,
-            ButtonType.NO);
-        alert.setTitle("Cancel Session");
-        alert.setHeaderText("Confirm Cancellation");
-
-        alert.showAndWait().ifPresent(response -> {
-          if (response == ButtonType.YES)
-          {
-            viewModel.cancelSession(selected);
-            mySessions_tView.getSelectionModel().clearSelection();
-          }
-        });
-      }
-    });
-
-    @FXML private void onEditButtonClicked()
-    {
-      boolean editing = fname_textField.isEditable();
-      if (editing) {
-        boolean success = viewModel.saveProfile();
-        if (success) {
-          setFieldsReadOnly();
-          edit_btn.setText("Edit");
-        } else {
-          Alert alert = new Alert(Alert.AlertType.ERROR);
-          alert.setTitle("Save Failed");
-          alert.setHeaderText(null);
-          alert.setContentText("Could not save profile. Please check your input and try again.");
-          alert.showAndWait();
-        }
-      } else {
-        setFieldsEditable();
-        edit_btn.setText("Save");
-      }
-    }
-
-    public Region getRoot()
-    {
-      return root;
+    return root;
   }
 }

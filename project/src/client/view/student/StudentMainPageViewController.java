@@ -98,8 +98,6 @@ public class StudentMainPageViewController {
             new SimpleStringProperty(data.getValue().getState() != null
                 ? data.getValue().getState().getClass().getSimpleName() : ""));
         bookedSessions_tableView.setItems(viewModel.getBookedSessions());
-        viewDetails_btn_bookedS.disableProperty().bind(
-            bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());
 
         // profile fields
         fname_textArea.textProperty().bindBidirectional(viewModel.firstNameProperty());
@@ -120,6 +118,7 @@ public class StudentMainPageViewController {
         fromDate_textField.textProperty().bindBidirectional(viewModel.fromDateProperty());
         toDate_textField.textProperty().bindBidirectional(viewModel.toDateProperty());
 
+        setFieldsReadOnly();
         setUpButtons();
         viewModel.loadData();
     }

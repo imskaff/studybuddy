@@ -5,6 +5,7 @@ import client.viewmodel.ViewState;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.application.Platform;
@@ -146,6 +147,7 @@ public class TutorMainPageViewModel implements PropertyChangeListener
     public StringProperty genderProperty() { return gender; }
     public StringProperty languagesProperty() { return languages; }
     public StringProperty educationProperty() { return education; }
+    public StringProperty passwordProperty() { return password; }
 
 
     public boolean saveProfile() {

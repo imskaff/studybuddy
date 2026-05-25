@@ -55,8 +55,6 @@ public interface Model {
 
   List<String> getSubjects();
 
-  boolean editStudentProfile(Student student);
-
   boolean editTutorProfile(Tutor tutor);
 
   String login(String email, String password);
@@ -65,5 +63,4 @@ public interface Model {
   public void book(Session session);
   public void cancel(Session session);
   public void remove(Session session);
-  boolean editTutorProfile(Tutor tutor);
 }

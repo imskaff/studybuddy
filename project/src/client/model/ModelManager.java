@@ -83,15 +83,6 @@ public class ModelManager implements Model, PropertyChangeListener {
     return loggedInTutor;
    }
 
-  @Override public boolean editStudentProfile(Student student)
-  {
-    if(loggedInStudent.equals(student))
-    {
-      return true;
-    }
-    return false;
-  }
-
   @Override public void setLoggedInAdminId(int adminId)
    {
     this.loggedInAdminId = adminId;
@@ -221,15 +212,6 @@ public class ModelManager implements Model, PropertyChangeListener {
   @Override public void remove(Session session)
   {
     session.remove(session);
-  }
-
-  @Override public boolean editTutorProfile(Tutor tutor)
-  {
-    if(loggedInTutor.equals(tutor))
-    {
-      return true;
-    }
-    return false;
   }
 
   @Override
