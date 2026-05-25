@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface UserDAO {
     User create(String first_name, String last_name, LocalDate date_of_birth, String email, String phone,
-            String password, String gender, ArrayList<String> languages, String type) throws SQLException;
+            String password, String gender, ArrayList<String> languages, String type, String educationLevel) throws SQLException;
 
     User readByInt(int id) throws SQLException;
 

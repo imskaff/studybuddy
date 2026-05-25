@@ -20,12 +20,15 @@ public class TutorProfileViewController {
 
     private Region root;
     private Stage popupStage;
+    private TutorProfileViewModel viewModel;
+
 
     public TutorProfileViewController() {}
 
     public void init(Stage popupStage, TutorProfileViewModel viewModel, Region root) {
         this.popupStage = popupStage;
         this.root = root;
+        this.viewModel = viewModel;
 
         fname_textField.textProperty().bind(viewModel.firstNameProperty());
         lname_textField.textProperty().bind(viewModel.lastNameProperty());

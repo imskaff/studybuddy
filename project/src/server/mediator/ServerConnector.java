@@ -5,7 +5,6 @@ import java.net.Socket;
 import java.time.LocalDateTime;
 
 import server.model.ModelManager;
-
 // The BookingServer class acts as the connecting class.
 // It creates a server socket that listens on a specific port
 // and waits for incoming client connections. When a client connects,

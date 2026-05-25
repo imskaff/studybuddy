@@ -9,7 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 
-import java.sql.SQLException;
+import javafx.scene.control.Alert;
 
 public class CreateStudentProfileController
 {
@@ -77,21 +77,28 @@ public class CreateStudentProfileController
     back_btn.setOnAction(event -> viewHandler.openCreateNewProfile());
     rules_btn.setOnAction(event -> viewHandler.openRules());
     register_btn.setOnAction(event -> {
-
-      if(confirm_checkBtn.equals(true))
-      {
-        try
-        {
-          viewModel.register();
-        }
-        catch (SQLException e)
-        {
-          e.printStackTrace();
-        }
+      if (!confirm_checkBtn.isSelected()) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Rules Required");
+        alert.setHeaderText(null);
+        alert.setContentText("You must accept the rules before registering.");
+        alert.showAndWait();
+        return;
       }
-      else
-      {
-        System.err.println("Rules has to be confirmed to register");
+      boolean success = viewModel.register();
+      if (success) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Registration Successful");
+        alert.setHeaderText(null);
+        alert.setContentText("Your account has been created. You can now log in.");
+        alert.showAndWait();
+        viewHandler.openWelcomeView();
+      } else {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Registration Failed");
+        alert.setHeaderText(null);
+        alert.setContentText("Registration failed. The email may already be in use or some fields are invalid.");
+        alert.showAndWait();
       }
     });
   }

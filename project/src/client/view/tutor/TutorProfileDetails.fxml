@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="359.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.tutor.TutorProfileDetailsController">
+   <children>
+      <TextField fx:id="fname_textField" layoutX="10.0" layoutY="61.0" />
+      <TextField fx:id="lname_textField" layoutX="186.0" layoutY="60.0" />
+      <TextField fx:id="date_textField" layoutX="10.0" layoutY="110.0" />
+      <TextField fx:id="email_textField" layoutX="10.0" layoutY="159.0" />
+      <TextField fx:id="password_textField" layoutX="10.0" layoutY="208.0" />
+      <Text layoutX="11.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First name" />
+      <Text layoutX="187.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last name" />
+      <Text layoutX="11.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date of birth" />
+      <Text layoutX="11.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-mail address" />
+      <Text layoutX="11.0" layoutY="201.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+      <Text layoutX="11.0" layoutY="296.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Languages" />
+      <TextArea fx:id="languages_textArea" layoutX="10.0" layoutY="306.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="95.0" prefWidth="159.0" />
+      <TextArea fx:id="education_textArea" layoutX="187.0" layoutY="160.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="241.0" prefWidth="160.0" />
+      <Text layoutX="120.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Profile Details" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font></Text>
+      <Separator layoutY="30.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="4.0" prefWidth="359.0" />
+      <Text layoutX="191.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Education" />
+      <Separator layoutY="417.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="359.0" />
+      <Button fx:id="back_btn" layoutX="294.0" layoutY="429.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="53.0" text="Back" />
+      <TextField fx:id="gender_textField" layoutX="10.0" layoutY="257.0" />
+      <Text layoutX="11.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gender" />
+      <Button fx:id="confirm_btn" layoutX="170.0" layoutY="429.0" mnemonicParsing="false" text="Confirm changes" />
+      <TextField fx:id="phone_textField" layoutX="186.0" layoutY="110.0" />
+      <Text layoutX="187.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone number" />
+   </children>
+</AnchorPane>

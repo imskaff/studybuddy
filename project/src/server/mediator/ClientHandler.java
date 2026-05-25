@@ -3,10 +3,7 @@ package server.mediator;
 import com.google.gson.*;
 import server.dao.SessionDAOImpl;
 import server.dao.UserDAOImpl;
-import server.model.Session;
-import server.model.SessionModel;
-import server.model.ModelManager;
-import server.model.Student;
+import server.model.*;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -91,7 +88,9 @@ public class ClientHandler implements Runnable {
       handleGetPendingTutors();
     } else if (requestType.getType().equals("GET_SUBJECTS")) {
       handleGetSubjects();
-    }else if(requestType.getType().equals("EDIT_STUDENT_PROFILE")){
+    } else if (requestType.getType().equals("LOGIN")) {
+      handleLogin(clientText);
+    } else if(requestType.getType().equals("EDIT_STUDENT_PROFILE")){
       handleEditStudentProfile(clientText);
     }else if(requestType.getType().equals("EDIT_TUTOR_PROFILE")){
       handleEditTutorProfile(clientText);
@@ -220,6 +219,27 @@ public class ClientHandler implements Runnable {
     }
   }
 
+  private void handleCancelSession(String clientText)
+  {
+    CancelSessionRequest request = gson.fromJson(clientText, CancelSessionRequest.class);
+
+    boolean cancelled = model.cancelSession(request.getUserId(),
+            request.getSessionId(), request.getUserType());
+
+    if(cancelled && request.getUserType().equalsIgnoreCase("student"))
+    {
+      sendResponse(new Response("OK", "Student booking cancelled. Session is now available"));
+    }
+    else if(cancelled && request.getUserType().equalsIgnoreCase("tutor"))
+    {
+      sendResponse(new Response("OK", "Session status changed to cancelled"));
+    }
+    else
+    {
+      sendResponse(new Response("ERROR", "Session could not be cancelled"));
+    }
+  }
+
   // Handles a request to get all available (unbooked) sessions
   private void handleGetAvailableSessions() throws Exception {
     ArrayList<Session> sessions = new ArrayList<>(SessionDAOImpl.getInstance().readAvailable());
@@ -249,24 +269,27 @@ public class ClientHandler implements Runnable {
     sendJsonResponse(response);
   }
 
-  private void handleCancelSession(String clientText)
-  {
-    CancelSessionRequest request = gson.fromJson(clientText, CancelSessionRequest.class);
+  private void handleLogin(String clientText) throws Exception {
+    LoginRequest request = gson.fromJson(clientText, LoginRequest.class);
+    String email = request.getEmail();
+    String password = request.getPassword();
 
-    boolean cancelled = model.cancelSession(request.getUserId(),
-        request.getSessionId(), request.getUserType());
-
-    if(cancelled && request.getUserType().equalsIgnoreCase("student"))
-    {
-      sendResponse(new Response("OK", "Student booking cancelled. Session is now available"));
-    }
-    else if(cancelled && request.getUserType().equalsIgnoreCase("tutor"))
-    {
-      sendResponse(new Response("OK", "Session status changed to cancelled"));
-    }
-    else
-    {
-      sendResponse(new Response("ERROR", "Session could not be cancelled"));
+    User user = UserDAOImpl.getInstance().readByEmailAndPassword(email, password);
+    if (user instanceof Student student) {
+      sendJsonResponse(LoginResponse.ok("student", gson.toJson(student)));
+    } else if (user instanceof Tutor tutor) {
+      if (!tutor.isApproved()) {
+        sendJsonResponse(LoginResponse.ok("tutor_pending", gson.toJson(tutor)));
+      } else {
+        sendJsonResponse(LoginResponse.ok("tutor", gson.toJson(tutor)));
+      }
+    } else {
+      int adminId = UserDAOImpl.getInstance().getAdminId(email, password);
+      if (adminId != -1) {
+        sendJsonResponse(LoginResponse.ok("admin", String.valueOf(adminId)));
+      } else {
+        sendJsonResponse(LoginResponse.error("Invalid email or password"));
+      }
     }
   }
 
@@ -292,5 +315,4 @@ public class ClientHandler implements Runnable {
 
     out.println(replyJson);
   }
-
 }

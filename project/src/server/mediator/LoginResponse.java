@@ -25,4 +25,15 @@ public class LoginResponse {
     public String getUserType() { return userType; }
     public String getUserJson() { return userJson; }
     public String getMessage()  { return message; }
+
+  @Override
+  public String toString()
+  {
+    return "LoginResponse{" +
+        "status='" + status + '\'' +
+        ", userType='" + userType + '\'' +
+        ", userJson='" + userJson + '\'' +
+        ", message='" + message + '\'' +
+        '}';
+  }
 }

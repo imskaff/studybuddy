@@ -199,7 +199,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
       // Creates the student profile in the database
       UserDAOImpl.getInstance().create(student.getFirst_name(), student.getLast_name(),
           student.getDate_of_birth(), student.getEmail(), student.getPhone(),
-          student.getPassword(), student.getGender(), student.getLanguages(), "Student");
+          student.getPassword(), student.getGender(), student.getLanguages(), "Student", null);
 
       return true;
     }
@@ -231,7 +231,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
       }
       UserDAOImpl.getInstance().create(tutor.getFirst_name(), tutor.getLast_name(), tutor.getDate_of_birth(),
           tutor.getEmail(), tutor.getPhone(), tutor.getPassword(), tutor.getGender(),
-          tutor.getLanguages(), "Tutor");
+          tutor.getLanguages(), "Tutor", tutor.getEducation_level());
 
       return true;
     }
@@ -335,15 +335,19 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
         return false;
       }
 
+      // Student cancellation
       if(type.equalsIgnoreCase("student"))
       {
         session.setStudent(null);
+        // FORCE state back to Available so other students can see it
         session.setState(new Available());
         SessionDAOImpl.getInstance().update(session);
         return true;
       }
+      // Tutor cancellation
       else if(type.equalsIgnoreCase("tutor"))
       {
+        // FORCE state to Cancelled
         session.setState(new Cancel());
         SessionDAOImpl.getInstance().update(session);
         return true;
@@ -357,6 +361,25 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
       return false;
     }
   }
+
+  @Override
+  public User login(String email, String password)
+  {
+    try {
+      if(email == null || email.isEmpty() || password == null || password.isEmpty())
+      {
+        return null;
+      }
+      // Searches for the user in the database
+      return UserDAOImpl.getInstance().readByEmailAndPassword(email, password);
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
 
   @Override
   public List<String> getSubjects()

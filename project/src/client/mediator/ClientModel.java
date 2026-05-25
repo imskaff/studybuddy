@@ -3,6 +3,7 @@ package client.mediator;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import server.mediator.LoginResponse;
 import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
@@ -38,6 +39,8 @@ public interface ClientModel {
   boolean editStudentProfile(Student student);
 
   boolean editTutorProfile(Tutor tutor);
+
+  LoginResponse login(String email, String password);
 
   boolean cancelSession(int userId, int sessionId, String userType);
 

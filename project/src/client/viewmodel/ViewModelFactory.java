@@ -2,14 +2,8 @@ package client.viewmodel;
 
 import client.model.Model;
 import client.viewmodel.admin.AdminViewModel;
-import client.viewmodel.student.CreateStudentProfileViewModel;
-import client.viewmodel.student.SessionStudentViewModel;
-import client.viewmodel.student.StudentMainPageViewModel;
-import client.viewmodel.student.TutorProfileViewModel;
-import client.viewmodel.tutor.CreateNewSessionViewModel;
-import client.viewmodel.tutor.CreateTutorProfileViewModel;
-import client.viewmodel.tutor.SessionTutorViewModel;
-import client.viewmodel.tutor.TutorMainPageViewModel;
+import client.viewmodel.student.*;
+import client.viewmodel.tutor.*;
 
 public class ViewModelFactory
 {
@@ -26,6 +20,7 @@ public class ViewModelFactory
     private CreateNewProfileViewModel createNewProfileViewModel;
     private RulesViewModel rulesViewModel;
     private CreateStudentProfileViewModel createStudentProfileViewModel;
+    private EditStudentProfileViewModel editStudentProfileViewModel;
 
     private ViewState viewState;
 
@@ -45,6 +40,8 @@ public class ViewModelFactory
         createNewProfileViewModel = new CreateNewProfileViewModel(model);
         rulesViewModel = new RulesViewModel(model);
         createStudentProfileViewModel = new CreateStudentProfileViewModel(model);
+        editStudentProfileViewModel = new EditStudentProfileViewModel(model);
+
 
     }
 
@@ -101,4 +98,10 @@ public class ViewModelFactory
   {
     return createStudentProfileViewModel;
   }
+
+  public EditStudentProfileViewModel getEditStudentProfileViewModel()
+  {
+    return editStudentProfileViewModel;
+  }
+
 }

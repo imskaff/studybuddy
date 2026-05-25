@@ -41,17 +41,23 @@ public interface Model {
 
   boolean declineTutor(int tutorId);
 
-  void registerStudent(Student student);
+  boolean registerStudent(Student student);
 
-  void registerTutor(Tutor tutor);
+  boolean registerTutor(Tutor tutor);
 
   void setLoggedInTutor(Tutor tutor);
 
   Tutor getLoggedInTutor();
 
+  boolean editStudentProfile(Student student);
+
   void addPropertyChangeListener(PropertyChangeListener listener);
 
   List<String> getSubjects();
+
+  boolean editTutorProfile(Tutor tutor);
+
+  String login(String email, String password);
 
   public void complete(Session session);
   public void book(Session session);

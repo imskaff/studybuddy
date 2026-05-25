@@ -176,16 +176,14 @@ public class Client implements ClientModel
     return sendRequest(request);
   }
 
-  @Override public boolean createStudentProfile(Student student,
-      boolean rulesConfirmed)
+  @Override public boolean createStudentProfile(Student student, boolean rulesConfirmed)
   {
     CreateStudentProfileRequest request = new CreateStudentProfileRequest(student, rulesConfirmed);
 
     return sendRequest(request);
   }
 
-  @Override public boolean createTutorProfile(Tutor tutor,
-      boolean rulesConfirmed)
+  @Override public boolean createTutorProfile(Tutor tutor, boolean rulesConfirmed)
   {
     CreateTutorProfileRequest request = new CreateTutorProfileRequest(tutor, rulesConfirmed);
 
@@ -213,6 +211,15 @@ public class Client implements ClientModel
     EditTutorProfileRequest request = new EditTutorProfileRequest(tutor);
 
     return sendRequest(request);
+  }
+
+  @Override
+  public LoginResponse login(String email, String password)
+  {
+    LoginRequest request = new LoginRequest(email, password);
+    String replyJson = sendRequestForResponse(request);
+    if (replyJson == null) return LoginResponse.error("Connection error");
+    return gson.fromJson(replyJson, LoginResponse.class);
   }
 
   @Override
