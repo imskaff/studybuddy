@@ -6,8 +6,8 @@ import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.sql.SQLException;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -102,8 +102,7 @@ public class StudentMainPageViewModel implements PropertyChangeListener
     bookedSessions.setAll(model.getBookedSessions());
   }
 
-  public void loadProfile(Student student)
-  {
+  public void loadProfile(Student student) {
     firstName.set(student.getFirst_name());
     lastName.set(student.getLast_name());
     dateOfBirth.set(student.getDate_of_birth().toString());
@@ -111,6 +110,29 @@ public class StudentMainPageViewModel implements PropertyChangeListener
     phone.set(student.getPhone());
     gender.set(student.getGender());
     languages.set(String.join(", ", student.getLanguages()));
+  }
+
+  public boolean saveProfile() {
+    Student current = model.getLoggedInStudent();
+    if (current == null) return false;
+
+    LocalDate date;
+    try {
+      date = LocalDate.parse(dateOfBirth.get());
+    } catch (Exception e) {
+      return false;
+    }
+
+    ArrayList<String> langList = new ArrayList<>(
+        Arrays.asList(languages.get().split("\\s*,\\s*")));
+
+    Student updated = new Student(
+        firstName.get().trim(), lastName.get().trim(), date,
+        email.get().trim(), phone.get().trim(),
+        current.getPassword(), gender.get().trim(),
+        langList, current.getId(), "Student");
+
+    return model.editStudentProfile(updated);
   }
 
   public void resetFilters()
@@ -125,7 +147,6 @@ public class StudentMainPageViewModel implements PropertyChangeListener
   private void applyFilter()
   {
     filteredSessions.setPredicate(session -> {
-      // Subject filter
       String subject = subjectFilter.get();
       if (subject != null && !subject.equals("All") && !subject.isBlank())
       {
@@ -133,7 +154,6 @@ public class StudentMainPageViewModel implements PropertyChangeListener
           return false;
       }
 
-      // Min price filter
       String minP = minPrice.get();
       if (minP != null && !minP.isBlank())
       {
@@ -147,7 +167,6 @@ public class StudentMainPageViewModel implements PropertyChangeListener
         }
       }
 
-      // Max price filter
       String maxP = maxPrice.get();
       if (maxP != null && !maxP.isBlank())
       {
@@ -161,7 +180,6 @@ public class StudentMainPageViewModel implements PropertyChangeListener
         }
       }
 
-      // From date filter
       String from = fromDate.get();
       if (from != null && !from.isBlank())
       {
@@ -176,7 +194,6 @@ public class StudentMainPageViewModel implements PropertyChangeListener
         }
       }
 
-      // To date filter
       String to = toDate.get();
       if (to != null && !to.isBlank())
       {
@@ -199,9 +216,7 @@ public class StudentMainPageViewModel implements PropertyChangeListener
   {
     Student student = model.getLoggedInStudent();
     if(student != null && session != null) {
-
       boolean success = model.cancelSession(student.getId(), session.getId(), "student");
-
       if(success)
       {
         Platform.runLater(() -> {
@@ -227,62 +242,28 @@ public class StudentMainPageViewModel implements PropertyChangeListener
     return bookedSessions;
   }
 
-
-  public StringProperty firstNameProperty()
+  public ObservableList<String> getSubjectOptions()
   {
-    return firstName;
-  }
-
-  public StringProperty lastNameProperty()
-  {
-    return lastName;
-  }
-
-  public StringProperty dateOfBirthProperty()
-  {
-    return dateOfBirth;
-  }
-
-  public StringProperty emailProperty()
-  {
-    return email;
-  }
-    public ObservableList<String> getSubjectOptions () {
     return subjectOptions;
   }
 
-    public StringProperty passwordProperty () {
-    return password;
-  }
+  public StringProperty firstNameProperty() { return firstName; }
+  public StringProperty lastNameProperty() { return lastName; }
+  public StringProperty dateOfBirthProperty() { return dateOfBirth; }
+  public StringProperty emailProperty() { return email; }
+  public StringProperty passwordProperty() { return password; }
+  public StringProperty phoneProperty() { return phone; }
+  public StringProperty genderProperty() { return gender; }
+  public StringProperty languagesProperty() { return languages; }
+  public StringProperty subjectFilterProperty() { return subjectFilter; }
+  public StringProperty minPriceProperty() { return minPrice; }
+  public StringProperty maxPriceProperty() { return maxPrice; }
+  public StringProperty fromDateProperty() { return fromDate; }
+  public StringProperty toDateProperty() { return toDate; }
 
-    public StringProperty phoneProperty () {
-    return phone;
-  }
-    public StringProperty subjectFilterProperty () {
-    return subjectFilter;
-  }
-    public StringProperty minPriceProperty () {
-    return minPrice;
-  }
-    public StringProperty maxPriceProperty () {
-    return maxPrice;
-  }
-    public StringProperty fromDateProperty () {
-    return fromDate;
-  }
-    public StringProperty toDateProperty () {
-    return toDate;
-  }
-
-
-    public StringProperty genderProperty () {
-    return gender;
-  }
-    public StringProperty languagesProperty () {
-    return languages;
-  }
-
-    @Override public void propertyChange (PropertyChangeEvent evt){
+  @Override
+  public void propertyChange(PropertyChangeEvent evt)
+  {
     if ("SessionBooked".equals(evt.getPropertyName()))
     {
       Session session = (Session) evt.getNewValue();
@@ -292,5 +273,4 @@ public class StudentMainPageViewModel implements PropertyChangeListener
       });
     }
   }
-  }
-
+}

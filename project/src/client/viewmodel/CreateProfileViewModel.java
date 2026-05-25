@@ -5,7 +5,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.SQLException;
+
 
 public abstract class CreateProfileViewModel
 {
@@ -29,7 +29,7 @@ public abstract class CreateProfileViewModel
     this.userType.set(type);
   }
 
-  public abstract void register() throws SQLException;
+  public abstract boolean register();
 
   public StringProperty firstNameProperty(){ return firstName; }
   public StringProperty lastNameProperty(){ return lastName; }

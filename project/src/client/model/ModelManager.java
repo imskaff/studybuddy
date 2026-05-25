@@ -4,6 +4,10 @@ import java.beans.PropertyChangeSupport;
 
 import client.mediator.Client;
 import client.mediator.ClientModel;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import server.mediator.LocalDateAdapter;
+import server.mediator.LoginResponse;
 import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
@@ -79,15 +83,6 @@ public class ModelManager implements Model, PropertyChangeListener {
     return loggedInTutor;
    }
 
-  @Override public boolean editStudentProfile(Student student)
-  {
-    if(loggedInStudent.equals(student))
-    {
-      return true;
-    }
-    return false;
-  }
-
   @Override public void setLoggedInAdminId(int adminId)
    {
     this.loggedInAdminId = adminId;
@@ -113,20 +108,18 @@ public class ModelManager implements Model, PropertyChangeListener {
         return client.editSession(loggedInTutor.getId(), session);
     }
 
-  @Override public boolean cancelSession(int userId, int sessionId,
-      String userType)
+  @Override
+  public boolean cancelSession(int userId, int sessionId, String userType)
   {
     boolean success = client.cancelSession(userId, sessionId, userType);
+    if(success)
     {
-      if(success)
-      {
-        support.firePropertyChange("SessionsUpdated", null, null);
-      }
+      support.firePropertyChange("SessionsUpdated", null, null);
     }
     return success;
   }
 
-  @Override
+    @Override
     public boolean deleteSession(int sessionId) {
         return client.deleteSession(sessionId, loggedInTutor.getId());
     }
@@ -152,13 +145,49 @@ public class ModelManager implements Model, PropertyChangeListener {
     }
 
     @Override
-    public void registerStudent(Student student) {
-        client.createStudentProfile(student, true);
+    public boolean editStudentProfile(Student student) {
+        boolean success = client.editStudentProfile(student);
+        if (success) {
+            loggedInStudent = student;
+        }
+        return success;
     }
 
     @Override
-    public void registerTutor(Tutor tutor) {
-        client.createTutorProfile(tutor, true);
+    public boolean editTutorProfile(Tutor tutor) {
+        boolean success = client.editTutorProfile(tutor);
+        if (success) {
+            loggedInTutor = tutor;
+        }
+        return success;
+    }
+
+    @Override
+    public String login(String email, String password) {
+        LoginResponse response = client.login(email, password);
+        if (!"OK".equals(response.getStatus())) return null;
+        String userType = response.getUserType();
+        Gson gson = new GsonBuilder()
+            .registerTypeAdapter(java.time.LocalDate.class, new LocalDateAdapter())
+            .create();
+        if ("student".equals(userType)) {
+            loggedInStudent = gson.fromJson(response.getUserJson(), Student.class);
+        } else if ("tutor".equals(userType)) {
+            loggedInTutor = gson.fromJson(response.getUserJson(), Tutor.class);
+        } else if ("admin".equals(userType)) {
+            loggedInAdminId = Integer.parseInt(response.getUserJson());
+        }
+        return userType;
+    }
+
+    @Override
+    public boolean registerStudent(Student student) {
+        return client.createStudentProfile(student, true);
+    }
+
+    @Override
+    public boolean registerTutor(Tutor tutor) {
+        return client.createTutorProfile(tutor, true);
     }
 
   @Override public void complete(Session session)
@@ -181,15 +210,6 @@ public class ModelManager implements Model, PropertyChangeListener {
   @Override public void remove(Session session)
   {
     session.remove(session);
-  }
-
-  @Override public boolean editTutorProfile(Tutor tutor)
-  {
-    if(loggedInTutor.equals(tutor))
-    {
-      return true;
-    }
-    return false;
   }
 
   @Override

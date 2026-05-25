@@ -88,12 +88,12 @@ public class ClientHandler implements Runnable {
       handleGetPendingTutors();
     } else if (requestType.getType().equals("GET_SUBJECTS")) {
       handleGetSubjects();
-    }else if(requestType.getType().equals("EDIT_STUDENT_PROFILE")){
+    } else if (requestType.getType().equals("LOGIN")) {
+      handleLogin(clientText);
+    } else if(requestType.getType().equals("EDIT_STUDENT_PROFILE")){
       handleEditStudentProfile(clientText);
     }else if(requestType.getType().equals("EDIT_TUTOR_PROFILE")){
       handleEditTutorProfile(clientText);
-    }else if(requestType.getType().equals("LOGIN")){
-      handleLogin(clientText);
     }else if(requestType.getType().equals("CANCEL_SESSION"))
     {
       handleCancelSession(clientText);
@@ -219,39 +219,6 @@ public class ClientHandler implements Runnable {
     }
   }
 
-  private void handleLogin(String clientText){
-    LoginRequest request = gson.fromJson(clientText, LoginRequest.class);
-
-    //Missing or invalid input
-    if(request.getEmail() == null || request.getEmail().isEmpty()
-        || request.getPassword() == null || request.getPassword().isEmpty())
-    {
-      LoginResponse response = LoginResponse.error("Missing or invalid login information");
-
-      out.println(gson.toJson(response));
-      return;
-    }
-
-  //sends the login info to the server-side model to check if the user exists in the database
-    User user = model.login(request.getEmail(), request.getPassword());
-
-    //valid credentials
-    if(user != null){
-      String userJson = gson.toJson(user);
-     //successful response
-      LoginResponse response = LoginResponse.ok(user.getType(), userJson);
-
-      //sends the response back to the client
-      out.println(gson.toJson(response));
-    }
-    //invalid credentials
-    else {
-      LoginResponse response = LoginResponse.error("Invalid credentials");
-
-      out.println(gson.toJson(response));
-    }
-  }
-
   private void handleCancelSession(String clientText)
   {
     CancelSessionRequest request = gson.fromJson(clientText, CancelSessionRequest.class);
@@ -300,6 +267,30 @@ public class ClientHandler implements Runnable {
     ArrayList<server.model.Tutor> tutors = UserDAOImpl.getInstance().readPendingTutors();
     TutorListResponse response = new TutorListResponse("OK", "Pending tutors", tutors);
     sendJsonResponse(response);
+  }
+
+  private void handleLogin(String clientText) throws Exception {
+    LoginRequest request = gson.fromJson(clientText, LoginRequest.class);
+    String email = request.getEmail();
+    String password = request.getPassword();
+
+    User user = UserDAOImpl.getInstance().readByEmailAndPassword(email, password);
+    if (user instanceof Student student) {
+      sendJsonResponse(LoginResponse.ok("student", gson.toJson(student)));
+    } else if (user instanceof Tutor tutor) {
+      if (!tutor.isApproved()) {
+        sendJsonResponse(LoginResponse.ok("tutor_pending", gson.toJson(tutor)));
+      } else {
+        sendJsonResponse(LoginResponse.ok("tutor", gson.toJson(tutor)));
+      }
+    } else {
+      int adminId = UserDAOImpl.getInstance().getAdminId(email, password);
+      if (adminId != -1) {
+        sendJsonResponse(LoginResponse.ok("admin", String.valueOf(adminId)));
+      } else {
+        sendJsonResponse(LoginResponse.error("Invalid email or password"));
+      }
+    }
   }
 
   private void sendResponse(Response response) {

@@ -3,7 +3,6 @@ package client.mediator;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-
 import server.mediator.LoginResponse;
 import server.model.Session;
 import server.model.Student;

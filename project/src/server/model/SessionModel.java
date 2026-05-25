@@ -44,4 +44,5 @@ public interface SessionModel {
   boolean editStudentProfile(Student student);
 
   boolean editTutorProfile(Tutor tutor);
+
 }

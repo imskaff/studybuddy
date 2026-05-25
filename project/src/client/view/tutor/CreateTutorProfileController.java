@@ -9,7 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 
-import java.sql.SQLException;
+import javafx.scene.control.Alert;
 
 public class CreateTutorProfileController
 {
@@ -43,7 +43,7 @@ public class CreateTutorProfileController
   public void init(ViewHandler viewHandler, CreateTutorProfileViewModel createTutorViewModel, Region root)
   {
     this.viewHandler = viewHandler;
-    this.viewModel = viewModel;
+    this.viewModel = createTutorViewModel;
     this.root = root;
 
     fname_textField.textProperty().bindBidirectional(viewModel.firstNameProperty());
@@ -80,14 +80,28 @@ public class CreateTutorProfileController
     back_Btn.setOnAction(event -> viewHandler.openCreateNewProfile());
     rules_Btn.setOnAction(event -> viewHandler.openRules());
     register_Btn.setOnAction(event -> {
-
-      if(rules_checkBox.equals(true))
-      {
-        viewModel.register();
+      if (!rules_checkBox.isSelected()) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Rules Required");
+        alert.setHeaderText(null);
+        alert.setContentText("You must accept the rules before registering.");
+        alert.showAndWait();
+        return;
       }
-      else
-      {
-        System.err.println("Rules has to be confirmed to register");
+      boolean success = viewModel.register();
+      if (success) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Registration Submitted");
+        alert.setHeaderText(null);
+        alert.setContentText("Your tutor application has been submitted and is pending admin approval.");
+        alert.showAndWait();
+        viewHandler.openWelcomeView();
+      } else {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Registration Failed");
+        alert.setHeaderText(null);
+        alert.setContentText("Registration failed. The email may already be in use or some fields are invalid.");
+        alert.showAndWait();
       }
     });
   }

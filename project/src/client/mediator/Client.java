@@ -213,41 +213,19 @@ public class Client implements ClientModel
     return sendRequest(request);
   }
 
-  // Login uses a separate method instead of the generic sendRequest() helper
-  // because login returns a LoginResponse object containing additional information
   @Override
-  public LoginResponse login(String email, String password){
-    try
-    {
-      LoginRequest request = new LoginRequest(email, password);
-
-      String requestJson = gson.toJson(request);
-
-      System.out.println("Client> " + requestJson);
-
-      out.println(requestJson);
-
-      String replyJson = in.readLine();
-
-      System.out.println("Server> " + replyJson);
-
-      return gson.fromJson(replyJson, LoginResponse.class);
-    }
-    catch(IOException e)
-    {
-      e.printStackTrace();
-
-      return LoginResponse.error("Could not connect to server");
-    }
+  public LoginResponse login(String email, String password)
+  {
+    LoginRequest request = new LoginRequest(email, password);
+    String replyJson = sendRequestForResponse(request);
+    if (replyJson == null) return LoginResponse.error("Connection error");
+    return gson.fromJson(replyJson, LoginResponse.class);
   }
 
   @Override
   public boolean cancelSession(int userId, int sessionId, String userType)
   {
-    // Creates the cancel session request object
     CancelSessionRequest request = new CancelSessionRequest(userId, sessionId, userType);
-
-    // Sends the request to the server
     return sendRequest(request);
   }
 

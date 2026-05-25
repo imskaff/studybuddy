@@ -21,33 +21,16 @@ public class CancelSessionRequest
     this.userType = userType;
   }
 
-  public String getType()
-  {
-    return type;
-  }
-
-  public int getUserId()
-  {
-    return userId;
-  }
-
-  public int getSessionId()
-  {
-    return sessionId;
-  }
-
-  public String getUserType()
-  {
-    return userType;
-  }
+  public String getType() { return type; }
+  public int getUserId() { return userId; }
+  public int getSessionId() { return sessionId; }
+  public String getUserType() { return userType; }
 
   @Override
   public String toString()
   {
-    return "CANCEL_SESSION{" +
-        "userId=" + userId +
+    return "CANCEL_SESSION{userId=" + userId +
         ", sessionId=" + sessionId +
-        ", userType='" + userType + '\'' +
-        '}';
+        ", userType='" + userType + "'}";
   }
 }
