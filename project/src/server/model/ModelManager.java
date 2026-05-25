@@ -8,11 +8,11 @@ import java.util.List;
 import server.dao.SessionDAOImpl;
 import server.dao.UserDAOImpl;
 
-public class SessionModelManager implements SessionModel, PropertyChangeListener {
+public class ModelManager implements SessionModel, PropertyChangeListener {
     private final SessionList list;
     private PropertyChangeSupport support;
 
-    public SessionModelManager() {
+    public ModelManager() {
         list = new SessionList();
         support = new PropertyChangeSupport(this);
     }
@@ -76,6 +76,8 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
       }
       // Assigns the student to the session
       session.setStudent(student);
+      // Changes the session state to booked
+      session.book(session);
       // Updates the session in the database
       SessionDAOImpl.getInstance().update(session);
 
@@ -313,6 +315,41 @@ public class SessionModelManager implements SessionModel, PropertyChangeListener
       UserDAOImpl.getInstance().update(tutor);
 
       return true;
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  @Override
+  public boolean cancelSession(int userId, int sessionId, String type)
+  {
+    try
+    {
+      Session session = SessionDAOImpl.getInstance().readByInt(sessionId);
+
+      if(session == null)
+      {
+        return false;
+      }
+
+      if(type.equalsIgnoreCase("student"))
+      {
+        session.setStudent(null);
+        session.setState(new Available());
+        SessionDAOImpl.getInstance().update(session);
+        return true;
+      }
+      else if(type.equalsIgnoreCase("tutor"))
+      {
+        session.setState(new Cancel());
+        SessionDAOImpl.getInstance().update(session);
+        return true;
+      }
+
+      return false;
     }
     catch(Exception e)
     {

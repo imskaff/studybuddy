@@ -5,7 +5,9 @@ import client.viewmodel.student.StudentMainPageViewModel;
 import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
@@ -44,6 +46,7 @@ public class StudentMainPageViewController {
 
     @FXML private Button viewDetails_button;
     @FXML private Button viewDetails_btn_bookedS;
+    @FXML private Button cancel_btn;
 
     @FXML private ComboBox<String> subject_comboBox;
     @FXML private TextField minPrice_textField;
@@ -115,6 +118,28 @@ public class StudentMainPageViewController {
         fromDate_textField.textProperty().bindBidirectional(viewModel.fromDateProperty());
         toDate_textField.textProperty().bindBidirectional(viewModel.toDateProperty());
         reset_btn.setOnAction(e -> viewModel.resetFilters());
+
+        cancel_btn.disableProperty().bind(
+            bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());
+
+        cancel_btn.setOnAction(event -> {
+            Session selected = bookedSessions_tableView.getSelectionModel().getSelectedItem();
+            if(selected != null)
+            {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Are you sure you want to cancel this session?",
+                    ButtonType.YES, ButtonType.NO);
+                alert.setTitle("Cancel Session");
+                alert.setHeaderText("Confirm Cancellation");
+
+                alert.showAndWait().ifPresent(response -> {
+                    if(response == ButtonType.YES) {
+                        viewModel.cancelSession(selected);
+                        bookedSessions_tableView.getSelectionModel().clearSelection();
+                    }
+                });
+            }
+        });
 
         setFieldsReadOnly();
         viewModel.loadData();

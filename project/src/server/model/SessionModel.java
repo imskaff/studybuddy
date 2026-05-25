@@ -40,4 +40,6 @@ public interface SessionModel {
   boolean editStudentProfile(Student student);
 
   boolean editTutorProfile(Tutor tutor);
+
+  boolean cancelSession(int userId, int sessionId, String type);
 }

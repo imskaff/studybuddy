@@ -154,6 +154,21 @@ public class StudentMainPageViewModel implements PropertyChangeListener {
         });
     }
 
+  public void cancelSession(Session session)
+  {
+    Student student = model.getLoggedInStudent();
+    if(student != null && session != null) {
+      boolean success = model.cancelSession(student.getId(), session.getId(), "student");
+      if(success)
+      {
+        Platform.runLater(() -> {
+          loadSessions();
+          loadBookedSessions();
+        });
+      }
+    }
+  }
+
     public FilteredList<Session> getFilteredSessions() {
         return filteredSessions;
     }

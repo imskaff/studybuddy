@@ -5,7 +5,7 @@ import server.dao.SessionDAOImpl;
 import server.dao.UserDAOImpl;
 import server.model.Session;
 import server.model.SessionModel;
-import server.model.SessionModelManager;
+import server.model.ModelManager;
 import server.model.Student;
 
 import java.util.List;
@@ -22,11 +22,11 @@ import java.time.LocalDateTime;
 public class ClientHandler implements Runnable {
   private final BufferedReader in;
   private final PrintWriter out;
-  private final SessionModelManager model;
+  private final ModelManager model;
   private final Socket socket;
   private final Gson gson;
 
-  public ClientHandler(Socket socket, SessionModelManager model) throws IOException {
+  public ClientHandler(Socket socket, ModelManager model) throws IOException {
     this.socket = socket;
     this.model = model;
     this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -95,7 +95,11 @@ public class ClientHandler implements Runnable {
       handleEditStudentProfile(clientText);
     }else if(requestType.getType().equals("EDIT_TUTOR_PROFILE")){
       handleEditTutorProfile(clientText);
-    }else {
+    }else if(requestType.getType().equals("CANCEL_SESSION"))
+    {
+      handleCancelSession(clientText);
+    }
+    else {
       sendResponse(new Response("ERROR", "Unknown request type"));
     }
   }
@@ -243,6 +247,27 @@ public class ClientHandler implements Runnable {
     ArrayList<server.model.Tutor> tutors = UserDAOImpl.getInstance().readPendingTutors();
     TutorListResponse response = new TutorListResponse("OK", "Pending tutors", tutors);
     sendJsonResponse(response);
+  }
+
+  private void handleCancelSession(String clientText)
+  {
+    CancelSessionRequest request = gson.fromJson(clientText, CancelSessionRequest.class);
+
+    boolean cancelled = model.cancelSession(request.getUserId(),
+        request.getSessionId(), request.getUserType());
+
+    if(cancelled && request.getUserType().equalsIgnoreCase("student"))
+    {
+      sendResponse(new Response("OK", "Student booking cancelled. Session is now available"));
+    }
+    else if(cancelled && request.getUserType().equalsIgnoreCase("tutor"))
+    {
+      sendResponse(new Response("OK", "Session status changed to cancelled"));
+    }
+    else
+    {
+      sendResponse(new Response("ERROR", "Session could not be cancelled"));
+    }
   }
 
   private void sendResponse(Response response) {

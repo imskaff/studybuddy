@@ -39,6 +39,8 @@ public interface ClientModel {
 
   boolean editTutorProfile(Tutor tutor);
 
+  boolean cancelSession(int userId, int sessionId, String userType);
+
   // Retrieves all available (unbooked) sessions from the server.
   ArrayList<Session> getAvailableSessions();
 

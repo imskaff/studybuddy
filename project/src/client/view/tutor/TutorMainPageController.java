@@ -31,6 +31,8 @@ public class TutorMainPageController
 
   @FXML private Button viewDetails_btn;
   @FXML private Button create_btn;
+  @FXML private Button remove_btn;
+  @FXML private Button cancel_btn;
   private Region root;
   private ViewHandler viewHandler;
   private TutorMainPageViewModel viewModel;
@@ -99,6 +101,32 @@ public class TutorMainPageController
   private void setUpButtons()
   {
     viewDetails_btn.setOnAction(event -> onViewDetails());
+
     create_btn.setOnAction(event -> viewHandler.openCreateNewSession());
+
+    remove_btn.disableProperty().bind(
+        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
+
+    cancel_btn.disableProperty().bind(
+        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
+
+    cancel_btn.setOnAction(event -> {
+      Session selected = mySessions_tView.getSelectionModel().getSelectedItem();
+      if (selected != null)
+      {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+            "Are you sure you want to cancel this session?", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Cancel Session");
+        alert.setHeaderText("Confirm Cancellation");
+
+        alert.showAndWait().ifPresent(response -> {
+          if (response == ButtonType.YES)
+          {
+            viewModel.cancelSession(selected);
+            mySessions_tView.getSelectionModel().clearSelection();
+          }
+        });
+      }
+    });
   }
 }

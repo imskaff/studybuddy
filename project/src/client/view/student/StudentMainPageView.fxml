@@ -127,6 +127,7 @@
                                     </columns>
                                 </TableView>
                                 <Button fx:id="viewDetails_btn_bookedS" layoutX="801.0" layoutY="628.0" mnemonicParsing="false" text="View Details" />
+                                <Button fx:id="cancel_btn" layoutX="680.0" layoutY="628.0" mnemonicParsing="false" text="Cancel Session" />
                             </children>
                         </AnchorPane>
                     </content>

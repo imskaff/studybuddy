@@ -33,6 +33,8 @@ public interface Model {
 
   boolean editSession(Session session);
 
+  boolean cancelSession(int userId, int sessionId, String userType);
+
   boolean deleteSession(int sessionId);
 
   boolean approveTutor(int tutorId);
