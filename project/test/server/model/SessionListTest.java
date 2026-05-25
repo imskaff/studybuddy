@@ -3,66 +3,64 @@ package server.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-public class SessionListTest {
+public class SessionListTest
+{
     private SessionList list;
 
     @BeforeEach
-    void init(){
-            list = new SessionList();
-        }
-
-    @Test
-    public void listEmptyWhenNoSessionAvailable(){
-        ArrayList<Session> sessions = list.getAllSessions();
-
-        assertTrue(sessions.isEmpty(), () -> "SessionList should be empty");
+    void init()
+    {
+        list = new SessionList();
     }
 
     @Test
-    void addSessionIncrementsSizeByOne() {
-        Session session = mock(Session.class);
+    public void listEmptyWhenNoSessionAvailable()
+    {
+        assertTrue(list.getAllSessions().isEmpty());
+    }
 
-        list.addSession(session);
+    @Test
+    void addSessionIncrementsSizeByOne()
+    {
+        list.addSession(makeSession(1));
 
         assertEquals(1, list.getSize());
     }
 
     @Test
-    void getSessionByIdReturnsCorrectSession() {
-        Session session = mock(Session.class);
-        when(session.getId()).thenReturn(42);
+    void getSessionByIdReturnsCorrectSession()
+    {
+        Session session = makeSession(42);
         list.addSession(session);
 
-        Session result = list.getSessionById(42);
-
-        assertEquals(session, result);
+        assertEquals(session, list.getSessionById(42));
     }
 
     @Test
-    void getSessionByIdWithNonExistentIdReturnsNull() {
-        Session session = mock(Session.class);
-        when(session.getId()).thenReturn(1);
-        list.addSession(session);
+    void getSessionByIdWithNonExistentIdReturnsNull()
+    {
+        list.addSession(makeSession(1));
 
         assertNull(list.getSessionById(99));
     }
 
     @Test
-    void removeSessionByIndexWhenOutOfBoundsThrowsException() {
+    void removeSessionByIndexWhenOutOfBoundsThrowsException()
+    {
         assertThrows(IndexOutOfBoundsException.class, () -> list.removeSession(0));
     }
 
     @Test
-    void removeSessionByIdRemovesOnlyTargetSession() {
-        Session s1 = mock(Session.class);
-        Session s2 = mock(Session.class);
-        when(s1.getId()).thenReturn(1);
-        when(s2.getId()).thenReturn(2);
+    void removeSessionByIdRemovesOnlyTargetSession()
+    {
+        Session s1 = makeSession(1);
+        Session s2 = makeSession(2);
         list.addSession(s1);
         list.addSession(s2);
 
@@ -71,5 +69,14 @@ public class SessionListTest {
         assertEquals(1, list.getSize());
         assertNull(list.getSessionById(1));
         assertEquals(s2, list.getSessionById(2));
+    }
+
+    private static Session makeSession(int id)
+    {
+        Tutor tutor = new Tutor("John", "Doe", LocalDate.of(1985, 1, 1),
+                "john@example.com", "111111111", "pass", "Male",
+                new ArrayList<>(), "Master's", "tutor", 10);
+        return new Session(id, "desc", 10.0, "Math", "Room",
+                LocalDateTime.now(), LocalDateTime.now().plusHours(1), tutor, null);
     }
 }

@@ -5,23 +5,23 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import server.model.Session;
 import server.model.Tutor;
 
-import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+
+import java.beans.PropertyChangeEvent;
 
 class StudentMainPageViewModelTest {
 
-    private Model mockModel;
+    private FakeModel fakeModel;
     private StudentMainPageViewModel viewModel;
 
     @BeforeAll
@@ -34,8 +34,8 @@ class StudentMainPageViewModelTest {
 
     @BeforeEach
     void setUp() {
-        mockModel = mock(Model.class);
-        viewModel = new StudentMainPageViewModel(mockModel);
+        fakeModel = new FakeModel();
+        viewModel = new StudentMainPageViewModel(fakeModel);
     }
 
     // --- viewing sessions ---
@@ -44,7 +44,7 @@ class StudentMainPageViewModelTest {
     void checkIfListPopulatesFromModel() {
         Session s1 = makeSession(1, "Math");
         Session s2 = makeSession(2, "Physics");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(s1, s2)));
+        fakeModel.sessions = new ArrayList<>(List.of(s1, s2));
 
         viewModel.loadSessions();
 
@@ -56,11 +56,11 @@ class StudentMainPageViewModelTest {
 
     @Test
     void checkIfListIsEmptyWhenModelReturnsEmptyList() {
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>());
+        fakeModel.sessions = new ArrayList<>();
 
         viewModel.loadSessions();
 
-        assertTrue(viewModel.getSessions().isEmpty(), () -> "Sessions list should be empty");
+        assertTrue(viewModel.getSessions().isEmpty());
     }
 
     // --- viewing booked sessions ---
@@ -68,22 +68,22 @@ class StudentMainPageViewModelTest {
     @Test
     void checkIfBookedListPopulatesFromModel() {
         Session booked = makeSession(3, "Chemistry");
-        when(mockModel.getBookedSessions()).thenReturn(new ArrayList<>(List.of(booked)));
+        fakeModel.bookedSessions = new ArrayList<>(List.of(booked));
 
         viewModel.loadBookedSessions();
 
         ObservableList<Session> bookedSessions = viewModel.getBookedSessions();
         assertEquals(1, bookedSessions.size());
-        assertTrue(bookedSessions.contains(booked), () -> "Booked sessions list should contain the session returned by the model");
+        assertTrue(bookedSessions.contains(booked));
     }
 
     @Test
     void checkIfBookedListIsEmptyWhenModelReturnsEmptyList() {
-        when(mockModel.getBookedSessions()).thenReturn(new ArrayList<>());
+        fakeModel.bookedSessions = new ArrayList<>();
 
         viewModel.loadBookedSessions();
 
-        assertTrue(viewModel.getBookedSessions().isEmpty(), () -> "Booked sessions list should be empty");
+        assertTrue(viewModel.getBookedSessions().isEmpty());
     }
 
     // --- booking moves session to booked list ---
@@ -91,41 +91,41 @@ class StudentMainPageViewModelTest {
     @Test
     void sessionBookedEventRemovesSessionFromAvailableList() throws InterruptedException {
         Session session = makeSession(1, "Math");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(session)));
+        fakeModel.sessions = new ArrayList<>(List.of(session));
         viewModel.loadSessions();
 
         viewModel.propertyChange(new PropertyChangeEvent(this, "SessionBooked", null, session));
         Thread.sleep(300);
 
-        assertFalse(viewModel.getSessions().contains(session), () -> "Booked session should be removed from the available list");
+        assertFalse(viewModel.getSessions().contains(session));
     }
 
     @Test
     void sessionBookedEventAddsSessionToBookedList() throws InterruptedException {
         Session session = makeSession(1, "Math");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(session)));
-        when(mockModel.getBookedSessions()).thenReturn(new ArrayList<>());
+        fakeModel.sessions = new ArrayList<>(List.of(session));
+        fakeModel.bookedSessions = new ArrayList<>();
         viewModel.loadSessions();
         viewModel.loadBookedSessions();
 
         viewModel.propertyChange(new PropertyChangeEvent(this, "SessionBooked", null, session));
         Thread.sleep(300);
 
-        assertTrue(viewModel.getBookedSessions().contains(session), () -> "Booked session should be added to the booked list");
+        assertTrue(viewModel.getBookedSessions().contains(session));
     }
 
     @Test
     void sessionBookedEventDoesNotAffectOtherSessions() throws InterruptedException {
         Session s1 = makeSession(1, "Math");
         Session s2 = makeSession(2, "Physics");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(s1, s2)));
+        fakeModel.sessions = new ArrayList<>(List.of(s1, s2));
         viewModel.loadSessions();
 
         viewModel.propertyChange(new PropertyChangeEvent(this, "SessionBooked", null, s1));
         Thread.sleep(300);
 
-        assertFalse(viewModel.getSessions().contains(s1), () -> "Booked session should be removed from the available list");
-        assertTrue(viewModel.getSessions().contains(s2), () -> "Only the booked session should be removed from the available list");
+        assertFalse(viewModel.getSessions().contains(s1));
+        assertTrue(viewModel.getSessions().contains(s2));
     }
 
     // --- filter tests ---
@@ -238,7 +238,6 @@ class StudentMainPageViewModelTest {
         viewModel.minPriceProperty().set("40");
         viewModel.toDateProperty().set("01/05/2026");
 
-        // there is one session that matches both filters (Chemistry)
         var result = viewModel.getFilteredSessions();
         assertEquals(1, result.size());
         assertEquals("Chemistry", result.get(0).getSubject());
@@ -250,7 +249,7 @@ class StudentMainPageViewModelTest {
         Session math    = makeSession(1, "Math",      20.0, LocalDateTime.of(2026, 2, 1, 10, 0));
         Session physics = makeSession(2, "Physics",   80.0, LocalDateTime.of(2026, 6, 1, 10, 0));
         Session chem    = makeSession(3, "Chemistry", 50.0, LocalDateTime.of(2026, 4, 1, 10, 0));
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(math, physics, chem)));
+        fakeModel.sessions = new ArrayList<>(List.of(math, physics, chem));
         viewModel.loadSessions();
     }
 
@@ -263,7 +262,43 @@ class StudentMainPageViewModelTest {
                 "john@example.com", "111111111", "pass", "Male",
                 new ArrayList<>(), "Master's", "tutor", 10);
         return new Session(id, "desc", price, subject, "Room A",
-                startDate, startDate.plusHours(1),
-                tutor, null);
+                startDate, startDate.plusHours(1), tutor, null);
+    }
+
+    // --- fake model ---
+
+    private static class FakeModel implements Model {
+        ArrayList<Session> sessions = new ArrayList<>();
+        ArrayList<Session> bookedSessions = new ArrayList<>();
+
+        @Override public ArrayList<Session> getAllSessions() { return sessions; }
+        @Override public ArrayList<Session> getBookedSessions() { return bookedSessions; }
+        @Override public void addPropertyChangeListener(PropertyChangeListener l) {}
+        @Override public void connect() {}
+        @Override public void disconnect() {}
+        @Override public void bookSession(server.model.Student s, Tutor t, Session se) {}
+        @Override public void setLoggedInStudent(server.model.Student s) {}
+        @Override public server.model.Student getLoggedInStudent() { return null; }
+        @Override public void setLoggedInAdminId(int id) {}
+        @Override public int getLoggedInAdminId() { return 0; }
+        @Override public ArrayList<Tutor> getPendingTutors() { return new ArrayList<>(); }
+        @Override public boolean createSession(Session s) { return false; }
+        @Override public boolean editSession(Session s) { return false; }
+        @Override public boolean cancelSession(int u, int s, String t) { return false; }
+        @Override public boolean deleteSession(int id) { return false; }
+        @Override public boolean approveTutor(int id) { return false; }
+        @Override public boolean declineTutor(int id) { return false; }
+        @Override public boolean registerStudent(server.model.Student s) { return false; }
+        @Override public boolean registerTutor(Tutor t) { return false; }
+        @Override public void setLoggedInTutor(Tutor t) {}
+        @Override public Tutor getLoggedInTutor() { return null; }
+        @Override public boolean editStudentProfile(server.model.Student s) { return false; }
+        @Override public java.util.List<String> getSubjects() { return new ArrayList<>(); }
+        @Override public boolean editTutorProfile(Tutor t) { return false; }
+        @Override public String login(String e, String p) { return null; }
+        @Override public void complete(Session s) {}
+        @Override public void book(Session s) {}
+        @Override public void cancel(Session s) {}
+        @Override public void remove(Session s) {}
     }
 }
