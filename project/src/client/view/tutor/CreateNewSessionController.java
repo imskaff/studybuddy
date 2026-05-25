@@ -39,7 +39,7 @@ public class CreateNewSessionController
     this.viewModel = viewModel;
     this.root = root;
 
-    viewModel.loadSubjects();
+
     subject_comboBox.setItems(viewModel.getSubjectOptions());
     subject_comboBox.valueProperty().bindBidirectional(viewModel.subjectProperty());
     price_textField.textProperty().bindBidirectional(viewModel.priceProperty());
@@ -48,6 +48,7 @@ public class CreateNewSessionController
     endDate_textField.textProperty().bindBidirectional(viewModel.endDateProperty());
     description_textArea.textProperty().bindBidirectional(viewModel.descriptionProperty());
 
+    loadSubjects();
     setUpButtons();
   }
 
@@ -97,5 +98,14 @@ public class CreateNewSessionController
 } catch (Exception e) {
   e.printStackTrace();
 }
+  }
+
+  private void loadSubjects()
+  {
+    viewModel.loadSubjects();
+
+    System.out.println("Subjects loaded from DB: " + viewModel.getSubjectOptions());
+
+    subject_comboBox.setItems(viewModel.getSubjectOptions());
   }
 }

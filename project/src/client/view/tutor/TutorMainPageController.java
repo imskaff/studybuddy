@@ -56,10 +56,10 @@ public class TutorMainPageController
     date_column.setCellValueFactory(data ->
         new SimpleStringProperty(data.getValue().getStart_date()
             .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
-    state_column.setCellValueFactory(cellData -> {
-      SessionState state = cellData.getValue().getState();
-      return new SimpleStringProperty(state != null ? state.getClass().getSimpleName() : "");
-    });
+
+    state_column.setCellValueFactory(cellData ->
+        new SimpleStringProperty(cellData.getValue().getStatus())
+    );
     description_column.setCellValueFactory(
         data -> new SimpleStringProperty(data.getValue().getDescription()));
 

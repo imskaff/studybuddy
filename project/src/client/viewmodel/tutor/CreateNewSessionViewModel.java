@@ -10,6 +10,7 @@ import server.model.Tutor;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 public class CreateNewSessionViewModel implements PropertyChangeListener
 {
@@ -29,7 +30,7 @@ public class CreateNewSessionViewModel implements PropertyChangeListener
   {
     this.model = model;
 
-    subjectOptions = FXCollections.observableArrayList();
+    this.subjectOptions = FXCollections.observableArrayList();
 
     subject = new SimpleStringProperty("");
     price = new SimpleStringProperty("");
@@ -43,8 +44,13 @@ public class CreateNewSessionViewModel implements PropertyChangeListener
 
   public void loadSubjects()
   {
-    subjectOptions.clear();
-    subjectOptions.addAll(model.getSubjects());
+    List<String> subjectsFromDatabase = model.getSubjects();
+
+    if (subjectsFromDatabase != null)
+    {
+      subjectOptions.clear();
+      subjectOptions.addAll(subjectsFromDatabase);
+    }
   }
 
   public ObservableList<String> getSubjectOptions()
