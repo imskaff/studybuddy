@@ -27,25 +27,43 @@ public class CreateNewProfileController
 
     back_Btn.setOnAction(event -> viewHandler.openWelcomeView());
 
+    setupConfirmButton();
     chooseUserType();
     tutor_checkBtn.setSelected(false);
     student_checkBtn.setSelected(false);
   }
 
+  private void setupConfirmButton()
+  {
+    confirm_Btn.setOnAction(event -> {
+      if (tutor_checkBtn.isSelected())
+      {
+        viewHandler.openCreateTutorProfile();
+      }
+      else if (student_checkBtn.isSelected())
+      {
+        viewHandler.openCreateStudentProfile();
+      }
+      else
+      {
+        userTypeNotChosenAlert();
+      }
+    });
+  }
+
   private void chooseUserType()
   {
-    if(tutor_checkBtn.equals(true))
-    {
-      confirm_Btn.setOnAction(event -> viewHandler.openCreateTutorProfile());
-    }
-    else if (student_checkBtn.equals(true))
-    {
-      confirm_Btn.setOnAction(event -> viewHandler.openCreateStudentProfile());
-    }
-    else
-    {
-      confirm_Btn.setOnAction(event -> userTypeNotChosenAlert());
-    }
+    tutor_checkBtn.setOnAction(e -> {
+      if (tutor_checkBtn.isSelected()) {
+        student_checkBtn.setSelected(false);
+      }
+    });
+
+    student_checkBtn.setOnAction(e -> {
+      if (student_checkBtn.isSelected()) {
+        tutor_checkBtn.setSelected(false);
+      }
+    });
   }
 
   private void userTypeNotChosenAlert()

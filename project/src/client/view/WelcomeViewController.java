@@ -25,6 +25,9 @@ public class WelcomeViewController {
         this.viewHandler = viewHandler;
         this.viewModel = viewModel;
         this.root = root;
+
+        onLoginButtonClicked();
+        onRegisterButtonClicked();
     }
 
     public Region getRoot(){
@@ -47,6 +50,6 @@ public class WelcomeViewController {
     }
 
     @FXML private void onRegisterButtonClicked() {
-        // TODO: navigate to register view
+        register_button.setOnAction(event -> viewHandler.openCreateNewProfile());
     }
 }

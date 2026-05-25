@@ -218,7 +218,7 @@ public class ViewHandler
     {
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getResource(
-          "client/view/CreateNewProfile.fxml"));
+          "CreateNewProfile.fxml"));
       Region root = loader.load();
       CreateNewProfileController controller = loader.getController();
       controller.init(this, viewModelFactory.getCreateNewProfileViewModel(), root);
@@ -261,7 +261,7 @@ public class ViewHandler
     try
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource("client/view/student/CreateStudentProfile.fxml"));
+      loader.setLocation(getClass().getResource("student/CreateStudentProfile.fxml"));
       Region root = loader.load();
       CreateStudentProfileController controller = loader .getController();
       controller.init(this, viewModelFactory.getCreateStudentViewModel(),root);
@@ -282,7 +282,7 @@ public class ViewHandler
     try
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource("client/view/tutor/CreateTutorProfile.fxml"));
+      loader.setLocation(getClass().getResource("tutor/CreateTutorProfile.fxml"));
       Region root = loader.load();
       CreateTutorProfileController controller = loader .getController();
       controller.init(this, viewModelFactory.getCreateTutorViewModel(),root);
@@ -326,7 +326,7 @@ public class ViewHandler
     try
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource("client/view/student/StudentProfileDetails.fxml"));
+      loader.setLocation(getClass().getResource("student/StudentProfileDetails.fxml"));
       Region root = loader.load();
       StudentProfileDetailsController controller = loader.getController();
 
@@ -351,7 +351,7 @@ public class ViewHandler
     {
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(
-          getClass().getResource("client/view/tutor/TutorProfileDetails.fxml"));
+          getClass().getResource("tutor/TutorProfileDetails.fxml"));
       Region root = loader.load();
       TutorProfileDetailsController controller = loader.getController();
 
