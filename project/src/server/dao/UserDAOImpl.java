@@ -29,46 +29,56 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User create(String first_name, String last_name, LocalDate date_of_birth, String email, String phone,
-            String password, String gender, ArrayList<String> languages, String type) throws SQLException {
-        try (Connection connection = getConnection();
-                PreparedStatement statement = connection.prepareStatement(
-                        "INSERT INTO users (first_name, last_name, date_of_birth, email, phone, password, gender, languages, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                        PreparedStatement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, first_name);
-            statement.setString(2, last_name);
-            statement.setObject(3, date_of_birth);
-            statement.setString(4, email);
-            statement.setString(5, phone);
-            statement.setString(6, password);
-            statement.setString(7, gender);
-            statement.setObject(8, languages);
-            statement.setString(9, type);
-            statement.executeUpdate();
-
-            ResultSet keys = statement.getGeneratedKeys();
-          if(keys.next())
-          {
-            int id = keys.getInt(1);
-
-            // Creates a Tutor object
-            if("Tutor".equalsIgnoreCase(type))
-            {
-              return new Tutor(first_name, last_name,
-                  date_of_birth, email, phone,
-                  password, gender, languages,
-                  "N/A", type, id);
+            String password, String gender, ArrayList<String> languages, String type, String educationLevel) throws SQLException {
+        try (Connection connection = getConnection()) {
+            int id;
+            try (PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO users (first_name, last_name, date_of_birth, email, phone, password, gender, user_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                    PreparedStatement.RETURN_GENERATED_KEYS)) {
+                statement.setString(1, first_name);
+                statement.setString(2, last_name);
+                statement.setObject(3, date_of_birth);
+                statement.setString(4, email);
+                statement.setString(5, phone);
+                statement.setString(6, password);
+                statement.setString(7, gender);
+                statement.setString(8, type.toLowerCase());
+                statement.executeUpdate();
+                ResultSet keys = statement.getGeneratedKeys();
+                if (keys.next()) {
+                    id = keys.getInt(1);
+                } else {
+                    throw new SQLException("No keys generated");
+                }
             }
-
-            // Creates a Student object
-            return new Student(first_name, last_name,
-                date_of_birth, email, phone,
-                password, gender, languages,
-                id, type);
-          }
-          else
-          {
-            throw new SQLException("No keys generated");
-          }
+            try (PreparedStatement ins = connection.prepareStatement(
+                    "INSERT INTO user_languages (user_id, language) VALUES (?, ?)")) {
+                for (String lang : languages) {
+                    if (!lang.isBlank()) {
+                        ins.setInt(1, id);
+                        ins.setString(2, lang.trim());
+                        ins.executeUpdate();
+                    }
+                }
+            }
+            if ("Tutor".equalsIgnoreCase(type)) {
+                try (PreparedStatement tutorIns = connection.prepareStatement(
+                        "INSERT INTO tutors (user_id, education_level) VALUES (?, ?)")) {
+                    tutorIns.setInt(1, id);
+                    tutorIns.setString(2, educationLevel != null ? educationLevel : "");
+                    tutorIns.executeUpdate();
+                }
+                return new Tutor(first_name, last_name, date_of_birth, email, phone,
+                    password, gender, languages, educationLevel != null ? educationLevel : "", type, id);
+            } else {
+                try (PreparedStatement studentIns = connection.prepareStatement(
+                        "INSERT INTO students (user_id) VALUES (?)")) {
+                    studentIns.setInt(1, id);
+                    studentIns.executeUpdate();
+                }
+                return new Student(first_name, last_name, date_of_birth, email, phone,
+                    password, gender, languages, id, type);
+            }
         }
     }
 
@@ -108,20 +118,41 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void update(User user) throws SQLException {
-        try (Connection connection = getConnection();
-                PreparedStatement statement = connection.prepareStatement(
-                        "UPDATE users SET first_name = ?, last_name = ?, date_of_birth = ?, email = ?, phone = ?, password = ?, gender = ?, languages = ?, type = ? WHERE id = ?")) {
-            statement.setString(1, user.getFirst_name());
-            statement.setString(2, user.getLast_name());
-            statement.setObject(3, user.getDate_of_birth());
-            statement.setString(4, user.getEmail());
-            statement.setString(5, user.getPhone());
-            statement.setString(6, user.getPassword());
-            statement.setString(7, user.getGender());
-            statement.setObject(8, user.getLanguages());
-            statement.setString(9, user.getType());
-            statement.setInt(10, user.getId());
-            statement.executeUpdate();
+        try (Connection connection = getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE users SET first_name = ?, last_name = ?, date_of_birth = ?, email = ?, phone = ?, password = ?, gender = ?, user_type = ? WHERE id = ?")) {
+                statement.setString(1, user.getFirst_name());
+                statement.setString(2, user.getLast_name());
+                statement.setObject(3, user.getDate_of_birth());
+                statement.setString(4, user.getEmail());
+                statement.setString(5, user.getPhone());
+                statement.setString(6, user.getPassword());
+                statement.setString(7, user.getGender());
+                statement.setString(8, user.getType().toLowerCase());
+                statement.setInt(9, user.getId());
+                statement.executeUpdate();
+            }
+            try (PreparedStatement del = connection.prepareStatement(
+                    "DELETE FROM user_languages WHERE user_id = ?")) {
+                del.setInt(1, user.getId());
+                del.executeUpdate();
+            }
+            try (PreparedStatement ins = connection.prepareStatement(
+                    "INSERT INTO user_languages (user_id, language) VALUES (?, ?)")) {
+                for (String lang : user.getLanguages()) {
+                    ins.setInt(1, user.getId());
+                    ins.setString(2, lang.trim());
+                    ins.executeUpdate();
+                }
+            }
+            if (user instanceof Tutor) {
+                try (PreparedStatement tutorStmt = connection.prepareStatement(
+                        "UPDATE tutors SET education_level = ? WHERE user_id = ?")) {
+                    tutorStmt.setString(1, ((Tutor) user).getEducation_level());
+                    tutorStmt.setInt(2, user.getId());
+                    tutorStmt.executeUpdate();
+                }
+            }
         }
     }
 
@@ -137,7 +168,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User readByEmailAndPassword(String email, String password) throws SQLException {
         String sql = "SELECT u.id, u.first_name, u.last_name, u.date_of_birth, u.email, u.phone, "
-                + "u.password, u.gender, u.user_type, t.education_level "
+                + "u.password, u.gender, u.user_type, t.education_level, t.is_approved "
                 + "FROM users u LEFT JOIN tutors t ON u.id = t.user_id "
                 + "WHERE u.email = ? AND u.password = ?";
         try (Connection connection = getConnection();
@@ -158,8 +189,10 @@ public class UserDAOImpl implements UserDAO {
             String educationLevel = rs.getString("education_level");
             ArrayList<String> languages = readLanguages(connection, id);
             if ("tutor".equalsIgnoreCase(type)) {
-                return new Tutor(first_name, last_name, dob, em, phone, pwd, gender, languages,
+                Tutor tutor = new Tutor(first_name, last_name, dob, em, phone, pwd, gender, languages,
                         educationLevel != null ? educationLevel : "N/A", type, id);
+                tutor.setApproved(rs.getBoolean("is_approved"));
+                return tutor;
             }
             return new Student(first_name, last_name, dob, em, phone, pwd, gender, languages, id, type);
         }
@@ -189,7 +222,7 @@ public class UserDAOImpl implements UserDAO {
                         rs.getString("education_level") != null ? rs.getString("education_level") : "N/A",
                         rs.getString("user_type"),
                         id);
-                tutor.setStatus("pending");
+                tutor.setApproved(false);
                 tutors.add(tutor);
             }
             return tutors;

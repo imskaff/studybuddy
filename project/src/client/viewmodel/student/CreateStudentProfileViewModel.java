@@ -18,23 +18,36 @@ public class CreateStudentProfileViewModel extends CreateProfileViewModel
   }
 
   @Override
-  public void register() throws SQLException
+  public boolean register()
   {
-
-    Student student = new Student(
-        firstNameProperty().get().trim(),
-        lastNameProperty().get().trim(),
-        LocalDate.parse(dateOfBirthProperty().get()),
-        emailProperty().get().trim(),
-        phoneNoProperty().get().trim(),
-        passwordProperty().get(),
-        genderProperty().get().trim(),
-        new ArrayList<>(getLanguages()),
-        0,
-        UserType.STUDENT.toString()
-   );
-
-    model.registerStudent(student);
+    String dob = dateOfBirthProperty().get();
+    if (firstNameProperty().get().isBlank() || lastNameProperty().get().isBlank()
+        || dob.isBlank() || emailProperty().get().isBlank()
+        || phoneNoProperty().get().isBlank() || passwordProperty().get().isBlank()
+        || genderProperty().get().isBlank() || languageInputProperty().get().isBlank()) {
+      return false;
+    }
+    try {
+      ArrayList<String> langs = new ArrayList<>();
+      for (String l : languageInputProperty().get().split(",")) {
+        if (!l.isBlank()) langs.add(l.trim());
+      }
+      Student student = new Student(
+          firstNameProperty().get().trim(),
+          lastNameProperty().get().trim(),
+          LocalDate.parse(dob.trim()),
+          emailProperty().get().trim(),
+          phoneNoProperty().get().trim(),
+          passwordProperty().get(),
+          genderProperty().get().trim(),
+          langs,
+          0,
+          UserType.STUDENT.toString()
+      );
+      return model.registerStudent(student);
+    } catch (Exception e) {
+      return false;
+    }
   }
 
   @Override public StringProperty firstNameProperty()

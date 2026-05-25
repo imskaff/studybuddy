@@ -5,7 +5,13 @@ import client.viewmodel.tutor.TutorMainPageViewModel;
 import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import server.model.Session;
 import server.model.SessionState;
@@ -23,10 +29,9 @@ public class TutorMainPageController
   @FXML private TextField lname_textField;
   @FXML private TextField email_textField;
   @FXML private TextField phone_textField;
-  @FXML private TextField gender_textField;
   @FXML private TextField dateOfBirth_textField;
-
-  @FXML private TextArea language_textArea;
+  @FXML private ComboBox<String> gender_comboBox;
+  @FXML private TextField language_textField;
   @FXML private TextArea education_textArea;
 
   @FXML private Button viewDetails_btn;
@@ -34,6 +39,8 @@ public class TutorMainPageController
   @FXML private Button edit_btn;
   @FXML private Button remove_btn;
   @FXML private Button cancel_btn;
+
+  @FXML private Button edit_btn;
 
   private Region root;
   private ViewHandler viewHandler;
@@ -46,13 +53,10 @@ public class TutorMainPageController
     this.viewModel = viewModel;
     this.root = root;
 
-    //main
-    subject_column.setCellValueFactory(
-        data -> new SimpleStringProperty(data.getValue().getSubject()));
-    price_column.setCellValueFactory(data -> new SimpleStringProperty(
-        String.format("%.2f", data.getValue().getPrice())));
-    date_column.setCellValueFactory(data -> new SimpleStringProperty(
-        data.getValue().getStart_date()
+    subject_column.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSubject()));
+    price_column.setCellValueFactory(data -> new SimpleStringProperty(String.format("%.2f", data.getValue().getPrice())));
+    date_column.setCellValueFactory(data ->
+        new SimpleStringProperty(data.getValue().getStart_date()
             .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
     state_column.setCellValueFactory(cellData -> {
       SessionState state = cellData.getValue().getState();
@@ -66,25 +70,22 @@ public class TutorMainPageController
     viewDetails_btn.disableProperty().bind(
         mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
 
-    //profile
-    fname_textField.textProperty()
-        .bindBidirectional(viewModel.firstNameProperty());
-    lname_textField.textProperty()
-        .bindBidirectional(viewModel.lastNameProperty());
-    dateOfBirth_textField.textProperty()
-        .bindBidirectional(viewModel.dateOfBirthProperty());
+    fname_textField.textProperty().bindBidirectional(viewModel.firstNameProperty());
+    lname_textField.textProperty().bindBidirectional(viewModel.lastNameProperty());
+    dateOfBirth_textField.textProperty().bindBidirectional(viewModel.dateOfBirthProperty());
     email_textField.textProperty().bindBidirectional(viewModel.emailProperty());
     phone_textField.textProperty().bindBidirectional(viewModel.phoneProperty());
-    gender_textField.textProperty()
-        .bindBidirectional(viewModel.genderProperty());
-    language_textArea.textProperty()
-        .bindBidirectional(viewModel.languagesProperty());
-    education_textArea.textProperty()
-        .bindBidirectional(viewModel.educationProperty());
+    gender_comboBox.getItems().addAll("male", "female");
+    gender_comboBox.valueProperty().bindBidirectional(viewModel.genderProperty());
+    gender_comboBox.setDisable(true);
+    language_textField.textProperty().bindBidirectional(viewModel.languagesProperty());
+    education_textArea.textProperty().bindBidirectional(viewModel.educationProperty());
 
     setFieldsReadOnly();
     viewModel.loadData();
-    setUpButtons();
+
+    viewDetails_btn.setOnAction(event -> onViewDetails());
+    create_btn.setOnAction(event -> viewHandler.openCreateNewSession());
   }
 
   private void setFieldsReadOnly()
@@ -94,9 +95,21 @@ public class TutorMainPageController
     dateOfBirth_textField.setEditable(false);
     email_textField.setEditable(false);
     phone_textField.setEditable(false);
-    gender_textField.setEditable(false);
-    language_textArea.setEditable(false);
+    gender_comboBox.setDisable(true);
+    language_textField.setEditable(false);
     education_textArea.setEditable(false);
+  }
+
+  private void setFieldsEditable()
+  {
+    fname_textField.setEditable(true);
+    lname_textField.setEditable(true);
+    dateOfBirth_textField.setEditable(true);
+    email_textField.setEditable(true);
+    phone_textField.setEditable(true);
+    gender_comboBox.setDisable(false);
+    language_textField.setEditable(true);
+    education_textArea.setEditable(true);
   }
 
   @FXML private void onViewDetails()
@@ -159,5 +172,30 @@ public class TutorMainPageController
         });
       }
     });
+
+    @FXML private void onEditButtonClicked()
+    {
+      boolean editing = fname_textField.isEditable();
+      if (editing) {
+        boolean success = viewModel.saveProfile();
+        if (success) {
+          setFieldsReadOnly();
+          edit_btn.setText("Edit");
+        } else {
+          Alert alert = new Alert(Alert.AlertType.ERROR);
+          alert.setTitle("Save Failed");
+          alert.setHeaderText(null);
+          alert.setContentText("Could not save profile. Please check your input and try again.");
+          alert.showAndWait();
+        }
+      } else {
+        setFieldsEditable();
+        edit_btn.setText("Save");
+      }
+    }
+
+    public Region getRoot()
+    {
+      return root;
   }
 }

@@ -5,9 +5,13 @@ import client.viewmodel.student.StudentMainPageViewModel;
 import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.*;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import server.model.Session;
@@ -28,11 +32,22 @@ public class StudentMainPageViewController {
     @FXML private TableColumn<Session, String> tutor_column_bookedS;
     @FXML private TableColumn<Session, String> status_column_bookedS;
 
+    @FXML private Tab main_tab;
+    @FXML private Tab profile_tab;
+    @FXML private Tab bookedSessions_tab;
+    @FXML private TextField fname_textArea;
+    @FXML private TextField lname_textArea;
+    @FXML private TextField email_textArea;
+    @FXML private TextField phone_textArea;
+    @FXML private ComboBox<String> gender_comboBox;
+    @FXML private TextField dateOfBirth_textArea;
+    @FXML private TextField language_textArea;
 
     @FXML private Button viewDetails_button;
     @FXML private Button viewDetails_btn_bookedS;
     @FXML private Button viewProfileDetails_btn;
     @FXML private Button cancel_btn;
+    @FXML private Button edit_button;
 
     @FXML private ComboBox<String> subject_comboBox;
     @FXML private TextField minPrice_textField;
@@ -83,7 +98,19 @@ public class StudentMainPageViewController {
             new SimpleStringProperty(data.getValue().getState() != null
                 ? data.getValue().getState().getClass().getSimpleName() : ""));
         bookedSessions_tableView.setItems(viewModel.getBookedSessions());
+        viewDetails_btn_bookedS.disableProperty().bind(
+            bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());
 
+        // profile fields
+        fname_textArea.textProperty().bindBidirectional(viewModel.firstNameProperty());
+        lname_textArea.textProperty().bindBidirectional(viewModel.lastNameProperty());
+        dateOfBirth_textArea.textProperty().bindBidirectional(viewModel.dateOfBirthProperty());
+        email_textArea.textProperty().bindBidirectional(viewModel.emailProperty());
+        phone_textArea.textProperty().bindBidirectional(viewModel.phoneProperty());
+        gender_comboBox.getItems().addAll("male", "female");
+        gender_comboBox.valueProperty().bindBidirectional(viewModel.genderProperty());
+        gender_comboBox.setDisable(true);
+        language_textArea.textProperty().bindBidirectional(viewModel.languagesProperty());
 
         // filter bar
         subject_comboBox.setItems(viewModel.getSubjectOptions());
@@ -101,7 +128,15 @@ public class StudentMainPageViewController {
         return root;
     }
 
-
+    private void setFieldsReadOnly() {
+        fname_textArea.setEditable(false);
+        lname_textArea.setEditable(false);
+        dateOfBirth_textArea.setEditable(false);
+        email_textArea.setEditable(false);
+        phone_textArea.setEditable(false);
+        gender_comboBox.setDisable(true);
+        language_textArea.setEditable(false);
+    }
 
     @FXML private void onViewDetailsButtonClicked() {
         Session selected = main_tableView.getSelectionModel().getSelectedItem();
@@ -152,5 +187,34 @@ public class StudentMainPageViewController {
       });
     }
 
+        @FXML private void onEditButtonClicked() {
+        boolean editing = fname_textArea.isEditable();
+        if (editing) {
+            boolean success = viewModel.saveProfile();
+            if (success) {
+                setFieldsReadOnly();
+                edit_button.setText("Edit");
+            } else {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                    javafx.scene.control.Alert.AlertType.ERROR);
+                alert.setTitle("Save Failed");
+                alert.setHeaderText(null);
+                alert.setContentText("Could not save profile. Please check your input and try again.");
+                alert.showAndWait();
+            }
+        } else {
+            setFieldsEditable();
+            edit_button.setText("Save");
+        }
+    }
 
+    private void setFieldsEditable() {
+        fname_textArea.setEditable(true);
+        lname_textArea.setEditable(true);
+        dateOfBirth_textArea.setEditable(true);
+        email_textArea.setEditable(true);
+        phone_textArea.setEditable(true);
+        gender_comboBox.setDisable(false);
+        language_textArea.setEditable(true);
+    }
 }

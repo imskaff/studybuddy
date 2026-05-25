@@ -3,7 +3,12 @@ package server.mediator;
 import com.google.gson.*;
 import server.dao.SessionDAOImpl;
 import server.dao.UserDAOImpl;
-import server.model.*;
+import server.model.Session;
+import server.model.SessionModel;
+import server.model.SessionModelManager;
+import server.model.Student;
+import server.model.Tutor;
+import server.model.User;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -88,7 +93,9 @@ public class ClientHandler implements Runnable {
       handleGetPendingTutors();
     } else if (requestType.getType().equals("GET_SUBJECTS")) {
       handleGetSubjects();
-    }else if(requestType.getType().equals("EDIT_STUDENT_PROFILE")){
+    } else if (requestType.getType().equals("LOGIN")) {
+      handleLogin(clientText);
+    } else if(requestType.getType().equals("EDIT_STUDENT_PROFILE")){
       handleEditStudentProfile(clientText);
     }else if(requestType.getType().equals("EDIT_TUTOR_PROFILE")){
       handleEditTutorProfile(clientText);
@@ -300,6 +307,30 @@ public class ClientHandler implements Runnable {
     ArrayList<server.model.Tutor> tutors = UserDAOImpl.getInstance().readPendingTutors();
     TutorListResponse response = new TutorListResponse("OK", "Pending tutors", tutors);
     sendJsonResponse(response);
+  }
+
+  private void handleLogin(String clientText) throws Exception {
+    LoginRequest request = gson.fromJson(clientText, LoginRequest.class);
+    String email = request.getEmail();
+    String password = request.getPassword();
+
+    User user = UserDAOImpl.getInstance().readByEmailAndPassword(email, password);
+    if (user instanceof Student student) {
+      sendJsonResponse(LoginResponse.ok("student", gson.toJson(student)));
+    } else if (user instanceof Tutor tutor) {
+      if (!tutor.isApproved()) {
+        sendJsonResponse(LoginResponse.ok("tutor_pending", gson.toJson(tutor)));
+      } else {
+        sendJsonResponse(LoginResponse.ok("tutor", gson.toJson(tutor)));
+      }
+    } else {
+      int adminId = UserDAOImpl.getInstance().getAdminId(email, password);
+      if (adminId != -1) {
+        sendJsonResponse(LoginResponse.ok("admin", String.valueOf(adminId)));
+      } else {
+        sendJsonResponse(LoginResponse.error("Invalid email or password"));
+      }
+    }
   }
 
   private void sendResponse(Response response) {

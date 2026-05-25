@@ -2,6 +2,11 @@ package client.viewmodel.tutor;
 
 import client.model.Model;
 import client.viewmodel.ViewState;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -10,13 +15,6 @@ import javafx.collections.ObservableList;
 import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
-
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class TutorMainPageViewModel implements PropertyChangeListener
 {
@@ -148,9 +146,29 @@ public class TutorMainPageViewModel implements PropertyChangeListener
     public StringProperty genderProperty() { return gender; }
     public StringProperty languagesProperty() { return languages; }
     public StringProperty educationProperty() { return education; }
-    public StringProperty passwordProperty()
-    {
-      return password;
+
+
+    public boolean saveProfile() {
+        Tutor current = model.getLoggedInTutor();
+        if (current == null) return false;
+
+        LocalDate dob;
+        try {
+            dob = LocalDate.parse(dateOfBirth.get());
+        } catch (Exception e) {
+            return false;
+        }
+
+        ArrayList<String> langList = new ArrayList<>(
+            Arrays.asList(languages.get().split("\\s*,\\s*")));
+
+        Tutor updated = new Tutor(
+            firstName.get().trim(), lastName.get().trim(), dob,
+            email.get().trim(), phone.get().trim(),
+            current.getPassword(), gender.get().trim(),
+            langList, education.get().trim(), current.getType(), current.getId());
+
+        return model.editTutorProfile(updated);
     }
 
   public void completeSession(Session session) {
