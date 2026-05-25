@@ -8,17 +8,17 @@ import org.junit.jupiter.api.Test;
 import server.model.Session;
 import server.model.Tutor;
 
+import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class TutorMainPageViewModelTest {
 
-    private Model mockModel;
+    private FakeModel fakeModel;
     private TutorMainPageViewModel viewModel;
 
     private static final LocalDateTime START = LocalDateTime.of(2026, 6, 1, 10, 0);
@@ -26,8 +26,8 @@ class TutorMainPageViewModelTest {
 
     @BeforeEach
     void setUp() {
-        mockModel = mock(Model.class);
-        viewModel = new TutorMainPageViewModel(mockModel, new ViewState());
+        fakeModel = new FakeModel();
+        viewModel = new TutorMainPageViewModel(fakeModel, new ViewState());
     }
 
     // --- loading sessions ---
@@ -41,7 +41,7 @@ class TutorMainPageViewModelTest {
     void loadSessionsPopulatesListFromModel() {
         Session s1 = makeSession(1, "Math");
         Session s2 = makeSession(2, "Physics");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(s1, s2)));
+        fakeModel.sessions = new ArrayList<>(List.of(s1, s2));
 
         viewModel.loadSessions();
 
@@ -53,7 +53,7 @@ class TutorMainPageViewModelTest {
 
     @Test
     void loadSessionsEmptyWhenModelReturnsEmptyList() {
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>());
+        fakeModel.sessions = new ArrayList<>();
 
         viewModel.loadSessions();
 
@@ -62,11 +62,10 @@ class TutorMainPageViewModelTest {
 
     @Test
     void loadSessionsReplacesExistingList() {
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(makeSession(1, "Math"))));
+        fakeModel.sessions = new ArrayList<>(List.of(makeSession(1, "Math")));
         viewModel.loadSessions();
 
-        Session replacement = makeSession(2, "Chemistry");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(replacement)));
+        fakeModel.sessions = new ArrayList<>(List.of(makeSession(2, "Chemistry")));
         viewModel.loadSessions();
 
         ObservableList<Session> sessions = viewModel.getSessions();
@@ -78,11 +77,10 @@ class TutorMainPageViewModelTest {
 
     @Test
     void listReflectsNewSessionAfterReload() {
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>());
+        fakeModel.sessions = new ArrayList<>();
         viewModel.loadSessions();
 
-        Session created = makeSession(10, "French");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(created)));
+        fakeModel.sessions = new ArrayList<>(List.of(makeSession(10, "French")));
         viewModel.loadSessions();
 
         assertEquals(1, viewModel.getSessions().size());
@@ -92,11 +90,10 @@ class TutorMainPageViewModelTest {
     @Test
     void listSizeIncreasesAfterNewSessionIsCreatedAndReloaded() {
         Session existing = makeSession(1, "Math");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(existing)));
+        fakeModel.sessions = new ArrayList<>(List.of(existing));
         viewModel.loadSessions();
 
-        Session created = makeSession(2, "Biology");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(existing, created)));
+        fakeModel.sessions = new ArrayList<>(List.of(existing, makeSession(2, "Biology")));
         viewModel.loadSessions();
 
         assertEquals(2, viewModel.getSessions().size());
@@ -104,8 +101,7 @@ class TutorMainPageViewModelTest {
 
     @Test
     void createdSessionDescriptionIsVisibleAfterReload() {
-        Session created = makeSession(5, "Statistics");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(created)));
+        fakeModel.sessions = new ArrayList<>(List.of(makeSession(5, "Statistics")));
 
         viewModel.loadSessions();
 
@@ -116,12 +112,10 @@ class TutorMainPageViewModelTest {
 
     @Test
     void listReflectsUpdatedSubjectAfterReload() {
-        Session original = makeSession(1, "Physics");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(original)));
+        fakeModel.sessions = new ArrayList<>(List.of(makeSession(1, "Physics")));
         viewModel.loadSessions();
 
-        Session updated = makeSessionWithSubject(1, "Quantum Physics");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(updated)));
+        fakeModel.sessions = new ArrayList<>(List.of(makeSession(1, "Quantum Physics")));
         viewModel.loadSessions();
 
         assertEquals("Quantum Physics", viewModel.getSessions().getFirst().getSubject());
@@ -129,12 +123,10 @@ class TutorMainPageViewModelTest {
 
     @Test
     void listReflectsUpdatedPriceAfterReload() {
-        Session original = makeSession(1, "Math");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(original)));
+        fakeModel.sessions = new ArrayList<>(List.of(makeSession(1, "Math")));
         viewModel.loadSessions();
 
-        Session updated = makeSessionWithPrice(1, "Math", 200.0);
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(updated)));
+        fakeModel.sessions = new ArrayList<>(List.of(makeSessionWithPrice(1, "Math", 200.0)));
         viewModel.loadSessions();
 
         assertEquals(200.0, viewModel.getSessions().getFirst().getPrice());
@@ -144,11 +136,10 @@ class TutorMainPageViewModelTest {
     void listSizeDoesNotChangeAfterUpdateAndReload() {
         Session s1 = makeSession(1, "Math");
         Session s2 = makeSession(2, "Physics");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(s1, s2)));
+        fakeModel.sessions = new ArrayList<>(List.of(s1, s2));
         viewModel.loadSessions();
 
-        Session s1Updated = makeSessionWithSubject(1, "Advanced Math");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(s1Updated, s2)));
+        fakeModel.sessions = new ArrayList<>(List.of(makeSession(1, "Advanced Math"), s2));
         viewModel.loadSessions();
 
         assertEquals(2, viewModel.getSessions().size());
@@ -156,12 +147,10 @@ class TutorMainPageViewModelTest {
 
     @Test
     void updatedDescriptionIsVisibleAfterReload() {
-        Session original = makeSession(1, "Math");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(original)));
+        fakeModel.sessions = new ArrayList<>(List.of(makeSession(1, "Math")));
         viewModel.loadSessions();
 
-        Session updated = makeSessionWithDescription(1, "Math", "Updated description");
-        when(mockModel.getAllSessions()).thenReturn(new ArrayList<>(List.of(updated)));
+        fakeModel.sessions = new ArrayList<>(List.of(makeSessionWithDescription(1, "Math", "Updated description")));
         viewModel.loadSessions();
 
         assertEquals("Updated description", viewModel.getSessions().getFirst().getDescription());
@@ -180,11 +169,6 @@ class TutorMainPageViewModelTest {
                 START, END, makeTutor(), null);
     }
 
-    private static Session makeSessionWithSubject(int id, String subject) {
-        return new Session(id, "Test description", 50.0, subject, "Room A",
-                START, END, makeTutor(), null);
-    }
-
     private static Session makeSessionWithPrice(int id, String subject, double price) {
         return new Session(id, "Test description", price, subject, "Room A",
                 START, END, makeTutor(), null);
@@ -193,5 +177,41 @@ class TutorMainPageViewModelTest {
     private static Session makeSessionWithDescription(int id, String subject, String description) {
         return new Session(id, description, 50.0, subject, "Room A",
                 START, END, makeTutor(), null);
+    }
+
+    // --- fake model ---
+
+    private static class FakeModel implements Model {
+        ArrayList<Session> sessions = new ArrayList<>();
+
+        @Override public ArrayList<Session> getAllSessions() { return sessions; }
+        @Override public void addPropertyChangeListener(PropertyChangeListener l) {}
+        @Override public void connect() {}
+        @Override public void disconnect() {}
+        @Override public void bookSession(server.model.Student s, Tutor t, Session se) {}
+        @Override public ArrayList<Session> getBookedSessions() { return new ArrayList<>(); }
+        @Override public void setLoggedInStudent(server.model.Student s) {}
+        @Override public server.model.Student getLoggedInStudent() { return null; }
+        @Override public void setLoggedInAdminId(int id) {}
+        @Override public int getLoggedInAdminId() { return 0; }
+        @Override public ArrayList<Tutor> getPendingTutors() { return new ArrayList<>(); }
+        @Override public boolean createSession(Session s) { return false; }
+        @Override public boolean editSession(Session s) { return false; }
+        @Override public boolean cancelSession(int u, int s, String t) { return false; }
+        @Override public boolean deleteSession(int id) { return false; }
+        @Override public boolean approveTutor(int id) { return false; }
+        @Override public boolean declineTutor(int id) { return false; }
+        @Override public boolean registerStudent(server.model.Student s) { return false; }
+        @Override public boolean registerTutor(Tutor t) { return false; }
+        @Override public void setLoggedInTutor(Tutor t) {}
+        @Override public Tutor getLoggedInTutor() { return null; }
+        @Override public boolean editStudentProfile(server.model.Student s) { return false; }
+        @Override public java.util.List<String> getSubjects() { return new ArrayList<>(); }
+        @Override public boolean editTutorProfile(Tutor t) { return false; }
+        @Override public String login(String e, String p) { return null; }
+        @Override public void complete(Session s) {}
+        @Override public void book(Session s) {}
+        @Override public void cancel(Session s) {}
+        @Override public void remove(Session s) {}
     }
 }

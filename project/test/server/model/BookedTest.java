@@ -2,55 +2,54 @@ package server.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BookedTest
 {
-  @Test void whenNowIsAfterEndDate_setStateToComplete()
-  {
-    Book book = new Book();
-    Session mockSession = mock(Session.class);
+    private static final LocalDateTime END_DATE = LocalDateTime.of(2026, 5, 20, 10, 0);
 
-    LocalDateTime endDate = LocalDateTime.of(2026, 5, 20, 10, 0);
-    LocalDateTime fixedNow = LocalDateTime.of(2026, 5, 20, 12, 0);
+    @Test
+    void whenNowIsAfterEndDate_setStateToComplete()
+    {
+        Session session = makeSession(END_DATE);
+        LocalDateTime fixedNow = LocalDateTime.of(2026, 5, 20, 12, 0);
 
-    when(mockSession.getEnd_date()).thenReturn(endDate);
+        new Book().complete(session, fixedNow);
 
-    book.complete(mockSession, fixedNow);
+        assertInstanceOf(Complete.class, session.getState());
+    }
 
-    verify(mockSession, times(1)).setState(any(Complete.class));
-  }
+    @Test
+    void whenNowIsEqualEndDate_setStateToComplete()
+    {
+        Session session = makeSession(END_DATE);
 
-  @Test
-  void whenNowIsEqualEndDate_setStateToComplete()
-  {
-    Book book = new Book();
-    Session mockSession = mock(Session.class);
+        new Book().complete(session, END_DATE);
 
-    LocalDateTime exactTime = LocalDateTime.of(2026, 5, 20, 10, 0);
+        assertInstanceOf(Complete.class, session.getState());
+    }
 
-    when(mockSession.getEnd_date()).thenReturn(exactTime);
+    @Test
+    void whenNowIsBeforeEndDate_shouldNotChangeState()
+    {
+        Session session = makeSession(END_DATE);
+        LocalDateTime fixedNow = LocalDateTime.of(2026, 5, 19, 10, 0);
 
-    book.complete(mockSession, exactTime);
+        new Book().complete(session, fixedNow);
 
-    verify(mockSession, times(1)).setState(any(Complete.class));
-  }
+        assertFalse(session.getState() instanceof Complete);
+    }
 
-  @Test
-  void whenNowIsBeforeEndDate_shouldNotChangeState()
-  {
-    Book book = new Book();
-    Session mockSession = mock(Session.class);
-
-    LocalDateTime endDate = LocalDateTime.of(2026, 5, 20, 10, 0);
-    LocalDateTime fixedNow = LocalDateTime.of(2026, 5, 19, 10, 0);
-
-    when(mockSession.getEnd_date()).thenReturn(endDate);
-
-    book.complete(mockSession, fixedNow);
-
-    verify(mockSession, never()).setState(any());
-  }
+    private static Session makeSession(LocalDateTime endDate)
+    {
+        Tutor tutor = new Tutor("John", "Doe", LocalDate.of(1985, 1, 1),
+                "john@example.com", "111111111", "pass", "Male",
+                new ArrayList<>(), "Master's", "tutor", 10);
+        return new Session(1, "desc", 10.0, "Math", "Room",
+                endDate.minusHours(2), endDate, tutor, null);
+    }
 }
