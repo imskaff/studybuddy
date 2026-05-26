@@ -22,11 +22,5 @@ public record Cancel() implements SessionState {
     session.setState(this);
  }
 
-  @Override
-  public void remove(Session session)
-  {
-    session.setToBeRemoved(true);
-  }
-
 }
 

@@ -52,4 +52,7 @@ public interface SessionModel {
 
   boolean editTutorProfile(Tutor tutor);
 
+  boolean completeSession(int sessionId);
+
 }
+

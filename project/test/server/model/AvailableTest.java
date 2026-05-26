@@ -48,36 +48,6 @@ public class AvailableTest
         assertInstanceOf(Available.class, session.getState());
     }
 
-    @Test
-    void removeMarksSessionToBeRemoved()
-    {
-        Session session = makeSession();
-
-        new Available().remove(session);
-
-        assertTrue(session.isToBeRemoved());
-    }
-
-    @Test
-    void removeDoesNotChangeState()
-    {
-        Session session = makeSession();
-
-        new Available().remove(session);
-
-        assertInstanceOf(Available.class, session.getState());
-    }
-
-    @Test
-    void cancelDoesNotMarkSessionToBeCanceled()
-    {
-        Session session = makeSession();
-
-        new Available().cancel(session);
-
-        assertFalse(session.isToBeCanceled());
-    }
-
     private static Session makeSession()
     {
         Tutor tutor = new Tutor("John", "Doe", LocalDate.of(1985, 1, 1),

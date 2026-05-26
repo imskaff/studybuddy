@@ -196,26 +196,14 @@ public class ModelManager implements Model, PropertyChangeListener {
         return client.createTutorProfile(tutor, true);
     }
 
-  @Override public void complete(Session session)
+  @Override public boolean completeSession(int sessionId)
   {
-    session.complete(session);
-  }
-
-  @Override public void book(Session session)
-  {
-    session.book(session);
-  }
-
-  @Override public void cancel(Session session)
-  {
-    session.cancel(session);
-  }
-
-
-
-  @Override public void remove(Session session)
-  {
-    session.remove(session);
+    boolean success = client.completeSession(sessionId);
+    if (success)
+    {
+      support.firePropertyChange("SessionsUpdated", null, null);
+    }
+    return success;
   }
 
   @Override

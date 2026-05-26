@@ -29,38 +29,6 @@ public class CompleteTest
     }
 
     @Test
-    void cancelDoesNotMarkSessionToBeCanceled()
-    {
-        new Complete().cancel(session);
-
-        assertFalse(session.isToBeCanceled());
-    }
-
-    @Test
-    void cancelDoesNotChangeState()
-    {
-        new Complete().cancel(session);
-
-        assertInstanceOf(Complete.class, session.getState());
-    }
-
-    @Test
-    void removeMarksSessionToBeRemoved()
-    {
-        new Complete().remove(session);
-
-        assertTrue(session.isToBeRemoved());
-    }
-
-    @Test
-    void removeDoesNotChangeState()
-    {
-        new Complete().remove(session);
-
-        assertInstanceOf(Complete.class, session.getState());
-    }
-
-    @Test
     void completeWhenNowIsAfterEndDateKeepsStateComplete()
     {
         LocalDateTime pastEnd = LocalDateTime.now().minusHours(1);

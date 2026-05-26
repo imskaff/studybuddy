@@ -61,8 +61,5 @@ public interface Model {
 
   String login(String email, String password);
 
-  public void complete(Session session);
-  public void book(Session session);
-  public void cancel(Session session);
-  public void remove(Session session);
+  boolean completeSession(int sessionId);
 }

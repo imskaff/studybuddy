@@ -19,10 +19,4 @@ public record Available() implements SessionState
   {
     System.out.println("Session cannot be canceled if it wasn't booked");
   }
-
-  @Override
-  public void remove(Session session)
-  {
-    session.setToBeRemoved(true);
-  }
 }

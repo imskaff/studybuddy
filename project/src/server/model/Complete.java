@@ -26,13 +26,6 @@ public record Complete() implements SessionState
     @Override
     public void cancel(Session session)
     {
-        session.setToBeCanceled(false);
         System.out.println("Session cannot be canceled if it's completed");
-    }
-
-    @Override
-  public void remove(Session session)
-    {
-      session.setToBeRemoved(true);
     }
 }

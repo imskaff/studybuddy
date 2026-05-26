@@ -44,30 +44,6 @@ public class CancelTest
         assertInstanceOf(Cancel.class, session.getState());
     }
 
-    @Test
-    void removeMarksSessionToBeRemoved()
-    {
-        new Cancel().remove(session);
-
-        assertTrue(session.isToBeRemoved());
-    }
-
-    @Test
-    void removeDoesNotChangeState()
-    {
-        new Cancel().remove(session);
-
-        assertInstanceOf(Cancel.class, session.getState());
-    }
-
-    @Test
-    void bookDoesNotMarkSessionToBeCanceled()
-    {
-        new Cancel().book(session);
-
-        assertFalse(session.isToBeCanceled());
-    }
-
     private static Session makeSession()
     {
         Tutor tutor = new Tutor("John", "Doe", LocalDate.of(1985, 1, 1),

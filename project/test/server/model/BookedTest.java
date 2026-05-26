@@ -44,6 +44,17 @@ public class BookedTest
         assertFalse(session.getState() instanceof Complete);
     }
 
+    @Test
+    void cancelChangesStateToCancel()
+    {
+        Session session = makeSession(END_DATE);
+        session.setState(new Book());
+
+        new Book().cancel(session);
+
+        assertInstanceOf(Cancel.class, session.getState());
+    }
+
     private static Session makeSession(LocalDateTime endDate)
     {
         Tutor tutor = new Tutor("John", "Doe", LocalDate.of(1985, 1, 1),

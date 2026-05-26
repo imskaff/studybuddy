@@ -15,9 +15,6 @@ public class Session {
   private Tutor tutor;
   private Student student;
 
-  private boolean toBeCanceled;
-  private boolean toBeRemoved;
-
   private String status;
 
   private transient SessionState state;
@@ -34,8 +31,6 @@ public class Session {
     this.end_date = end_date;
     this.tutor = tutor;
     this.student = student;
-    this.toBeCanceled = false;
-    this.toBeRemoved = false;
 
     this.state = new Available();
     this.status = "Available";
@@ -76,11 +71,6 @@ public class Session {
   public Student getStudent() { return student; }
   public void setStudent(Student student) { this.student = student; }
 
-  public boolean isToBeCanceled() { return toBeCanceled; }
-  public void setToBeCanceled(boolean toBeCanceled) { this.toBeCanceled = toBeCanceled; }
-  public boolean isToBeRemoved() { return toBeRemoved; }
-  public void setToBeRemoved(boolean toBeRemoved) { this.toBeRemoved = toBeRemoved; }
-
   public String getStatus() {
     return status;
   }
@@ -114,10 +104,6 @@ public class Session {
 
   public void cancel(Session session) {
     if(state != null) state.cancel(this);
-  }
-
-  public void remove(Session session) {
-    if(state != null) state.remove(this);
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {

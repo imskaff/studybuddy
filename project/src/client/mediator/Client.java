@@ -229,6 +229,13 @@ public class Client implements ClientModel
   }
 
   @Override
+  public boolean completeSession(int sessionId)
+  {
+    CompleteSessionRequest request = new CompleteSessionRequest(sessionId);
+    return sendRequest(request);
+  }
+
+  @Override
   public ArrayList<Session> getTutorSessions(int tutorId)
   {
     GetTutorSessionsRequest request = new GetTutorSessionsRequest(tutorId);

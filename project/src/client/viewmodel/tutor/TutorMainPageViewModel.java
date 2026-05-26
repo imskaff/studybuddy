@@ -175,13 +175,10 @@ public class TutorMainPageViewModel implements PropertyChangeListener
 
   public void completeSession(Session session) {
         if (session != null) {
-            model.complete(session);
-        }
-    }
-
-    public void bookSession(Session session) {
-        if (session != null) {
-            model.book(session);
+            boolean success = model.completeSession(session.getId());
+            if (success) {
+                Platform.runLater(this::loadSessions);
+            }
         }
     }
 

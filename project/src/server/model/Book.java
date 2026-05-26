@@ -29,13 +29,6 @@ public record Book() implements SessionState
     @Override
     public void cancel(Session session)
     {
-        session.setToBeCanceled(true);
+        session.setState(new Cancel());
     }
-
-  @Override
-  public void remove(Session session)
-  {
-    session.setToBeRemoved(false);
-    System.out.println("Session cannot be removed if it's booked. You need to cancel session first.");
-  }
 }

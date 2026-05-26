@@ -44,6 +44,9 @@ public interface ClientModel {
 
   boolean cancelSession(int userId, int sessionId, String userType);
 
+  // Sends a complete session request to the server.
+  boolean completeSession(int sessionId);
+
   // Retrieves all available (unbooked) sessions from the server.
   ArrayList<Session> getAvailableSessions();
 

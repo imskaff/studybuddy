@@ -183,6 +183,13 @@ public class StudentMainPageViewController {
       viewDetails_btn_bookedS.disableProperty().bind(
           bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());
 
+      viewDetails_btn_bookedS.setOnAction(event -> {
+          Session selected = bookedSessions_tableView.getSelectionModel().getSelectedItem();
+          if (selected != null) {
+              viewHandler.openStudentSessionView(selected);
+          }
+      });
+
       //Filtering
       reset_btn.setOnAction(e -> viewModel.resetFilters());
 

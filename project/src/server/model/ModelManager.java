@@ -339,25 +339,27 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
         return false;
       }
 
-      // Student cancellation
+      // Use State pattern to check if cancellation is allowed
+      // Only Booked sessions can be cancelled (Available, Complete, Cancel reject)
+      SessionState stateBefore = session.getState();
+      session.cancel(session);
+
+      // If state did not change, the State pattern rejected the transition
+      if(session.getState() == stateBefore)
+      {
+        return false;
+      }
+
+      // Student cancellation: unbook the student, revert to Available
       if(type.equalsIgnoreCase("student"))
       {
         session.setStudent(null);
-        // FORCE state back to Available so other students can see it
         session.setState(new Available());
-        sessionDAO.update(session);
-        return true;
       }
-      // Tutor cancellation
-      else if(type.equalsIgnoreCase("tutor"))
-      {
-        // FORCE state to Cancelled
-        session.setState(new Cancel());
-        sessionDAO.update(session);
-        return true;
-      }
+      // Tutor cancellation: state is already Cancel from the State pattern
 
-      return false;
+      sessionDAO.update(session);
+      return true;
     }
     catch(Exception e)
     {
@@ -401,19 +403,31 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
 
   @Override
   public List<Session> getAvailableSessions() {
-    try { return sessionDAO.readAvailable(); }
+    try {
+      List<Session> sessions = sessionDAO.readAvailable();
+      autoCompleteSessions(sessions);
+      return sessions;
+    }
     catch (Exception e) { e.printStackTrace(); return new ArrayList<>(); }
   }
 
   @Override
   public List<Session> getBookedSessions(int studentId) {
-    try { return sessionDAO.readByStudent(studentId); }
+    try {
+      List<Session> sessions = sessionDAO.readByStudent(studentId);
+      autoCompleteSessions(sessions);
+      return sessions;
+    }
     catch (Exception e) { e.printStackTrace(); return new ArrayList<>(); }
   }
 
   @Override
   public List<Session> getTutorSessions(int tutorId) {
-    try { return sessionDAO.readByTutor(tutorId); }
+    try {
+      List<Session> sessions = sessionDAO.readByTutor(tutorId);
+      autoCompleteSessions(sessions);
+      return sessions;
+    }
     catch (Exception e) { e.printStackTrace(); return new ArrayList<>(); }
   }
 
@@ -443,6 +457,61 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
       return false;
     }
     catch (Exception e) { e.printStackTrace(); return false; }
+  }
+
+  @Override
+  public boolean completeSession(int sessionId)
+  {
+    try
+    {
+      Session session = sessionDAO.readByInt(sessionId);
+      if (session == null)
+      {
+        return false;
+      }
+      // Delegate to the State pattern — Book.complete() checks the end_date
+      // and transitions to Complete; other states reject the transition
+      SessionState stateBefore = session.getState();
+      session.complete(session);
+
+      if (session.getState() == stateBefore)
+      {
+        return false;
+      }
+
+      sessionDAO.update(session);
+      return true;
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  // Automatically completes booked sessions whose end_date has passed.
+  // Delegates to the State pattern: session.complete() calls Book.complete()
+  // which checks the end_date and transitions to Complete if it has passed.
+  private void autoCompleteSessions(List<Session> sessions)
+  {
+    for (Session session : sessions)
+    {
+      SessionState stateBefore = session.getState();
+      session.complete(session);
+
+      // Only persist if the State pattern actually changed the state
+      if (session.getState() != stateBefore)
+      {
+        try
+        {
+          sessionDAO.update(session);
+        }
+        catch (Exception e)
+        {
+          e.printStackTrace();
+        }
+      }
+    }
   }
 
   @Override

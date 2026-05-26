@@ -79,6 +79,7 @@ public class ClientHandler implements Runnable {
       case "EDIT_STUDENT_PROFILE":      handleEditStudentProfile(clientText);   break;
       case "EDIT_TUTOR_PROFILE":        handleEditTutorProfile(clientText);     break;
       case "CANCEL_SESSION":            handleCancelSession(clientText);        break;
+      case "COMPLETE_SESSION":           handleCompleteSession(clientText);      break;
       case "GET_TUTOR_SESSIONS":        handleGetTutorSessions(clientText);     break;
       default: sendResponse(new Response("ERROR", "Unknown request type"));
     }
@@ -251,6 +252,22 @@ public class ClientHandler implements Runnable {
       sendJsonResponse(adminId != -1
           ? LoginResponse.ok("admin", String.valueOf(adminId))
           : LoginResponse.error("Invalid email or password"));
+    }
+  }
+
+  private void handleCompleteSession(String clientText)
+  {
+    CompleteSessionRequest request = gson.fromJson(clientText, CompleteSessionRequest.class);
+
+    boolean completed = model.completeSession(request.getSessionId());
+
+    if (completed)
+    {
+      sendResponse(new Response("OK", "Session completed"));
+    }
+    else
+    {
+      sendResponse(new Response("ERROR", "Session could not be completed"));
     }
   }
 
