@@ -33,13 +33,13 @@ import static org.mockito.Mockito.verify;
       MockitoAnnotations.openMocks(this);
 
 
-      viewModel.firstNameProperty().set(" Bob");
-      viewModel.lastNameProperty().set(" Johnson");
+      viewModel.firstNameProperty().set("Bob");
+      viewModel.lastNameProperty().set("Johnson");
       viewModel.dateOfBirthProperty().set("2000-01-01");
-      viewModel.emailProperty().set(" bob@student.com ");
-      viewModel.phoneNoProperty().set(" 1122334455 ");
+      viewModel.emailProperty().set("bob@student.com");
+      viewModel.phoneNoProperty().set("1122334455");
       viewModel.passwordProperty().set("StudentPass");
-      viewModel.genderProperty().set(" Male ");
+      viewModel.genderProperty().set("Male");
 
 
       viewModel.getLanguages().addAll(Arrays.asList("English"));

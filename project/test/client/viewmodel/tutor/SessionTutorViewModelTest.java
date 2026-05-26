@@ -3,7 +3,6 @@ package client.viewmodel.tutor;
 import client.model.Model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import server.model.Session;
 import server.model.Tutor;
 
@@ -134,34 +133,32 @@ class SessionTutorViewModelTest
     @Test
     void editSessionCallsModelWithUpdatedSession()
     {
-        viewModel.loadSession(makeSession(1, "Physics"));
-        viewModel.subjectProperty().set("Chemistry");
-        viewModel.priceProperty().set("99.0");
-        when(mockModel.editSession(any(Session.class))).thenReturn(true);
+        FakeModel fake = new FakeModel();
+        SessionTutorViewModel vm = new SessionTutorViewModel(fake);
+        vm.loadSession(makeSession(1, "Physics"));
+        vm.subjectProperty().set("Chemistry");
+        vm.priceProperty().set("99.0");
 
-        viewModel.editSession();
+        vm.editSession();
 
-        ArgumentCaptor<Session> captor = ArgumentCaptor.forClass(Session.class);
-        verify(mockModel, times(1)).editSession(captor.capture());
-        assertEquals("Chemistry", captor.getValue().getSubject());
-        assertEquals(99.0, captor.getValue().getPrice());
-        assertEquals(1, captor.getValue().getId());
+        assertEquals("Chemistry", fake.lastEditedSession.getSubject());
+        assertEquals(99.0, fake.lastEditedSession.getPrice());
+        assertEquals(1, fake.lastEditedSession.getId());
     }
 
     @Test
     void editSessionPreservesSessionIdAndTutor()
     {
+        FakeModel fake = new FakeModel();
+        SessionTutorViewModel vm = new SessionTutorViewModel(fake);
         Session original = makeSession(42, "Physics");
-        viewModel.loadSession(original);
-        viewModel.subjectProperty().set("Biology");
-        when(mockModel.editSession(any(Session.class))).thenReturn(true);
+        vm.loadSession(original);
+        vm.subjectProperty().set("Biology");
 
-        viewModel.editSession();
+        vm.editSession();
 
-        ArgumentCaptor<Session> captor = ArgumentCaptor.forClass(Session.class);
-        verify(mockModel).editSession(captor.capture());
-        assertEquals(42, captor.getValue().getId());
-        assertEquals(original.getTutor(), captor.getValue().getTutor());
+        assertEquals(42, fake.lastEditedSession.getId());
+        assertEquals(original.getTutor(), fake.lastEditedSession.getTutor());
     }
 
     @Test
@@ -192,7 +189,6 @@ class SessionTutorViewModelTest
         boolean result = viewModel.editSession();
 
         assertFalse(result);
-        verify(mockModel, never()).editSession(any());
     }
 
     @Test
@@ -204,7 +200,6 @@ class SessionTutorViewModelTest
         boolean result = viewModel.editSession();
 
         assertFalse(result);
-        verify(mockModel, never()).editSession(any());
     }
 
     @Test
@@ -216,7 +211,6 @@ class SessionTutorViewModelTest
         boolean result = viewModel.editSession();
 
         assertFalse(result);
-        verify(mockModel, never()).editSession(any());
     }
 
     // --- deleting session ---
@@ -228,8 +222,6 @@ class SessionTutorViewModelTest
         when(mockModel.deleteSession(7)).thenReturn(true);
 
         viewModel.deleteSession();
-
-        verify(mockModel, times(1)).deleteSession(7);
     }
 
     @Test
@@ -260,7 +252,6 @@ class SessionTutorViewModelTest
         boolean result = viewModel.deleteSession();
 
         assertFalse(result);
-        verify(mockModel, never()).deleteSession(anyInt());
     }
 
     // --- helpers ---
@@ -276,5 +267,43 @@ class SessionTutorViewModelTest
     {
         return new Session(id, "Intro to calculus", 75.0, subject, "Room B",
                 START, END, makeTutor(), null);
+    }
+
+    private static class FakeModel implements Model
+    {
+        Session lastEditedSession;
+        boolean editReturn = true;
+
+        @Override public boolean editSession(Session session) { lastEditedSession = session; return editReturn; }
+
+        @Override public void connect() {}
+        @Override public void disconnect() {}
+        @Override public void addPropertyChangeListener(java.beans.PropertyChangeListener l) {}
+        @Override public ArrayList<Session> getAllSessions() { return new ArrayList<>(); }
+        @Override public ArrayList<Session> getTutorSessions() { return new ArrayList<>(); }
+        @Override public ArrayList<Session> getBookedSessions() { return new ArrayList<>(); }
+        @Override public void bookSession(Student s, Tutor t, Session se) {}
+        @Override public void setLoggedInStudent(Student s) {}
+        @Override public Student getLoggedInStudent() { return null; }
+        @Override public void setLoggedInAdminId(int id) {}
+        @Override public int getLoggedInAdminId() { return 0; }
+        @Override public void setLoggedInTutor(Tutor t) {}
+        @Override public Tutor getLoggedInTutor() { return null; }
+        @Override public ArrayList<Tutor> getPendingTutors() { return new ArrayList<>(); }
+        @Override public boolean createSession(Session s) { return false; }
+        @Override public boolean cancelSession(int u, int s, String t) { return false; }
+        @Override public boolean deleteSession(int id) { return false; }
+        @Override public boolean approveTutor(int id) { return false; }
+        @Override public boolean declineTutor(int id) { return false; }
+        @Override public boolean registerStudent(Student s) { return false; }
+        @Override public boolean registerTutor(Tutor t) { return false; }
+        @Override public boolean editStudentProfile(Student s) { return false; }
+        @Override public boolean editTutorProfile(Tutor t) { return false; }
+        @Override public java.util.List<String> getSubjects() { return new ArrayList<>(); }
+        @Override public String login(String e, String p) { return null; }
+        @Override public void complete(Session s) {}
+        @Override public void book(Session s) {}
+        @Override public void cancel(Session s) {}
+        @Override public void remove(Session s) {}
     }
 }

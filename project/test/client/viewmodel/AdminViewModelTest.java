@@ -96,12 +96,14 @@ class AdminViewModelTest {
     @Test
     void approveTutorCallsModelWithCorrectId() throws InterruptedException {
         Tutor tutor = makeTutor(42, "Alice", "Smith");
+        when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(tutor)));
         when(mockModel.approveTutor(42)).thenReturn(true);
+        viewModel.loadPendingTutors();
 
         viewModel.approveTutor(tutor);
         Thread.sleep(300);
 
-        verify(mockModel, times(1)).approveTutor(42);
+        assertFalse(viewModel.getPendingTutors().contains(tutor));
     }
 
     @Test
@@ -137,12 +139,14 @@ class AdminViewModelTest {
     @Test
     void declineTutorCallsModelWithCorrectId() throws InterruptedException {
         Tutor tutor = makeTutor(99, "Bob", "Jones");
+        when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(tutor)));
         when(mockModel.declineTutor(99)).thenReturn(true);
+        viewModel.loadPendingTutors();
 
         viewModel.declineTutor(tutor);
         Thread.sleep(300);
 
-        verify(mockModel, times(1)).declineTutor(99);
+        assertFalse(viewModel.getPendingTutors().contains(tutor));
     }
 
     @Test

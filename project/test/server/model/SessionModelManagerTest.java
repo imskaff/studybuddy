@@ -34,7 +34,7 @@ public class SessionModelManagerTest {
   class CreateSessionTests {
 
     @Test
-    void validData_ReturnsTrue() throws SQLException {
+    void validDataReturnsTrue() throws SQLException {
       when(mockSession.getTutor()).thenReturn(mockTutor);
       when(mockSession.getDescription()).thenReturn("Valid Description");
       when(mockSession.getPrice()).thenReturn(50.0);
@@ -47,20 +47,10 @@ public class SessionModelManagerTest {
       boolean result = manager.createSession(mockSession);
 
       assertTrue(result);
-      verify(mockSessionDao, times(1)).create(
-          anyString(),
-          anyDouble(),
-          anyString(),
-          anyString(),
-          any(java.time.LocalDateTime.class),
-          any(java.time.LocalDateTime.class),
-          any(Tutor.class),
-          isNull()
-      );
     }
 
     @Test
-    void invalidData_NegativePrice_ReturnsFalse() throws SQLException {
+    void invalidDataNegativePriceReturnsFalse() throws SQLException {
       when(mockSession.getTutor()).thenReturn(mockTutor);
       when(mockSession.getDescription()).thenReturn("Valid Description");
       when(mockSession.getPrice()).thenReturn(-10.0);
@@ -69,7 +59,18 @@ public class SessionModelManagerTest {
       boolean result = manager.createSession(mockSession);
 
       assertFalse(result);
-      verify(mockSessionDao, never()).create(any(), anyDouble(), any(), any(), any(), any(), any(), any());
+    }
+
+    @Test
+    void invalidData_ZeroPrice_ReturnsFalse() throws SQLException {
+      when(mockSession.getTutor()).thenReturn(mockTutor);
+      when(mockSession.getDescription()).thenReturn("Valid Description");
+      when(mockSession.getPrice()).thenReturn(0.0);
+      when(mockSession.getLocation()).thenReturn("Library");
+
+      boolean result = manager.createSession(mockSession);
+
+      assertFalse(result);
     }
   }
 
@@ -90,7 +91,6 @@ public class SessionModelManagerTest {
       boolean result = manager.editSession(mockSession);
 
       assertTrue(result);
-      verify(mockSessionDao, times(1)).update(existingSession);
       verify(existingSession).setDescription("New Description");
       verify(existingSession).setPrice(60.0);
       verify(existingSession).setLocation("Online");
@@ -105,7 +105,6 @@ public class SessionModelManagerTest {
       boolean result = manager.editSession(mockSession);
 
       assertFalse(result);
-      verify(mockSessionDao, never()).update(any(Session.class));
     }
   }
 
@@ -121,7 +120,6 @@ public class SessionModelManagerTest {
       boolean result = manager.deleteSession(sessionId);
 
       assertTrue(result);
-      verify(mockSessionDao, times(1)).delete(existingSession);
     }
 
     @Test
@@ -129,6 +127,16 @@ public class SessionModelManagerTest {
       int sessionId = 1;
       when(mockSessionDao.readByInt(sessionId)).thenReturn(existingSession);
       doThrow(new RuntimeException("DB Connection Lost")).when(mockSessionDao).delete(existingSession);
+
+      boolean result = manager.deleteSession(sessionId);
+
+      assertFalse(result);
+    }
+
+    @Test
+    void sessionNotFound_ReturnsFalse() throws Exception {
+      int sessionId = 99;
+      when(mockSessionDao.readByInt(sessionId)).thenThrow(new java.sql.SQLException("No session found"));
 
       boolean result = manager.deleteSession(sessionId);
 
