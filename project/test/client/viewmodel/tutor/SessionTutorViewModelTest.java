@@ -4,6 +4,7 @@ import client.model.Model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import server.model.Session;
+import server.model.Student;
 import server.model.Tutor;
 
 import java.time.LocalDate;

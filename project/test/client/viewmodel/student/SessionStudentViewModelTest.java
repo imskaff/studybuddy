@@ -127,35 +127,42 @@ class SessionStudentViewModelTest
     @Test
     void bookSessionCallsModelWithCorrectStudentAndSession() throws Exception
     {
+        FakeModel fake = new FakeModel();
+        SessionStudentViewModel vm = new SessionStudentViewModel(fake);
         Session session = makeSession(1, "Math");
         Student student = makeStudent(5);
-        when(mockModel.getLoggedInStudent()).thenReturn(student);
-        viewModel.loadSession(session);
+        fake.loggedInStudent = student;
+        vm.loadSession(session);
 
-        viewModel.bookSession();
+        vm.bookSession();
 
-        verify(mockModel, times(1)).bookSession(student, session.getTutor(), session);
+        assertEquals(student, fake.lastBookedStudent);
+        assertEquals(session, fake.lastBookedSession);
     }
 
     @Test
     void bookSessionWithNoSessionLoadedDoesNotCallModel() throws Exception
     {
-        when(mockModel.getLoggedInStudent()).thenReturn(makeStudent(5));
+        FakeModel fake = new FakeModel();
+        SessionStudentViewModel vm = new SessionStudentViewModel(fake);
+        fake.loggedInStudent = makeStudent(5);
 
-        viewModel.bookSession();
+        vm.bookSession();
 
-        verify(mockModel, never()).bookSession(any(), any(), any());
+        assertNull(fake.lastBookedSession);
     }
 
     @Test
     void bookSessionWithNoLoggedInStudentDoesNotCallModel() throws Exception
     {
-        when(mockModel.getLoggedInStudent()).thenReturn(null);
-        viewModel.loadSession(makeSession(1, "Math"));
+        FakeModel fake = new FakeModel();
+        SessionStudentViewModel vm = new SessionStudentViewModel(fake);
+        fake.loggedInStudent = null;
+        vm.loadSession(makeSession(1, "Math"));
 
-        viewModel.bookSession();
+        vm.bookSession();
 
-        verify(mockModel, never()).bookSession(any(), any(), any());
+        assertNull(fake.lastBookedSession);
     }
 
     // helpers
@@ -178,5 +185,44 @@ class SessionStudentViewModelTest
         return new Student("Anna", "Brown", LocalDate.of(2000, 3, 15),
                 "anna@example.com", "222222222", "pass", "Female",
                 new ArrayList<>(), id, "student");
+    }
+
+    private static class FakeModel implements Model
+    {
+        Student loggedInStudent;
+        Student lastBookedStudent;
+        Session lastBookedSession;
+
+        @Override public void bookSession(Student s, Tutor t, Session se) { lastBookedStudent = s; lastBookedSession = se; }
+        @Override public Student getLoggedInStudent() { return loggedInStudent; }
+        @Override public ArrayList<Session> getAllSessions() { return new ArrayList<>(); }
+
+        @Override public void connect() {}
+        @Override public void disconnect() {}
+        @Override public void addPropertyChangeListener(java.beans.PropertyChangeListener l) {}
+        @Override public ArrayList<Session> getTutorSessions() { return new ArrayList<>(); }
+        @Override public ArrayList<Session> getBookedSessions() { return new ArrayList<>(); }
+        @Override public void setLoggedInStudent(Student s) {}
+        @Override public void setLoggedInAdminId(int id) {}
+        @Override public int getLoggedInAdminId() { return 0; }
+        @Override public void setLoggedInTutor(Tutor t) {}
+        @Override public Tutor getLoggedInTutor() { return null; }
+        @Override public ArrayList<Tutor> getPendingTutors() { return new ArrayList<>(); }
+        @Override public boolean createSession(Session s) { return false; }
+        @Override public boolean editSession(Session s) { return false; }
+        @Override public boolean cancelSession(int u, int s, String t) { return false; }
+        @Override public boolean deleteSession(int id) { return false; }
+        @Override public boolean approveTutor(int id) { return false; }
+        @Override public boolean declineTutor(int id) { return false; }
+        @Override public boolean registerStudent(Student s) { return false; }
+        @Override public boolean registerTutor(Tutor t) { return false; }
+        @Override public boolean editStudentProfile(Student s) { return false; }
+        @Override public boolean editTutorProfile(Tutor t) { return false; }
+        @Override public java.util.List<String> getSubjects() { return new ArrayList<>(); }
+        @Override public String login(String e, String p) { return null; }
+        @Override public void complete(Session s) {}
+        @Override public void book(Session s) {}
+        @Override public void cancel(Session s) {}
+        @Override public void remove(Session s) {}
     }
 }

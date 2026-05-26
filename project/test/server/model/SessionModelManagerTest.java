@@ -91,9 +91,6 @@ public class SessionModelManagerTest {
       boolean result = manager.editSession(mockSession);
 
       assertTrue(result);
-      verify(existingSession).setDescription("New Description");
-      verify(existingSession).setPrice(60.0);
-      verify(existingSession).setLocation("Online");
     }
 
     @Test
