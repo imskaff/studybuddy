@@ -144,7 +144,7 @@ public class SessionDAOImpl implements SessionDAO {
         String sql = "SELECT s.id, s.description, s.price, s.location, s.start_date, s.end_date, "
                 + "s.tutor_id, s.student_id, s.status, sub.name AS subject_name "
                 + "FROM sessions s LEFT JOIN subjects sub ON s.subject_id = sub.id "
-                + "WHERE s.student_id IS NULL AND s.status = 'Available'";
+                + "WHERE s.student_id IS NULL AND s.status = 'Available' AND s.start_date > NOW()";
         try (Connection connection = getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
