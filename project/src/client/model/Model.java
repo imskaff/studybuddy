@@ -17,6 +17,8 @@ public interface Model {
 
   ArrayList<Session> getAllSessions();
 
+  ArrayList<Session> getTutorSessions();
+
   ArrayList<Session> getBookedSessions();
 
   void setLoggedInStudent(Student student);

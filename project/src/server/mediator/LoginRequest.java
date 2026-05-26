@@ -1,7 +1,7 @@
 package server.mediator;
 
 public class LoginRequest {
-    private final String type = "LOGIN";
+    private String type = "LOGIN";
     private String email;
     private String password;
 

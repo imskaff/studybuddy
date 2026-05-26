@@ -58,6 +58,12 @@ public class ModelManager implements Model, PropertyChangeListener {
     }
 
     @Override
+    public ArrayList<Session> getTutorSessions() {
+        if (loggedInTutor == null) return new ArrayList<>();
+        return client.getTutorSessions(loggedInTutor.getId());
+    }
+
+    @Override
     public ArrayList<Session> getBookedSessions() {
         if (loggedInStudent == null) return new ArrayList<>();
         return client.getBookedSessions(loggedInStudent.getId());

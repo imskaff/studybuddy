@@ -97,6 +97,9 @@ public class ClientHandler implements Runnable {
     }else if(requestType.getType().equals("CANCEL_SESSION"))
     {
       handleCancelSession(clientText);
+    }else if(requestType.getType().equals("GET_TUTOR_SESSIONS"))
+    {
+      handleGetTutorSessions(clientText);
     }
     else {
       sendResponse(new Response("ERROR", "Unknown request type"));
@@ -291,6 +294,13 @@ public class ClientHandler implements Runnable {
         sendJsonResponse(LoginResponse.error("Invalid email or password"));
       }
     }
+  }
+
+  private void handleGetTutorSessions(String clientText) throws Exception {
+    GetTutorSessionsRequest request = gson.fromJson(clientText, GetTutorSessionsRequest.class);
+    ArrayList<Session> sessions = new ArrayList<>(SessionDAOImpl.getInstance().readByTutor(request.getTutorId()));
+    SessionListResponse response = new SessionListResponse("OK", "Tutor sessions", sessions);
+    sendJsonResponse(response);
   }
 
   private void sendResponse(Response response) {

@@ -1,9 +1,12 @@
 package server.dao;
 
+import server.model.Available;
+import server.model.Book;
+import server.model.Cancel;
+import server.model.Complete;
 import server.model.Session;
 import server.model.Student;
 import server.model.Tutor;
-import server.model.User;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -72,7 +75,7 @@ public class SessionDAOImpl implements SessionDAO {
     @Override
     public Session readByInt(int id) throws SQLException {
         String sql = "SELECT s.id, s.description, s.price, s.location, s.start_date, s.end_date, "
-                + "s.tutor_id, s.student_id, sub.name AS subject_name "
+                + "s.tutor_id, s.student_id, s.status, sub.name AS subject_name "
                 + "FROM sessions s LEFT JOIN subjects sub ON s.subject_id = sub.id "
                 + "WHERE s.id = ?";
         try (Connection connection = getConnection();
@@ -94,7 +97,7 @@ public class SessionDAOImpl implements SessionDAO {
 
         try (Connection connection = getConnection();
                 PreparedStatement statement = connection.prepareStatement(
-                        "UPDATE sessions SET description = ?, price = ?, location = ?, start_date = ?, end_date = ?, tutor_id = ?, student_id = ?, subject_id = ? WHERE id = ?")) {
+                        "UPDATE sessions SET description = ?, price = ?, location = ?, start_date = ?, end_date = ?, tutor_id = ?, student_id = ?, subject_id = ?, status = ? WHERE id = ?")) {
             statement.setString(1, session.getDescription());
             statement.setDouble(2, session.getPrice());
             statement.setString(3, session.getLocation());
@@ -111,7 +114,8 @@ public class SessionDAOImpl implements SessionDAO {
             } else {
                 statement.setNull(8, Types.INTEGER);
             }
-            statement.setInt(9, session.getId());
+            statement.setString(9, session.getStatus());
+            statement.setInt(10, session.getId());
             statement.executeUpdate();
         }
     }
@@ -128,7 +132,7 @@ public class SessionDAOImpl implements SessionDAO {
     @Override
     public List<Session> readAll() throws SQLException {
         String sql = "SELECT s.id, s.description, s.price, s.location, s.start_date, s.end_date, "
-                + "s.tutor_id, s.student_id, sub.name AS subject_name "
+                + "s.tutor_id, s.student_id, s.status, sub.name AS subject_name "
                 + "FROM sessions s LEFT JOIN subjects sub ON s.subject_id = sub.id";
         try (Connection connection = getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -144,9 +148,9 @@ public class SessionDAOImpl implements SessionDAO {
     @Override
     public List<Session> readAvailable() throws SQLException {
         String sql = "SELECT s.id, s.description, s.price, s.location, s.start_date, s.end_date, "
-                + "s.tutor_id, s.student_id, sub.name AS subject_name "
+                + "s.tutor_id, s.student_id, s.status, sub.name AS subject_name "
                 + "FROM sessions s LEFT JOIN subjects sub ON s.subject_id = sub.id "
-                + "WHERE s.student_id IS NULL";
+                + "WHERE s.student_id IS NULL AND s.status = 'Available'";
         try (Connection connection = getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
@@ -161,12 +165,30 @@ public class SessionDAOImpl implements SessionDAO {
     @Override
     public List<Session> readByStudent(int studentId) throws SQLException {
         String sql = "SELECT s.id, s.description, s.price, s.location, s.start_date, s.end_date, "
-                + "s.tutor_id, s.student_id, sub.name AS subject_name "
+                + "s.tutor_id, s.student_id, s.status, sub.name AS subject_name "
                 + "FROM sessions s LEFT JOIN subjects sub ON s.subject_id = sub.id "
                 + "WHERE s.student_id = ?";
         try (Connection connection = getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, studentId);
+            ResultSet resultSet = statement.executeQuery();
+            List<Session> sessions = new ArrayList<>();
+            while (resultSet.next()) {
+                sessions.add(mapRow(resultSet));
+            }
+            return sessions;
+        }
+    }
+
+    @Override
+    public List<Session> readByTutor(int tutorId) throws SQLException {
+        String sql = "SELECT s.id, s.description, s.price, s.location, s.start_date, s.end_date, "
+                + "s.tutor_id, s.student_id, s.status, sub.name AS subject_name "
+                + "FROM sessions s LEFT JOIN subjects sub ON s.subject_id = sub.id "
+                + "WHERE s.tutor_id = ?";
+        try (Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, tutorId);
             ResultSet resultSet = statement.executeQuery();
             List<Session> sessions = new ArrayList<>();
             while (resultSet.next()) {
@@ -187,6 +209,7 @@ public class SessionDAOImpl implements SessionDAO {
         int studentId = resultSet.getInt("student_id");
         boolean studentWasNull = resultSet.wasNull();
         String subject = resultSet.getString("subject_name");
+        String status = resultSet.getString("status");
 
         UserDAOImpl userDAO = UserDAOImpl.getInstance();
         Tutor tutor = (Tutor) userDAO.readByInt(tutorId);
@@ -194,7 +217,16 @@ public class SessionDAOImpl implements SessionDAO {
         if (!studentWasNull) {
             student = (Student) userDAO.readByInt(studentId);
         }
-        return new Session(sessionId, description, price, subject, location, start_date, end_date, tutor, student);
+        Session session = new Session(sessionId, description, price, subject, location, start_date, end_date, tutor, student);
+        if (status != null) {
+            switch (status) {
+                case "Cancel":   session.setState(new Cancel());   break;
+                case "Booked":   session.setState(new Book());     break;
+                case "Complete": session.setState(new Complete()); break;
+                default:         session.setState(new Available()); break;
+            }
+        }
+        return session;
     }
 
     @Override

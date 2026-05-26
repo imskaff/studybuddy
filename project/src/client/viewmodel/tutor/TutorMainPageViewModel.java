@@ -59,7 +59,7 @@ public class TutorMainPageViewModel implements PropertyChangeListener
 
     public void loadSessions()
     {
-        sessions.setAll(model.getAllSessions());
+        sessions.setAll(model.getTutorSessions());
     }
 
     public void loadProfile(Tutor tutor)

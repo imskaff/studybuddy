@@ -2,6 +2,8 @@ package server.model;
 
 public record Cancel() implements SessionState {
 
+ @Override public String statusName() { return "Cancel"; }
+
  @Override
  public void complete(Session session)
  {

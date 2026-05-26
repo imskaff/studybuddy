@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 public record Complete() implements SessionState
 {
+    @Override public String statusName() { return "Complete"; }
+
     @Override
     public void complete(Session session)
     {

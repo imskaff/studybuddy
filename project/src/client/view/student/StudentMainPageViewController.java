@@ -45,7 +45,8 @@ public class StudentMainPageViewController {
 
     @FXML private Button viewDetails_button;
     @FXML private Button viewDetails_btn_bookedS;
-    @FXML private Button viewProfileDetails_btn;
+    @FXML private Button refreshBookedSessions_btn;
+    @FXML private Button refresh_btn;
     @FXML private Button cancel_btn;
     @FXML private Button edit_button;
 
@@ -95,8 +96,8 @@ public class StudentMainPageViewController {
             return new SimpleStringProperty(tutor.getFirst_name() + " " + tutor.getLast_name());
         });
         status_column_bookedS.setCellValueFactory(data ->
-            new SimpleStringProperty(data.getValue().getState() != null
-                ? data.getValue().getState().getClass().getSimpleName() : ""));
+            new SimpleStringProperty(data.getValue().getStatus() != null
+                ? data.getValue().getStatus() : ""));
         bookedSessions_tableView.setItems(viewModel.getBookedSessions());
 
         // profile fields
@@ -170,13 +171,15 @@ public class StudentMainPageViewController {
 
     private void setUpButtons()
     {
-      viewProfileDetails_btn.setOnAction(event -> viewHandler.openStudentProfileDetails());
+      refresh_btn.setOnAction(event -> viewModel.loadSessions());
 
       //Available sessions
       viewDetails_button.disableProperty().bind(
           main_tableView.getSelectionModel().selectedItemProperty().isNull());
 
       //Booked Sessions
+      refreshBookedSessions_btn.setOnAction(event -> viewModel.loadBookedSessions());
+
       viewDetails_btn_bookedS.disableProperty().bind(
           bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());
 

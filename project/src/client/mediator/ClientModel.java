@@ -47,6 +47,9 @@ public interface ClientModel {
   // Retrieves all available (unbooked) sessions from the server.
   ArrayList<Session> getAvailableSessions();
 
+  // Retrieves all sessions belonging to a specific tutor from the server.
+  ArrayList<Session> getTutorSessions(int tutorId);
+
   // Retrieves all sessions booked by a specific student from the server.
   ArrayList<Session> getBookedSessions(int studentId);
 

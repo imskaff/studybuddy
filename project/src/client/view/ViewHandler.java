@@ -183,7 +183,7 @@ public class ViewHandler
       popupStage.setScene(new Scene(root));
       popupStage.setResizable(false);
       popupStage.initOwner(primaryStage);
-      popupStage.show();
+      popupStage.showAndWait();
     }
     catch (IOException e)
     {

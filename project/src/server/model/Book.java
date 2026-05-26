@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 public record Book() implements SessionState
 {
+    @Override public String statusName() { return "Booked"; }
+
     @Override
     public void complete(Session session)
     {

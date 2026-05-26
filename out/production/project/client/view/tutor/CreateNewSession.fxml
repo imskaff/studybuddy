@@ -37,16 +37,16 @@
                             <ComboBox fx:id="subject_comboBox" prefWidth="500.0" promptText="Select a subject" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                             <Label style="-fx-font-weight: bold;" text="Price:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                            <TextField fx:id="price_textField" promptText="e.g. 150.00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <TextField fx:id="price_textField" promptText="e.g. 100.00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                             <Label style="-fx-font-weight: bold;" text="Start Date:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                            <TextField fx:id="startDate_textField" promptText="dd/MM/yyyy HH:mm" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                            <TextField fx:id="startDate_textField" promptText="yyyy-MM-dd HH:mm" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                             <Label style="-fx-font-weight: bold;" text="End Date:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                            <TextField fx:id="endDate_textField" promptText="dd/MM/yyyy HH:mm" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                            <TextField fx:id="endDate_textField" promptText="yyyy-MM-dd HH:mm" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
                             <Label style="-fx-font-weight: bold;" text="Location:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                            <TextField fx:id="location_textField" promptText="Room number or Online link" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                            <TextField fx:id="location_textField" promptText="e.g. Room 101 or Link to online meeting" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         </children>
 
                         <rowConstraints>

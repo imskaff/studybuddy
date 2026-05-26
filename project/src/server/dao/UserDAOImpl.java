@@ -24,7 +24,7 @@ public class UserDAOImpl implements UserDAO {
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=studybuddy", "postgres",
-                "Mollers");
+                "password");
     }
 
     @Override
@@ -328,24 +328,28 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List<User> readAll() throws SQLException {
+        String sql = "SELECT u.id, u.first_name, u.last_name, u.date_of_birth, u.email, u.phone, "
+                + "u.password, u.gender, u.user_type, t.education_level "
+                + "FROM users u LEFT JOIN tutors t ON u.id = t.user_id";
         try (Connection connection = getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM users")) {
-            ResultSet resultSet = statement.executeQuery();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet rs = statement.executeQuery();
             List<User> users = new ArrayList<>();
-            while (resultSet.next()) {
-                int userId = resultSet.getInt(1);
-                String first_name = resultSet.getString(2);
-                String last_name = resultSet.getString(3);
-                LocalDate date_of_birth = resultSet.getObject(4, LocalDate.class);
-                String email = resultSet.getString(5);
-                String phone = resultSet.getString(6);
-                String password = resultSet.getString(7);
-                String gender = resultSet.getString(8);
-                ArrayList<String> languages = resultSet.getObject(9, ArrayList.class);
-                String type = resultSet.getString(10);
-                if ("Tutor".equalsIgnoreCase(type)) {
+            while (rs.next()) {
+                int userId = rs.getInt("id");
+                String first_name = rs.getString("first_name");
+                String last_name = rs.getString("last_name");
+                LocalDate date_of_birth = rs.getObject("date_of_birth", LocalDate.class);
+                String email = rs.getString("email");
+                String phone = rs.getString("phone");
+                String password = rs.getString("password");
+                String gender = rs.getString("gender");
+                String type = rs.getString("user_type");
+                String educationLevel = rs.getString("education_level");
+                ArrayList<String> languages = readLanguages(connection, userId);
+                if ("tutor".equalsIgnoreCase(type)) {
                     users.add(new Tutor(first_name, last_name, date_of_birth, email, phone, password, gender, languages,
-                            "N/A", type, userId));
+                            educationLevel != null ? educationLevel : "N/A", type, userId));
                 } else {
                     users.add(new Student(first_name, last_name, date_of_birth, email, phone, password, gender,
                             languages, userId, type));

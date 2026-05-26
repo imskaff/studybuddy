@@ -15,7 +15,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import server.model.Session;
-import server.model.SessionState;
 
 public class TutorMainPageController
 {
@@ -35,10 +34,10 @@ public class TutorMainPageController
   @FXML private TextField language_textField;
   @FXML private TextArea education_textArea;
 
+  @FXML private Button refresh_btn;
   @FXML private Button viewDetails_btn;
   @FXML private Button create_btn;
   @FXML private Button edit_btn;
-  @FXML private Button remove_btn;
   @FXML private Button cancel_btn;
 
   private Region root;
@@ -82,19 +81,27 @@ public class TutorMainPageController
 
   private void setUpButtons()
   {
+    refresh_btn.setOnAction(event -> viewModel.loadSessions());
+
     viewDetails_btn.disableProperty().bind(
         mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
     viewDetails_btn.setOnAction(event -> onViewDetails());
 
-    create_btn.setOnAction(event -> viewHandler.openCreateNewSession());
+    create_btn.setOnAction(event -> {
+      viewHandler.openCreateNewSession();
+      viewModel.loadSessions();
+    });
 
     edit_btn.setOnAction(event -> onEditButtonClicked());
 
-    remove_btn.disableProperty().bind(
-        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
-
     cancel_btn.disableProperty().bind(
-        mySessions_tView.getSelectionModel().selectedItemProperty().isNull());
+        javafx.beans.binding.Bindings.createBooleanBinding(
+            () -> {
+              Session s = mySessions_tView.getSelectionModel().getSelectedItem();
+              return s == null || !"Booked".equals(s.getStatus());
+            },
+            mySessions_tView.getSelectionModel().selectedItemProperty()
+        ));
     cancel_btn.setOnAction(event -> {
       Session selected = mySessions_tView.getSelectionModel().getSelectedItem();
       if (selected != null)

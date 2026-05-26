@@ -3,6 +3,8 @@ package server.model;
 public record Available() implements SessionState
 {
 
+  @Override public String statusName() { return "Available"; }
+
   @Override public void complete(Session session)
   {
     System.out.println("Session cannot be completed if it's not booked");

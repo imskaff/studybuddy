@@ -27,7 +27,6 @@ public class WelcomeViewController {
         this.viewModel = viewModel;
         this.root = root;
 
-        onLoginButtonClicked();
         onRegisterButtonClicked();
     }
 

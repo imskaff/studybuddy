@@ -94,7 +94,7 @@ public class Session {
     this.state = newState;
 
     if (newState != null) {
-      this.status = newState.getClass().getSimpleName();
+      this.status = newState.statusName();
     }
 
     support.firePropertyChange("state", oldState, newState);

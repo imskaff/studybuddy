@@ -229,6 +229,20 @@ public class Client implements ClientModel
     return sendRequest(request);
   }
 
+  @Override
+  public ArrayList<Session> getTutorSessions(int tutorId)
+  {
+    GetTutorSessionsRequest request = new GetTutorSessionsRequest(tutorId);
+    String replyJson = sendRequestForResponse(request);
+    if (replyJson == null) return new ArrayList<>();
+    SessionListResponse response = gson.fromJson(replyJson, SessionListResponse.class);
+    if ("OK".equals(response.getStatus()) && response.getSessions() != null)
+    {
+      return response.getSessions();
+    }
+    return new ArrayList<>();
+  }
+
   // Retrieves all available (unbooked) sessions from the server
   @Override
   public ArrayList<Session> getAvailableSessions()
