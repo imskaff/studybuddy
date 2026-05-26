@@ -5,14 +5,18 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
-import server.dao.SessionDAOImpl;
-import server.dao.UserDAOImpl;
+import server.dao.SessionDAO;
+import server.dao.UserDAO;
 
 public class ModelManager implements SessionModel, PropertyChangeListener {
     private final SessionList list;
     private PropertyChangeSupport support;
+    private final SessionDAO sessionDAO;
+    private final UserDAO userDAO;
 
-    public ModelManager() {
+    public ModelManager(SessionDAO sessionDAO, UserDAO userDAO) {
+        this.sessionDAO = sessionDAO;
+        this.userDAO = userDAO;
         list = new SessionList();
         support = new PropertyChangeSupport(this);
     }
@@ -61,9 +65,9 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
   {
     try {
       // Reads the selected session from the database
-      Session session = SessionDAOImpl.getInstance().readByInt(sessionId);
+      Session session = sessionDAO.readByInt(sessionId);
       // Reads the student from the database
-      Student student = (Student) UserDAOImpl.getInstance().readByInt(studentId);
+      Student student = (Student) userDAO.readByInt(studentId);
       // Checks if the session or student does not exist
       if(session == null || student == null)
       {
@@ -79,7 +83,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
       // Changes the session state to booked
       session.book(session);
       // Updates the session in the database
-      SessionDAOImpl.getInstance().update(session);
+      sessionDAO.update(session);
 
       return true;
     }
@@ -102,7 +106,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
         return false;
       }
       // Creates the session in the database
-      SessionDAOImpl.getInstance().create(session.getDescription(), session.getPrice(),
+      sessionDAO.create(session.getDescription(), session.getPrice(),
           session.getSubject(), session.getLocation(), session.getStart_date(),
           session.getEnd_date(), session.getTutor(), session.getStudent());
 
@@ -127,7 +131,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
         return false;
       }
       // Reads the existing session from the database
-      Session existing = SessionDAOImpl.getInstance().readByInt(updatedSession.getId());
+      Session existing = sessionDAO.readByInt(updatedSession.getId());
 
       // Checks if the session exists
       if(existing == null)
@@ -142,7 +146,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
       existing.setStart_date(updatedSession.getStart_date());
       existing.setEnd_date(updatedSession.getEnd_date());
       // Updates the session in the database
-      SessionDAOImpl.getInstance().update(existing);
+      sessionDAO.update(existing);
 
       return true;
     }
@@ -158,14 +162,14 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
   {
     try {
       // Reads the session from the database
-      Session session = SessionDAOImpl.getInstance().readByInt(sessionId);
+      Session session = sessionDAO.readByInt(sessionId);
       // Checks if the session exists
       if(session == null)
       {
         return false;
       }
       // Deletes the session from the database
-      SessionDAOImpl.getInstance().delete(session);
+      sessionDAO.delete(session);
 
       return true;
     }
@@ -192,12 +196,12 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
         return false;
       }
       // Checks if the email already exists in the database
-      if(UserDAOImpl.getInstance().readByEmail(student.getEmail()) != null)
+      if(userDAO.readByEmail(student.getEmail()) != null)
       {
         return false;
       }
       // Creates the student profile in the database
-      UserDAOImpl.getInstance().create(student.getFirst_name(), student.getLast_name(),
+      userDAO.create(student.getFirst_name(), student.getLast_name(),
           student.getDate_of_birth(), student.getEmail(), student.getPhone(),
           student.getPassword(), student.getGender(), student.getLanguages(), "Student", null);
 
@@ -225,11 +229,11 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
         return false;
       }
       // Checks if the email already exists in the database
-      if(UserDAOImpl.getInstance().readByEmail(tutor.getEmail()) != null)
+      if(userDAO.readByEmail(tutor.getEmail()) != null)
       {
         return false;
       }
-      UserDAOImpl.getInstance().create(tutor.getFirst_name(), tutor.getLast_name(), tutor.getDate_of_birth(),
+      userDAO.create(tutor.getFirst_name(), tutor.getLast_name(), tutor.getDate_of_birth(),
           tutor.getEmail(), tutor.getPhone(), tutor.getPassword(), tutor.getGender(),
           tutor.getLanguages(), "Tutor", tutor.getEducation_level());
 
@@ -250,13 +254,13 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
       // Approves the tutor
       if("APPROVE".equals(action))
       {
-        return UserDAOImpl.getInstance().updateTutorApproval(tutorId, true);
+        return userDAO.updateTutorApproval(tutorId, true);
       }
 
       // Declines the tutor
       else if("DECLINE".equals(action))
       {
-        return UserDAOImpl.getInstance().updateTutorApproval(tutorId, false);
+        return userDAO.updateTutorApproval(tutorId, false);
       }
 
       return false;
@@ -284,7 +288,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
         return false;
       }
       // Updates the student profile in the database
-      UserDAOImpl.getInstance().update(student);
+      userDAO.update(student);
 
       return true;
     }
@@ -312,7 +316,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
         return false;
       }
       // Updates the common user information in the database
-      UserDAOImpl.getInstance().update(tutor);
+      userDAO.update(tutor);
 
       return true;
     }
@@ -328,7 +332,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
   {
     try
     {
-      Session session = SessionDAOImpl.getInstance().readByInt(sessionId);
+      Session session = sessionDAO.readByInt(sessionId);
 
       if(session == null)
       {
@@ -341,7 +345,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
         session.setStudent(null);
         // FORCE state back to Available so other students can see it
         session.setState(new Available());
-        SessionDAOImpl.getInstance().update(session);
+        sessionDAO.update(session);
         return true;
       }
       // Tutor cancellation
@@ -349,7 +353,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
       {
         // FORCE state to Cancelled
         session.setState(new Cancel());
-        SessionDAOImpl.getInstance().update(session);
+        sessionDAO.update(session);
         return true;
       }
 
@@ -371,7 +375,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
         return null;
       }
       // Searches for the user in the database
-      return UserDAOImpl.getInstance().readByEmailAndPassword(email, password);
+      return userDAO.readByEmailAndPassword(email, password);
     }
     catch(Exception e)
     {
@@ -386,13 +390,59 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
   {
     try
     {
-      return SessionDAOImpl.getInstance().readSubjects();
+      return sessionDAO.readSubjects();
     }
     catch (Exception e)
     {
       e.printStackTrace();
       return new ArrayList<>();
     }
+  }
+
+  @Override
+  public List<Session> getAvailableSessions() {
+    try { return sessionDAO.readAvailable(); }
+    catch (Exception e) { e.printStackTrace(); return new ArrayList<>(); }
+  }
+
+  @Override
+  public List<Session> getBookedSessions(int studentId) {
+    try { return sessionDAO.readByStudent(studentId); }
+    catch (Exception e) { e.printStackTrace(); return new ArrayList<>(); }
+  }
+
+  @Override
+  public List<Session> getTutorSessions(int tutorId) {
+    try { return sessionDAO.readByTutor(tutorId); }
+    catch (Exception e) { e.printStackTrace(); return new ArrayList<>(); }
+  }
+
+  @Override
+  public List<Tutor> getPendingTutors() {
+    try { return userDAO.readPendingTutors(); }
+    catch (Exception e) { e.printStackTrace(); return new ArrayList<>(); }
+  }
+
+  @Override
+  public int getAdminId(String email, String password) {
+    try { return userDAO.getAdminId(email, password); }
+    catch (Exception e) { e.printStackTrace(); return -1; }
+  }
+
+  @Override
+  public boolean handleTutorRegistration(int tutorId, String action, int adminId) {
+    try {
+      if ("APPROVE".equals(action)) {
+        userDAO.updateApprovalStatus(tutorId, true, adminId);
+        return true;
+      }
+      if ("DECLINE".equals(action)) {
+        userDAO.declineTutor(tutorId);
+        return true;
+      }
+      return false;
+    }
+    catch (Exception e) { e.printStackTrace(); return false; }
   }
 
   @Override

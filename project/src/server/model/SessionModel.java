@@ -5,6 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface SessionModel {
+  List<Session> getAvailableSessions();
+  List<Session> getBookedSessions(int studentId);
+  List<Session> getTutorSessions(int tutorId);
+  List<Tutor> getPendingTutors();
+  int getAdminId(String email, String password);
+  boolean handleTutorRegistration(int tutorId, String action, int adminId);
+
     void bookSession(Student student, Tutor tutor, Session sessionId);
 
     ArrayList<Session> getAllSessions();

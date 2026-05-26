@@ -185,6 +185,8 @@ class TutorMainPageViewModelTest {
         ArrayList<Session> sessions = new ArrayList<>();
 
         @Override public ArrayList<Session> getAllSessions() { return sessions; }
+
+        @Override public ArrayList<Session> getTutorSessions() {return new ArrayList<>(); }
         @Override public void addPropertyChangeListener(PropertyChangeListener l) {}
         @Override public void connect() {}
         @Override public void disconnect() {}

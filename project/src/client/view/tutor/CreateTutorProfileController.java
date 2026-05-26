@@ -5,6 +5,7 @@ import client.viewmodel.tutor.CreateTutorProfileViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
@@ -19,7 +20,7 @@ public class CreateTutorProfileController
   @FXML private TextField password_textField;
   @FXML private TextField phone_textField;
   @FXML private TextField date_textField;
-  @FXML private TextField gender_textField;
+  @FXML private ComboBox<String> gender_comboBox;
 
   @FXML private TextArea languages_textArea;
   @FXML private TextArea education_textArea;
@@ -52,7 +53,8 @@ public class CreateTutorProfileController
     email_textField.textProperty().bindBidirectional(viewModel.emailProperty());
     password_textField.textProperty().bindBidirectional(viewModel.passwordProperty());
     phone_textField.textProperty().bindBidirectional(viewModel.phoneNoProperty());
-    gender_textField.textProperty().bindBidirectional(viewModel.genderProperty());
+    gender_comboBox.getItems().addAll("male", "female");
+    gender_comboBox.valueProperty().bindBidirectional(viewModel.genderProperty());
     languages_textArea.textProperty().bindBidirectional(viewModel.languageInputProperty());
     education_textArea.textProperty().bindBidirectional(viewModel.educationLevelProperty());
 
@@ -69,7 +71,7 @@ public class CreateTutorProfileController
     email_textField.setEditable(editable);
     password_textField.setEditable(editable);
     phone_textField.setEditable(editable);
-    gender_textField.setEditable(editable);
+    gender_comboBox.setDisable(!editable);
     languages_textArea.setEditable(editable);
     education_textArea.setEditable(editable);
   }

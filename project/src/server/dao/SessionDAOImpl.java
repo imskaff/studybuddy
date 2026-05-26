@@ -14,17 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SessionDAOImpl implements SessionDAO {
-    private static SessionDAOImpl instance;
+    private final UserDAO userDAO;
 
-    private SessionDAOImpl() throws SQLException {
+    public SessionDAOImpl(UserDAO userDAO) throws SQLException {
         DriverManager.registerDriver(new org.postgresql.Driver());
-    }
-
-    public static synchronized SessionDAOImpl getInstance() throws SQLException {
-        if (instance == null) {
-            instance = new SessionDAOImpl();
-        }
-        return instance;
+        this.userDAO = userDAO;
     }
 
     private Connection getConnection() throws SQLException {
@@ -211,7 +205,6 @@ public class SessionDAOImpl implements SessionDAO {
         String subject = resultSet.getString("subject_name");
         String status = resultSet.getString("status");
 
-        UserDAOImpl userDAO = UserDAOImpl.getInstance();
         Tutor tutor = (Tutor) userDAO.readByInt(tutorId);
         Student student = null;
         if (!studentWasNull) {

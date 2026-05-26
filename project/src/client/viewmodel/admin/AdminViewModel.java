@@ -20,21 +20,21 @@ public class AdminViewModel {
     }
 
     public void approveTutor(Tutor tutor) {
-        Thread t = new Thread(() -> {
-            boolean success = model.approveTutor(tutor.getId());
-            if (success)
+        runAsync(() -> {
+            if (model.approveTutor(tutor.getId()))
                 Platform.runLater(() -> pendingTutors.remove(tutor));
         });
-        t.setDaemon(true);
-        t.start();
     }
 
     public void declineTutor(Tutor tutor) {
-        Thread t = new Thread(() -> {
-            boolean success = model.declineTutor(tutor.getId());
-            if (success)
+        runAsync(() -> {
+            if (model.declineTutor(tutor.getId()))
                 Platform.runLater(() -> pendingTutors.remove(tutor));
         });
+    }
+
+    private static void runAsync(Runnable task) {
+        Thread t = new Thread(task);
         t.setDaemon(true);
         t.start();
     }

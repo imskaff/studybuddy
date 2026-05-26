@@ -272,6 +272,12 @@ class StudentMainPageViewModelTest {
         ArrayList<Session> bookedSessions = new ArrayList<>();
 
         @Override public ArrayList<Session> getAllSessions() { return sessions; }
+
+        @Override
+        public ArrayList<Session> getTutorSessions() {
+            return null;
+        }
+
         @Override public ArrayList<Session> getBookedSessions() { return bookedSessions; }
         @Override public void addPropertyChangeListener(PropertyChangeListener l) {}
         @Override public void connect() {}

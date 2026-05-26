@@ -1,8 +1,6 @@
 package server.mediator;
 
 import com.google.gson.*;
-import server.dao.SessionDAOImpl;
-import server.dao.UserDAOImpl;
 import server.model.*;
 
 import java.util.List;
@@ -65,44 +63,24 @@ public class ClientHandler implements Runnable {
 
   private void handleRequest(String clientText) throws Exception {
     RequestType requestType = gson.fromJson(clientText, RequestType.class);
-
-    if (requestType.getType().equals("BOOK_SESSION")) {
-      handleBookSession(clientText);
-    } else if (requestType.getType().equals("CREATE_SESSION")) {
-      handleCreateSession(clientText);
-    } else if (requestType.getType().equals("EDIT_SESSION")) {
-      handleEditSession(clientText);
-    } else if (requestType.getType().equals("DELETE_SESSION")) {
-      handleDeleteSession(clientText);
-    } else if (requestType.getType().equals("CREATE_STUDENT_PROFILE")) {
-      handleCreateStudentProfile(clientText);
-    } else if (requestType.getType().equals("CREATE_TUTOR_PROFILE")) {
-      handleCreateTutorProfile(clientText);
-    } else if (requestType.getType().equals("HANDLE_TUTOR_REGISTRATION")) {
-      handleTutorRegistration(clientText);
-    } else if (requestType.getType().equals("GET_AVAILABLE_SESSIONS")) {
-      handleGetAvailableSessions();
-    } else if (requestType.getType().equals("GET_BOOKED_SESSIONS")) {
-      handleGetBookedSessions(clientText);
-    } else if (requestType.getType().equals("GET_PENDING_TUTORS")) {
-      handleGetPendingTutors();
-    } else if (requestType.getType().equals("GET_SUBJECTS")) {
-      handleGetSubjects();
-    } else if (requestType.getType().equals("LOGIN")) {
-      handleLogin(clientText);
-    } else if(requestType.getType().equals("EDIT_STUDENT_PROFILE")){
-      handleEditStudentProfile(clientText);
-    }else if(requestType.getType().equals("EDIT_TUTOR_PROFILE")){
-      handleEditTutorProfile(clientText);
-    }else if(requestType.getType().equals("CANCEL_SESSION"))
-    {
-      handleCancelSession(clientText);
-    }else if(requestType.getType().equals("GET_TUTOR_SESSIONS"))
-    {
-      handleGetTutorSessions(clientText);
-    }
-    else {
-      sendResponse(new Response("ERROR", "Unknown request type"));
+    switch (requestType.getType()) {
+      case "BOOK_SESSION":              handleBookSession(clientText);          break;
+      case "CREATE_SESSION":            handleCreateSession(clientText);        break;
+      case "EDIT_SESSION":              handleEditSession(clientText);          break;
+      case "DELETE_SESSION":            handleDeleteSession(clientText);        break;
+      case "CREATE_STUDENT_PROFILE":    handleCreateStudentProfile(clientText); break;
+      case "CREATE_TUTOR_PROFILE":      handleCreateTutorProfile(clientText);   break;
+      case "HANDLE_TUTOR_REGISTRATION": handleTutorRegistration(clientText);    break;
+      case "GET_AVAILABLE_SESSIONS":    handleGetAvailableSessions();           break;
+      case "GET_BOOKED_SESSIONS":       handleGetBookedSessions(clientText);    break;
+      case "GET_PENDING_TUTORS":        handleGetPendingTutors();               break;
+      case "GET_SUBJECTS":              handleGetSubjects();                    break;
+      case "LOGIN":                     handleLogin(clientText);                break;
+      case "EDIT_STUDENT_PROFILE":      handleEditStudentProfile(clientText);   break;
+      case "EDIT_TUTOR_PROFILE":        handleEditTutorProfile(clientText);     break;
+      case "CANCEL_SESSION":            handleCancelSession(clientText);        break;
+      case "GET_TUTOR_SESSIONS":        handleGetTutorSessions(clientText);     break;
+      default: sendResponse(new Response("ERROR", "Unknown request type"));
     }
   }
 
@@ -181,18 +159,15 @@ public class ClientHandler implements Runnable {
     }
   }
 
-  private void handleTutorRegistration(String clientText) throws Exception {
+  private void handleTutorRegistration(String clientText) {
     HandleTutorRegistrationRequest request = gson.fromJson(clientText, HandleTutorRegistrationRequest.class);
-
-    if ("APPROVE".equals(request.getAction())) {
-      UserDAOImpl.getInstance().updateApprovalStatus(request.getTutorId(), true, request.getAdminId());
-      sendResponse(new Response("APPROVED", "Tutor profile approved"));
-    } else if ("DECLINE".equals(request.getAction())) {
-      UserDAOImpl.getInstance().declineTutor(request.getTutorId());
-      sendResponse(new Response("DECLINED", "Tutor profile declined"));
-    } else {
+    boolean ok = model.handleTutorRegistration(request.getTutorId(), request.getAction(), request.getAdminId());
+    if ("APPROVE".equals(request.getAction()))
+      sendResponse(new Response(ok ? "APPROVED" : "ERROR", ok ? "Tutor profile approved" : "Failed to approve"));
+    else if ("DECLINE".equals(request.getAction()))
+      sendResponse(new Response(ok ? "DECLINED" : "ERROR", ok ? "Tutor profile declined" : "Failed to decline"));
+    else
       sendResponse(new Response("ERROR", "Unknown action"));
-    }
   }
 
   private void handleEditStudentProfile(String clientText)
@@ -243,64 +218,46 @@ public class ClientHandler implements Runnable {
     }
   }
 
-  // Handles a request to get all available (unbooked) sessions
-  private void handleGetAvailableSessions() throws Exception {
-    ArrayList<Session> sessions = new ArrayList<>(SessionDAOImpl.getInstance().readAvailable());
-    SessionListResponse response = new SessionListResponse("OK", "Available sessions", sessions);
-    sendJsonResponse(response);
+  private void handleGetAvailableSessions() {
+    ArrayList<Session> sessions = new ArrayList<>(model.getAvailableSessions());
+    sendJsonResponse(new SessionListResponse("OK", "Available sessions", sessions));
   }
 
-  // Handles a request to get all sessions booked by a specific student
-  private void handleGetBookedSessions(String clientText) throws Exception {
+  private void handleGetBookedSessions(String clientText) {
     GetBookedSessionsRequest request = gson.fromJson(clientText, GetBookedSessionsRequest.class);
-    ArrayList<Session> sessions = new ArrayList<>(
-        SessionDAOImpl.getInstance().readByStudent(request.getStudentId()));
-    SessionListResponse response = new SessionListResponse("OK", "Booked sessions", sessions);
-    sendJsonResponse(response);
+    ArrayList<Session> sessions = new ArrayList<>(model.getBookedSessions(request.getStudentId()));
+    sendJsonResponse(new SessionListResponse("OK", "Booked sessions", sessions));
   }
 
   private void handleGetSubjects() throws Exception {
     List<String> subjects = model.getSubjects();
-    SubjectsResponse response = new SubjectsResponse("OK", subjects);
-    sendJsonResponse(response);
+    sendJsonResponse(new SubjectsResponse("OK", subjects));
   }
 
-  // Handles a request to get all pending tutor registrations
-  private void handleGetPendingTutors() throws Exception {
-    ArrayList<server.model.Tutor> tutors = UserDAOImpl.getInstance().readPendingTutors();
-    TutorListResponse response = new TutorListResponse("OK", "Pending tutors", tutors);
-    sendJsonResponse(response);
+  private void handleGetPendingTutors() {
+    ArrayList<Tutor> tutors = new ArrayList<>(model.getPendingTutors());
+    sendJsonResponse(new TutorListResponse("OK", "Pending tutors", tutors));
   }
 
   private void handleLogin(String clientText) throws Exception {
     LoginRequest request = gson.fromJson(clientText, LoginRequest.class);
-    String email = request.getEmail();
-    String password = request.getPassword();
-
-    User user = UserDAOImpl.getInstance().readByEmailAndPassword(email, password);
+    User user = model.login(request.getEmail(), request.getPassword());
     if (user instanceof Student student) {
       sendJsonResponse(LoginResponse.ok("student", gson.toJson(student)));
     } else if (user instanceof Tutor tutor) {
-      if (!tutor.isApproved()) {
-        sendJsonResponse(LoginResponse.ok("tutor_pending", gson.toJson(tutor)));
-      } else {
-        sendJsonResponse(LoginResponse.ok("tutor", gson.toJson(tutor)));
-      }
+      sendJsonResponse(LoginResponse.ok(tutor.isApproved() ? "tutor" : "tutor_pending", gson.toJson(tutor)));
     } else {
-      int adminId = UserDAOImpl.getInstance().getAdminId(email, password);
-      if (adminId != -1) {
-        sendJsonResponse(LoginResponse.ok("admin", String.valueOf(adminId)));
-      } else {
-        sendJsonResponse(LoginResponse.error("Invalid email or password"));
-      }
+      int adminId = model.getAdminId(request.getEmail(), request.getPassword());
+      sendJsonResponse(adminId != -1
+          ? LoginResponse.ok("admin", String.valueOf(adminId))
+          : LoginResponse.error("Invalid email or password"));
     }
   }
 
-  private void handleGetTutorSessions(String clientText) throws Exception {
+  private void handleGetTutorSessions(String clientText) {
     GetTutorSessionsRequest request = gson.fromJson(clientText, GetTutorSessionsRequest.class);
-    ArrayList<Session> sessions = new ArrayList<>(SessionDAOImpl.getInstance().readByTutor(request.getTutorId()));
-    SessionListResponse response = new SessionListResponse("OK", "Tutor sessions", sessions);
-    sendJsonResponse(response);
+    ArrayList<Session> sessions = new ArrayList<>(model.getTutorSessions(request.getTutorId()));
+    sendJsonResponse(new SessionListResponse("OK", "Tutor sessions", sessions));
   }
 
   private void sendResponse(Response response) {
