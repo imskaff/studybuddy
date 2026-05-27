@@ -78,7 +78,8 @@ public class ClientHandler implements Runnable {
         } finally {
             try {
                 socket.close();
-            } catch (IOException ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
