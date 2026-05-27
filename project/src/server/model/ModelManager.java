@@ -3,6 +3,7 @@ package server.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import server.dao.SessionDAO;
@@ -620,18 +621,24 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
     {
         for (Session session : sessions)
         {
-            SessionState stateBefore = session.getState();
-            session.complete(session);
-
-            if (session.getState() != stateBefore)
+            if (session.getEnd_date() != null && LocalDateTime.now().isAfter(session.getEnd_date()))
             {
-                try
+                if ("Booked".equals(session.getStatus()))
                 {
-                    sessionDAO.update(session);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
+                    SessionState stateBefore = session.getState();
+                    session.complete(session);
+
+                    if (session.getState() != stateBefore)
+                    {
+                        try
+                        {
+                            sessionDAO.update(session);
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
         }
