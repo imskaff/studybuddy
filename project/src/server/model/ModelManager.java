@@ -14,7 +14,10 @@ import server.dao.UserDAO;
  * persistence to the injected {@link SessionDAO} and {@link UserDAO},
  * and applies the State pattern for session lifecycle transitions.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
+ * @author Daniela Vihovanet
+ * @author Volodymyr Neka
  */
 public class ModelManager implements SessionModel, PropertyChangeListener {
     private final SessionList list;
@@ -121,7 +124,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
 
     /**
      * Reads the session and student from the database, verifies the session is
-     * unbooked, assigns the student, transitions to the {@link Book} state,
+     * unbooked, assigns the student, transitions to the {@link Book} state
      * and persists the change.
      *
      * @param studentId the student's ID
@@ -156,7 +159,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
 
     /**
      * Validates that the session has a tutor, a non-empty description, a positive
-     * price, and a non-empty location, then saves it to the database.
+     * price and a non-empty location, then saves it to the database.
      *
      * @param session the session to create
      * @return {@code true} if the session was created successfully
@@ -186,7 +189,7 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
 
     /**
      * Validates the updated session, fetches the existing record, applies the
-     * new field values, and persists the change to the database.
+     * new field values and persists the change to the database.
      *
      * @param updatedSession the session with updated values
      * @return {@code true} if the update succeeded
@@ -604,41 +607,6 @@ public class ModelManager implements SessionModel, PropertyChangeListener {
             return false;
         }
         catch (Exception e) { e.printStackTrace(); return false; }
-    }
-
-    /**
-     * Marks a session as complete using the State pattern and persists the change.
-     * The session must be in the {@link Book} state and its end date must have passed.
-     *
-     * @param sessionId the ID of the session to complete
-     * @return {@code true} if the session was successfully completed
-     */
-    @Override
-    public boolean completeSession(int sessionId)
-    {
-        try
-        {
-            Session session = sessionDAO.readByInt(sessionId);
-            if (session == null)
-            {
-                return false;
-            }
-            SessionState stateBefore = session.getState();
-            session.complete(session);
-
-            if (session.getState() == stateBefore)
-            {
-                return false;
-            }
-
-            sessionDAO.update(session);
-            return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
     }
 
     /**

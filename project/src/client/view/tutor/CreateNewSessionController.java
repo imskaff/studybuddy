@@ -20,12 +20,12 @@ import server.model.Tutor;
  * 
  * Binds all input fields bidirectionally to the
  * {@link CreateNewSessionViewModel}. The create button parses the field
- * values, constructs a {@link Session}, and delegates to
+ * values, constructs a {@link Session} and delegates to
  * {@link CreateNewSessionViewModel#createSession(Session)}. Date-time values
  * must be in the format {@code yyyy-MM-dd HH:mm}.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class CreateNewSessionController
 {
@@ -46,7 +46,7 @@ public class CreateNewSessionController
 
   /**
    * Initialises the controller: binds all form fields to ViewModel properties,
-   * loads the subject list, and wires the back and create buttons.
+   * loads the subject list and wires the back and create buttons.
    *
    * @param popup       the popup {@link Stage} (closed on back or successful creation)
    * @param viewHandler the application navigation handler
@@ -83,7 +83,7 @@ public class CreateNewSessionController
   }
 
   /**
-   * Reads and validates the form fields, builds a {@link Session}, and calls
+   * Reads and validates the form fields, builds a {@link Session} and calls
    * {@link CreateNewSessionViewModel#createSession(Session)}.
    * Closes the popup on success. Logs an error message if the price is not a
    * valid number, the date format is wrong, or any other exception occurs.

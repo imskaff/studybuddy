@@ -21,7 +21,7 @@ import javafx.scene.layout.Region;
  * welcome screen.
  * 
  *
- * @author
+ * @author Kamila Jeremicz
  */
 public class CreateTutorProfileController
 {
@@ -54,7 +54,7 @@ public class CreateTutorProfileController
   /**
    * Initialises the controller: binds all form fields to ViewModel properties,
    * populates the gender combo-box, resets the rules check-box, enables all
-   * fields, and wires the buttons.
+   * fields and wires the buttons.
    *
    * @param viewHandler             the application navigation handler
    * @param createTutorViewModel    the create-tutor-profile ViewModel
@@ -101,7 +101,7 @@ public class CreateTutorProfileController
   }
 
   /**
-   * Wires the back, rules, and register buttons.
+   * Wires the back, rules and register buttons.
    * 
    * The register button requires the rules check-box to be selected; if not,
    * a warning alert is shown. On a successful registration an information

@@ -6,7 +6,8 @@ import java.util.List;
  * Server response that carries the list of available subject names back to the client.
  * Used by the {@code GET_SUBJECTS} handler.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class SubjectsResponse {
     private String status;

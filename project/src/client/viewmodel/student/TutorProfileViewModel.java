@@ -14,8 +14,8 @@ import server.model.Tutor;
  * The student uses this screen to view a tutor's details before or after
  * booking a session.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class TutorProfileViewModel {
     private Model model;

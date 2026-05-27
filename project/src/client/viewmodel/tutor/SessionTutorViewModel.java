@@ -18,8 +18,8 @@ import server.model.Session;
  * {@link #editSession()} and {@link #deleteSession()} actions. Also exposes
  * a subject-options list for the subject combo-box.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class SessionTutorViewModel implements PropertyChangeListener
 {

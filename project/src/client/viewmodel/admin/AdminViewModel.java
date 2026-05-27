@@ -14,7 +14,8 @@ import server.model.Tutor;
  * to avoid blocking the JavaFX application thread.
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class AdminViewModel {
     private final Model model;

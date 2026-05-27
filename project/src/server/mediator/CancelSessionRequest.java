@@ -7,7 +7,9 @@ package server.mediator;
  * moves the session to the Cancelled state.
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
+ * @author Volodymyr Neka
  */
 public class CancelSessionRequest
 {

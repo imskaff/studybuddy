@@ -15,7 +15,8 @@ import server.model.Tutor;
  * {@link client.mediator.Client}.
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Daniela Vihovanet
  */
 public interface Model {
 
@@ -216,13 +217,5 @@ public interface Model {
      *         or {@code null} if login failed
      */
     String login(String email, String password);
-
-    /**
-     * Sends a complete-session request to the server.
-     *
-     * @param sessionId the ID of the session to mark as complete
-     * @return {@code true} if the server confirmed the completion
-     */
-    boolean completeSession(int sessionId);
 
 }

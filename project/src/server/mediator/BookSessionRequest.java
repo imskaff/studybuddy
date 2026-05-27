@@ -3,7 +3,8 @@ package server.mediator;
 /**
  * Request sent from the client when a student books a tutoring session.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class BookSessionRequest {
     private String type = "BOOK_SESSION";

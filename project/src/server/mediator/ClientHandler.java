@@ -20,9 +20,10 @@ import java.time.LocalDateTime;
  * Runs in its own thread. Each incoming JSON line is dispatched to the appropriate
  * private handler method via a {@code switch} on the request-type string. All responses
  * are written back to the client as JSON using Gson.
- * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
+ * @author Daniela Vihovanet
  */
 public class ClientHandler implements Runnable {
     private final BufferedReader in;
@@ -334,25 +335,6 @@ public class ClientHandler implements Runnable {
             sendJsonResponse(adminId != -1
                 ? LoginResponse.ok("admin", String.valueOf(adminId))
                 : LoginResponse.error("Invalid email or password"));
-        }
-    }
-
-    /**
-     * Handles a {@code COMPLETE_SESSION} request.
-     *
-     * @param clientText the raw JSON request containing the session ID
-     */
-    private void handleCompleteSession(String clientText)
-    {
-        CompleteSessionRequest request = gson.fromJson(clientText, CompleteSessionRequest.class);
-        boolean completed = model.completeSession(request.getSessionId());
-        if (completed)
-        {
-            sendResponse(new Response("OK", "Session completed"));
-        }
-        else
-        {
-            sendResponse(new Response("ERROR", "Session could not be completed"));
         }
     }
 

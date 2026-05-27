@@ -8,7 +8,8 @@ import java.util.ArrayList;
  * Used by the {@code GET_AVAILABLE_SESSIONS}, {@code GET_BOOKED_SESSIONS},
  * and {@code GET_TUTOR_SESSIONS} handlers.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class SessionListResponse
 {

@@ -6,8 +6,7 @@ package server.mediator;
  * Contains a status string (e.g. {@code "OK"}, {@code "ERROR"},
  * {@code "APPROVED"}, {@code "DECLINED"}) and a human-readable message.
  * 
- *
- * @author
+ * @author Adam Terelak
  */
 public class Response {
     private String status;

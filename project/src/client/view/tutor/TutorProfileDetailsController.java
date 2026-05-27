@@ -17,9 +17,8 @@ import javafx.stage.Stage;
  * {@link TutorMainPageViewModel#saveChanges()} and navigates back to the
  * tutor main page on success, or shows an error alert on failure. The back
  * button also navigates to the tutor main page without saving.
- * 
  *
- * @author
+ * @author Kamila Jeremicz
  */
 public class TutorProfileDetailsController
 {
@@ -49,7 +48,7 @@ public class TutorProfileDetailsController
 
   /**
    * Initialises the controller: binds all text fields bidirectionally to the
-   * ViewModel properties, makes all fields editable, and wires the buttons.
+   * ViewModel properties, makes all fields editable and wires the buttons.
    *
    * @param popupStage the stage hosting this popup
    * @param viewModel  the tutor main-page ViewModel

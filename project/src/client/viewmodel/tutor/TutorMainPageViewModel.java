@@ -21,11 +21,11 @@ import server.model.Tutor;
  * 
  * Manages the observable list of the logged-in tutor's sessions and the
  * editable profile properties. Provides actions to save profile changes,
- * complete a session, and cancel a session. Registers as a model listener
+ * complete a session and cancel a session. Registers as a model listener
  * for future reactive updates.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class TutorMainPageViewModel implements PropertyChangeListener
 {
@@ -46,7 +46,7 @@ public class TutorMainPageViewModel implements PropertyChangeListener
 
   /**
    * Constructs a {@code TutorMainPageViewModel}, initialises all observable
-   * properties, and registers as a model property-change listener.
+   * properties and registers as a model property-change listener.
    *
    * @param model     the client-side model
    * @param viewState shared navigation state
@@ -232,21 +232,6 @@ public class TutorMainPageViewModel implements PropertyChangeListener
           langList, education.get().trim(), current.getType(), current.getId());
 
       return model.editTutorProfile(updated);
-  }
-
-  /**
-   * Marks the given session as complete. If the operation succeeds, the
-   * sessions list is refreshed on the JavaFX application thread.
-   *
-   * @param session the session to complete; ignored if {@code null}
-   */
-  public void completeSession(Session session) {
-      if (session != null) {
-          boolean success = model.completeSession(session.getId());
-          if (success) {
-              Platform.runLater(this::loadSessions);
-          }
-      }
   }
 
   /**

@@ -23,8 +23,8 @@ import server.model.Tutor;
  * TCP socket implementation of {@link ClientModel}.
  * Keeps a persistent connection to the server on port 4025 and handles
  * all request/response communication over JSON.
- *
- * @author
+ * 
+ * @author Daniela Vihovanet
  */
 public class Client implements ClientModel
 {
@@ -89,7 +89,7 @@ public class Client implements ClientModel
     }
 
     /**
-     * Serialises the request to JSON, sends it to the server, and returns
+     * Serialises the request to JSON, sends it to the server and returns
      * {@code true} if the response status is {@code "OK"}, {@code "APPROVED"},
      * or {@code "DECLINED"}.
      *
@@ -121,7 +121,7 @@ public class Client implements ClientModel
     }
 
     /**
-     * Serialises the request to JSON, sends it, and returns the raw JSON
+     * Serialises the request to JSON, sends it and returns the raw JSON
      * response string. Used when the response needs to be deserialised into
      * a list or structured object.
      *
@@ -287,18 +287,6 @@ public class Client implements ClientModel
     public boolean cancelSession(int userId, int sessionId, String userType)
     {
         return sendRequest(new CancelSessionRequest(userId, sessionId, userType));
-    }
-
-    /**
-     * Sends a complete-session request to the server.
-     *
-     * @param sessionId the ID of the session to complete
-     * @return {@code true} if the server accepted the request
-     */
-    @Override
-    public boolean completeSession(int sessionId)
-    {
-        return sendRequest(new CompleteSessionRequest(sessionId));
     }
 
     /**

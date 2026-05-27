@@ -8,7 +8,8 @@ package server.model;
  * decides which transitions are legal and which are silently rejected.
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public interface SessionState
 {

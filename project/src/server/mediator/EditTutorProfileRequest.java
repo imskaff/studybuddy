@@ -5,7 +5,8 @@ import server.model.Tutor;
 /**
  * Request sent from the client when a tutor updates their profile information.
  *
- * @author
+ *  @author Adam Terelak
+ *  @author Kamila Jeremicz
  */
 public class EditTutorProfileRequest
 {

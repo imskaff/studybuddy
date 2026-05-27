@@ -20,7 +20,7 @@ import javafx.scene.layout.Region;
  * dialog and navigates to the welcome screen.
  * 
  *
- * @author
+ * @author Kamila Jeremicz
  */
 public class CreateStudentProfileController
 {
@@ -52,7 +52,7 @@ public class CreateStudentProfileController
   /**
    * Initialises the controller: binds all form fields to ViewModel properties,
    * populates the gender combo-box, resets the rules check-box, enables all
-   * fields, and wires the buttons.
+   * fields and wires the buttons.
    *
    * @param viewHandler the application navigation handler
    * @param viewModel   the create-student-profile ViewModel
@@ -98,7 +98,7 @@ public class CreateStudentProfileController
   }
 
   /**
-   * Wires the back, rules, and register buttons.
+   * Wires the back, rules and register buttons.
    * 
    * The register button requires the rules check-box to be selected; if not,
    * a warning alert is shown. On a successful registration an information

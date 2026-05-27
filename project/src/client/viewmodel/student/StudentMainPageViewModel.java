@@ -21,12 +21,12 @@ import server.model.Student;
  * ViewModel for the student main page.
  * 
  * Manages observable lists of available and booked sessions, subject filter
- * options, and the logged-in student's editable profile properties.
+ * options and the logged-in student's editable profile properties.
  * Listens for {@code SessionBooked} model events and updates the lists on the
  * JavaFX application thread accordingly.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class StudentMainPageViewModel implements PropertyChangeListener
 {
@@ -58,7 +58,7 @@ public class StudentMainPageViewModel implements PropertyChangeListener
   /**
    * Constructs a {@code StudentMainPageViewModel}, initialises all observable
    * properties, wires filter-change listeners so that any filter modification
-   * immediately re-evaluates the predicate, and registers as a model listener.
+   * immediately re-evaluates the predicate and registers as a model listener.
    *
    * @param model the client-side model
    */
@@ -96,7 +96,7 @@ public class StudentMainPageViewModel implements PropertyChangeListener
 
   /**
    * Loads all data needed for the main page: subjects, available sessions,
-   * booked sessions, and the logged-in student's profile.
+   * booked sessions and the logged-in student's profile.
    */
   public void loadData()
   {

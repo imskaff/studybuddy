@@ -3,7 +3,8 @@ package server.mediator;
 /**
  * Request sent from the client when a tutor permanently deletes a session.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class DeleteSessionRequest
 {

@@ -21,7 +21,7 @@ import server.model.Student;
  * events.
  * 
  *
- * @author
+ * @author Volodymyr Neka
  */
 public class SessionStudentViewModel implements PropertyChangeListener
 {

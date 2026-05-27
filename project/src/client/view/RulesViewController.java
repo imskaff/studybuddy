@@ -12,7 +12,7 @@ import javafx.scene.layout.Region;
  * navigating back to the profile-type selection screen via the back button.
  * 
  *
- * @author
+ * @author Kamila Jeremicz
  */
 public class RulesViewController
 {

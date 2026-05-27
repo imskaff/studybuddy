@@ -3,7 +3,8 @@ package server.mediator;
 /**
  * Request sent from the client to retrieve all available subject names from the server.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class GetSubjectsRequest {
     private String type = "GET_SUBJECTS";

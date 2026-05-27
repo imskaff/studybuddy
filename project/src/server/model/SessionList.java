@@ -5,11 +5,11 @@ import java.util.ArrayList;
 /**
  * An in-memory list of {@link Session} objects used by the server-side model.
  * 
- * Provides simple add, get, and remove operations with an explicit
+ * Provides simple add, get and remove operations with an explicit
  * size counter maintained in parallel with the backing list.
  * 
  *
- * @author
+ * @author Adam Terelak
  */
 public class SessionList {
     private ArrayList<Session> sessions;

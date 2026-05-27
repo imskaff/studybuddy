@@ -8,7 +8,8 @@ package server.model;
  * effectively closed.
  * 
  *
- * @author
+ * @author Kamila Jeremicz
+ * @author Volodymyr Neka
  */
 public record Cancel() implements SessionState {
 

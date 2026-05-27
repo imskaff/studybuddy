@@ -25,9 +25,7 @@ class AdminViewModelTest {
     static void initJavaFX() throws InterruptedException {
         try {
             Platform.startup(() -> {});
-        } catch (IllegalStateException ignored) {
-            // JavaFX already running
-        }
+        } catch (IllegalStateException ignored) {}
         Thread.sleep(100);
     }
 

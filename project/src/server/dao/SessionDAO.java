@@ -10,11 +10,9 @@ import server.model.Tutor;
 /**
  * Data Access Object interface for {@link Session} persistence.
  * 
- * Defines all database operations related to tutoring sessions,
- * including CRUD operations and specialised queries used by the business layer.
+ * Defines all database operations related to tutoring sessions.
  * 
- *
- * @author
+ * @author Adam Terelak
  */
 public interface SessionDAO {
 

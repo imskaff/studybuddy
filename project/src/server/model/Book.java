@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * completed once its end date has passed, or cancelled by either party.
  * 
  *
- * @author
+ * @author Kamila Jeremicz
  */
 public record Book() implements SessionState
 {

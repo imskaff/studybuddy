@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * passed. No further transitions (book, cancel) are allowed from this state.
  * 
  *
- * @author
+ * @author Kamila Jeremicz
  */
 public record Complete() implements SessionState
 {

@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * ViewModel for the tutor registration form.
  * Extends {@link CreateProfileViewModel} and adds an education-level field.
  *
- * @author
+ * @author Kamila Jeremicz
  */
 public class CreateTutorProfileViewModel extends CreateProfileViewModel
 {

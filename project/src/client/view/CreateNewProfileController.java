@@ -16,7 +16,8 @@ import javafx.scene.layout.Region;
  * is shown.
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class CreateNewProfileController
 {
@@ -32,7 +33,7 @@ public class CreateNewProfileController
 
   /**
    * Initialises the controller, enforces mutual exclusion between the two
-   * check-boxes, wires the back and confirm buttons, and resets both
+   * check-boxes, wires the back and confirm buttons and resets both
    * check-boxes to unchecked.
    *
    * @param viewHandler the application navigation handler

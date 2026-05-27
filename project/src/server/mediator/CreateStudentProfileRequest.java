@@ -6,7 +6,8 @@ import server.model.Student;
  * Request sent from the client when a user registers a new student profile.
  * Registration is rejected by the server if {@code rulesConfirmed} is {@code false}.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class CreateStudentProfileRequest
 {

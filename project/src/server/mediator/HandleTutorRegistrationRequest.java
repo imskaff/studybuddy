@@ -4,7 +4,8 @@ package server.mediator;
  * Request sent from the client when an administrator approves or declines
  * a pending tutor registration.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class HandleTutorRegistrationRequest
 {

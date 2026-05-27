@@ -5,12 +5,12 @@ import java.sql.Connection;
 /**
  * Placeholder class holding the PostgreSQL connection constants.
  * 
- * Connection management is currently handled directly inside
+ * Connection management is handled directly inside
  * {@link UserDAOImpl} and {@link SessionDAOImpl} via their own
- * {@code getConnection()} methods. This class is retained for reference.
- * 
+ * {@code getConnection()} methods.
+ * The class is kept for reference.
  *
- * @author
+ * @author Adam Terelak
  */
 public class DBConnection {
     private static final String URL = "jdbc:postgresql://localhost:5432/studybuddy";

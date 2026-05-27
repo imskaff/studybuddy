@@ -9,7 +9,7 @@ package server.mediator;
  * {@link CreateSessionRequest}).
  * 
  *
- * @author
+ * @author Adam Terelak
  */
 public class RequestType
 {

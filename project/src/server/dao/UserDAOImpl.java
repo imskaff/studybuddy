@@ -10,36 +10,21 @@ import server.model.User;
 
 /**
  * PostgreSQL implementation of {@link UserDAO}.
- * Implemented as a thread-safe Singleton. Each public method opens its own
- * connection and closes it in a try-with-resources block.
+ * Each public method opens its own connection and closes it.
  * Language records are stored in the {@code user_languages} join table,
  * and tutor-specific data lives in a separate {@code tutors} table.
  *
- * @author
+ * @author Adam Terelak
  */
 public class UserDAOImpl implements UserDAO {
-    private static UserDAOImpl instance;
 
     /**
-     * Private constructor that registers the PostgreSQL JDBC driver.
+     * Constructs a {@code UserDAOImpl} and registers the PostgreSQL JDBC driver.
      *
      * @throws SQLException if the driver cannot be registered
      */
-    private UserDAOImpl() throws SQLException {
+    public UserDAOImpl() throws SQLException {
         DriverManager.registerDriver(new org.postgresql.Driver());
-    }
-
-    /**
-     * Returns the singleton instance, creating it if necessary.
-     *
-     * @return the singleton {@code UserDAOImpl} instance
-     * @throws SQLException if the instance cannot be created
-     */
-    public static synchronized UserDAOImpl getInstance() throws SQLException {
-        if (instance == null) {
-            instance = new UserDAOImpl();
-        }
-        return instance;
     }
 
     /**

@@ -22,7 +22,8 @@ import java.util.List;
  * Delegates all server communication to {@link Client} and keeps track
  * of the currently logged-in user.
  *
- * @author
+ * @author Adam Terelak
+ * @author Daniela Vihovanet
  */
 public class ModelManager implements Model, PropertyChangeListener {
     private final ClientModel client;
@@ -349,21 +350,7 @@ public class ModelManager implements Model, PropertyChangeListener {
         return client.createTutorProfile(tutor, true);
     }
 
-    /**
-     * Marks a session as complete and fires a {@code "SessionsUpdated"} event on success.
-     *
-     * @param sessionId the ID of the session to complete
-     * @return {@code true} if the operation succeeded
-     */
-    @Override public boolean completeSession(int sessionId)
-    {
-        boolean success = client.completeSession(sessionId);
-        if (success)
-        {
-            support.firePropertyChange("SessionsUpdated", null, null);
-        }
-        return success;
-    }
+
 
     /**
      * Forwards any received property-change events to this model's own listeners.

@@ -3,7 +3,7 @@ package server.mediator;
 /**
  * Request sent from the client to authenticate a user by email and password.
  *
- * @author
+ * @author Kamila Jeremicz
  */
 public class LoginRequest {
     private String type = "LOGIN";

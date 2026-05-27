@@ -9,7 +9,7 @@ import client.model.Model;
  * directly through the registration request flag.
  * 
  *
- * @author
+ * @author Kamila Jeremicz
  */
 public class RulesViewModel
 {

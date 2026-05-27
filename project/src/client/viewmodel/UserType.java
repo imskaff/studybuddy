@@ -5,7 +5,7 @@ package client.viewmodel;
  * Used by {@link CreateProfileViewModel} to distinguish whether a registration
  * form belongs to a student or a tutor.
  *
- * @author
+ * @author Kamila Jeremicz
  */
 public enum UserType
 {

@@ -14,8 +14,7 @@ import java.util.List;
  * Covers both {@link server.model.Student} and {@link Tutor} records,
  * as well as administrator authentication and tutor approval operations.
  * 
- *
- * @author
+ * @author Adam Terelak
  */
 public interface UserDAO {
 

@@ -10,10 +10,10 @@ import javafx.stage.Stage;
  * Application entry point for the JavaFX client.
  * 
  * Constructs the client-side object graph (model, view-model factory, view handler),
- * connects to the server, and launches the primary stage.
+ * connects to the server and launches the primary stage.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class ClientMain extends Application {
 

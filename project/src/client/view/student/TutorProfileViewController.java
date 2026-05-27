@@ -15,7 +15,8 @@ import javafx.stage.Stage;
  * set to read-only. The back button closes the popup stage.
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class TutorProfileViewController {
     @FXML private TextField fname_textField;
@@ -36,7 +37,7 @@ public class TutorProfileViewController {
 
     /**
      * Initialises the controller: binds all display fields to ViewModel
-     * properties, makes them read-only, and wires the back button to close
+     * properties, makes them read-only and wires the back button to close
      * the popup stage.
      *
      * @param popupStage the stage hosting this popup

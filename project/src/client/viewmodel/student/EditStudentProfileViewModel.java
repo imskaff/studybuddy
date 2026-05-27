@@ -16,8 +16,8 @@ import java.util.Arrays;
  * Loads the currently logged-in student's data into editable JavaFX properties
  * and provides a {@link #saveChanges()} method that validates and persists updates.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class EditStudentProfileViewModel
 {

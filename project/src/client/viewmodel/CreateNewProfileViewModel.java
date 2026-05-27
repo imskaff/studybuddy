@@ -6,7 +6,7 @@ import client.model.Model;
  * ViewModel for the "create new profile" selection screen, where the user
  * chooses whether to register as a student or a tutor.
  *
- * @author
+ * @author Kamila Jeremicz
  */
 public class CreateNewProfileViewModel
 {

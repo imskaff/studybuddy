@@ -15,8 +15,7 @@ import server.model.Tutor;
  * sent over the persistent TCP socket to the server. The client-side
  * {@link client.model.ModelManager} delegates all network calls to this interface.
  * 
- *
- * @author
+ * @author Daniela Vihovanet
  */
 public interface ClientModel {
 
@@ -131,14 +130,6 @@ public interface ClientModel {
      * @return {@code true} if the server confirmed the cancellation
      */
     boolean cancelSession(int userId, int sessionId, String userType);
-
-    /**
-     * Sends a complete-session request to the server.
-     *
-     * @param sessionId the ID of the session to mark as complete
-     * @return {@code true} if the server confirmed the completion
-     */
-    boolean completeSession(int sessionId);
 
     /**
      * Retrieves all available (unbooked, future) sessions from the server.

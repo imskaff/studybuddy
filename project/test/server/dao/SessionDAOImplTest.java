@@ -17,25 +17,25 @@ public class SessionDAOImplTest {
 
     @Test
     void readByInt_throwsSQLException_whenSessionNotFound() throws SQLException {
-        SessionDAOImpl dao = new SessionDAOImpl(UserDAOImpl.getInstance());
+        SessionDAOImpl dao = new SessionDAOImpl(new UserDAOImpl());
         assertThrows(SQLException.class, () -> dao.readByInt(-999));
     }
 
     @Test
     void readAvailable_returnsNonNullList() throws SQLException {
-        SessionDAOImpl dao = new SessionDAOImpl(UserDAOImpl.getInstance());
+        SessionDAOImpl dao = new SessionDAOImpl(new UserDAOImpl());
         assertNotNull(dao.readAvailable());
     }
 
     @Test
     void readByStudent_returnsEmptyList_forNonExistentStudent() throws SQLException {
-        SessionDAOImpl dao = new SessionDAOImpl(UserDAOImpl.getInstance());
+        SessionDAOImpl dao = new SessionDAOImpl(new UserDAOImpl());
         assertTrue(dao.readByStudent(-999).isEmpty());
     }
 
     @Test
     void readByTutor_returnsEmptyList_forNonExistentTutor() throws SQLException {
-        SessionDAOImpl dao = new SessionDAOImpl(UserDAOImpl.getInstance());
+        SessionDAOImpl dao = new SessionDAOImpl(new UserDAOImpl());
         assertTrue(dao.readByTutor(-999).isEmpty());
     }
 }

@@ -12,8 +12,8 @@ package server.mediator;
  * Use the static factory methods {@link #ok(String, String)} and
  * {@link #error(String)} to construct instances.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class LoginResponse {
     private String status;

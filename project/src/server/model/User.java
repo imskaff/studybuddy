@@ -9,8 +9,8 @@ import java.util.ArrayList;
  * Holds the common personal information shared by all user types
  * ({@link Student} and {@link Tutor}).
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public abstract class User {
     private int id;

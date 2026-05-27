@@ -4,7 +4,8 @@ package server.mediator;
  * Request sent from the client to retrieve all tutor registrations
  * awaiting administrator approval.
  *
- * @author
+ * @author  Adam Terelak
+ * @author  Kamila Jeremicz
  */
 public class GetPendingTutorsRequest
 {

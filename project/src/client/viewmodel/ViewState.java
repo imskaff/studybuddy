@@ -10,7 +10,8 @@ import server.model.Session;
  * ViewModel can set the selection and another can read it without coupling.
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class ViewState
 {

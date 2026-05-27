@@ -16,19 +16,7 @@ public class UserDAOImplTest {
 
     @BeforeEach
     void setUp() throws SQLException {
-        dao = UserDAOImpl.getInstance();
-    }
-
-    @Test
-    void getInstance_doesNotThrow() {
-        assertDoesNotThrow(UserDAOImpl::getInstance);
-    }
-
-    @Test
-    void getInstance_returnsSameInstance() throws SQLException {
-        UserDAOImpl a = UserDAOImpl.getInstance();
-        UserDAOImpl b = UserDAOImpl.getInstance();
-        assertSame(a, b);
+        dao = new UserDAOImpl();
     }
 
     @Test

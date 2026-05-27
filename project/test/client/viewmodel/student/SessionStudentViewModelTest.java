@@ -220,6 +220,5 @@ class SessionStudentViewModelTest
         @Override public boolean editTutorProfile(Tutor t) { return false; }
         @Override public java.util.List<String> getSubjects() { return new ArrayList<>(); }
         @Override public String login(String e, String p) { return null; }
-        @Override public boolean completeSession(int sessionId) { return false; }
-    }
+        }
 }

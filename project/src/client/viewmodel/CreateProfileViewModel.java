@@ -13,8 +13,7 @@ import javafx.collections.ObservableList;
  * {@link client.viewmodel.tutor.CreateTutorProfileViewModel}) implement
  * {@link #register()} with type-specific validation and model calls.
  * 
- *
- * @author
+ * @author Kamila Jeremicz
  */
 public abstract class CreateProfileViewModel
 {

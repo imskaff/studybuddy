@@ -7,8 +7,7 @@ package server.model;
  * to all students for booking. The only valid transition out of this state
  * is to {@link Book} via {@link #book(Session)}.
  * 
- *
- * @author
+ * @author Kamila Jeremicz
  */
 public record Available() implements SessionState
 {

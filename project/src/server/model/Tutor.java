@@ -10,8 +10,8 @@ import java.util.ArrayList;
  * A tutor must be approved by an administrator before they can create
  * and offer tutoring sessions.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class Tutor extends User {
     private String education_level;

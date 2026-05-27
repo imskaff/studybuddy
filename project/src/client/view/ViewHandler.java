@@ -16,13 +16,15 @@ import server.model.Tutor;
  * Central navigation controller for the JavaFX application.
  * 
  * Loads FXML files, obtains the matching view controller, injects the
- * corresponding ViewModel from the {@link ViewModelFactory}, and sets the
+ * corresponding ViewModel from the {@link ViewModelFactory} and sets the
  * resulting {@link Scene} on the primary {@link Stage}. Each {@code open*}
  * method corresponds to one application screen. Popup screens are shown on
  * a new {@link Stage} owned by the primary stage.
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
+ * @author Volodymyr Neka
  */
 public class ViewHandler
 {

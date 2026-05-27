@@ -12,7 +12,9 @@ import client.viewmodel.tutor.*;
  * Each view controller obtains its ViewModel through the corresponding getter.
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
+ * @author Daniela Vihovanet
  */
 public class ViewModelFactory
 {

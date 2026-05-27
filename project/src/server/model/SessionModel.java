@@ -10,8 +10,7 @@ import java.util.List;
  * Implemented by {@link ModelManager}. All operations that can be requested
  * by a connected client (via {@code ClientHandler}) must go through this interface.
  * 
- *
- * @author
+ * @author Adam Terelak
  */
 public interface SessionModel {
 
@@ -131,7 +130,7 @@ public interface SessionModel {
      * Creates a new session and persists it to the database.
      *
      * @param session the session to create (must have a tutor, non-empty description,
-     *                positive price, and non-empty location)
+     *                positive price and non-empty location)
      * @return {@code true} if the session was created; {@code false} if validation failed
      */
     boolean createSession(Session session);
@@ -234,11 +233,4 @@ public interface SessionModel {
      */
     boolean editTutorProfile(Tutor tutor);
 
-    /**
-     * Marks a booked session as complete if its end date has passed.
-     *
-     * @param sessionId the ID of the session to complete
-     * @return {@code true} if the session was completed; {@code false} otherwise
-     */
-    boolean completeSession(int sessionId);
 }

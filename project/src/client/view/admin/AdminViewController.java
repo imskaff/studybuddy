@@ -19,7 +19,8 @@ import server.model.Tutor;
  * {@link AdminViewModel}.
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class AdminViewController {
     @FXML private TableView<Tutor> pendingTutors_tableView;
@@ -39,7 +40,7 @@ public class AdminViewController {
 
     /**
      * Initialises the controller: configures column cell-value factories,
-     * binds the table to the ViewModel's pending-tutors list, and triggers
+     * binds the table to the ViewModel's pending-tutors list and triggers
      * an initial data load.
      *
      * @param viewHandler the application navigation handler

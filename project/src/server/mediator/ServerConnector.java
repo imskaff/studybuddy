@@ -15,7 +15,9 @@ import server.model.ModelManager;
  * to a {@link ClientHandler} together with the shared {@link ModelManager}.
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
+ * @author Daniela Vihovanet
  */
 public class ServerConnector implements Runnable {
     private static final int PORT = 4025;

@@ -5,7 +5,8 @@ import server.model.Student;
 /**
  * Request sent from the client when a student updates their profile information.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class EditStudentProfileRequest
 {

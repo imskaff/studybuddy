@@ -22,14 +22,14 @@ import server.model.Session;
  * Manages two areas:
  * <ul>
  *   <li><b>Sessions table</b> — shows all sessions owned by the logged-in
- *       tutor with subject, price, date, status, and description columns.
- *       Provides view-details, create, cancel, and refresh actions.</li>
+ *       tutor with subject, price, date, status and description columns.
+ *       Provides view-details, create, cancel and refresh actions.</li>
  *   <li><b>Profile fields</b> — editable via an Edit / Save toggle button;
  *       delegates persistence to {@link TutorMainPageViewModel#saveProfile()}.</li>
  * </ul>
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class TutorMainPageController
 {
@@ -63,7 +63,7 @@ public class TutorMainPageController
    * Initialises the controller: configures all table column cell-value
    * factories, binds the table to the ViewModel's sessions list, binds
    * profile fields bidirectionally to ViewModel properties, makes fields
-   * read-only, wires buttons, and loads data.
+   * read-only, wires buttons and loads data.
    *
    * @param viewHandler the application navigation handler
    * @param viewModel   the tutor main-page ViewModel
@@ -104,7 +104,7 @@ public class TutorMainPageController
   }
 
   /**
-   * Wires the refresh, view-details, create, edit, and cancel buttons.
+   * Wires the refresh, view-details, create, edit and cancel buttons.
    * 
    * The cancel button is disabled unless the selected session has status
    * {@code "Booked"}. It shows a confirmation dialog before delegating to

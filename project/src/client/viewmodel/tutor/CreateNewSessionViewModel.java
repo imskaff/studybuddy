@@ -15,12 +15,12 @@ import server.model.Tutor;
  * ViewModel for the create-new-session form.
  * 
  * Holds the editable properties for a new tutoring session, exposes a
- * subject-options list populated from the server, and delegates session
+ * subject-options list populated from the server and delegates session
  * creation to the model. Registers as a model listener for future reactive
  * updates.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class CreateNewSessionViewModel implements PropertyChangeListener
 {

@@ -3,7 +3,8 @@ package server.mediator;
 /**
  * Request sent from the client to retrieve all sessions booked by a specific student.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class GetBookedSessionsRequest
 {

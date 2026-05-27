@@ -7,7 +7,8 @@ import server.model.Tutor;
  * The registration is pending administrator approval. Rejected by the server
  * if {@code rulesConfirmed} is {@code false}.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class CreateTutorProfileRequest
 {

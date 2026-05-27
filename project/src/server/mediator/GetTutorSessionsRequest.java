@@ -3,7 +3,8 @@ package server.mediator;
 /**
  * Request sent from the client to retrieve all sessions belonging to a specific tutor.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class GetTutorSessionsRequest
 {

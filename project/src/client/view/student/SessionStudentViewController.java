@@ -22,7 +22,8 @@ import server.model.Tutor;
  * </ul>
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class SessionStudentViewController
 {
@@ -48,7 +49,7 @@ public class SessionStudentViewController
 
   /**
    * Initialises the controller: binds all display fields to ViewModel
-   * properties (one-way), makes fields read-only, and wires the buttons.
+   * properties (one-way), makes fields read-only and wires the buttons.
    *
    * @param viewHandler the application navigation handler
    * @param viewModel   the session-student ViewModel (session already loaded)
@@ -97,7 +98,7 @@ public class SessionStudentViewController
   }
 
   /**
-   * Wires the back, book, and view-profile buttons.
+   * Wires the back, book and view-profile buttons.
    */
   private void setUpButtons()
   {
@@ -108,7 +109,7 @@ public class SessionStudentViewController
 
   /**
    * Books the selected session on a daemon background thread to avoid
-   * blocking the UI, disables the button to prevent double-clicks, and
+   * blocking the UI, disables the button to prevent double-clicks and
    * navigates back to the student main page on the JavaFX application thread
    * once complete.
    */

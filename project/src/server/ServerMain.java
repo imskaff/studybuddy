@@ -11,11 +11,11 @@ import server.model.ModelManager;
  * Application entry point for the server.
  * 
  * Wires the dependency graph: creates the DAO instances, injects them into
- * {@link ModelManager}, wraps the model in a {@link ServerConnector}, and
+ * {@link ModelManager}, wraps the model in a {@link ServerConnector} and
  * starts the server on a dedicated thread.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class ServerMain {
 
@@ -27,7 +27,7 @@ public class ServerMain {
      * @throws Exception if the database connection or server socket cannot be opened
      */
     public static void main(String[] args) throws Exception {
-        UserDAO userDAO = UserDAOImpl.getInstance();
+        UserDAO userDAO = new UserDAOImpl();
         SessionDAO sessionDAO = new SessionDAOImpl(userDAO);
         ModelManager model = new ModelManager(sessionDAO, userDAO);
         ServerConnector server = new ServerConnector(model);

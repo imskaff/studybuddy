@@ -18,8 +18,8 @@ import javafx.stage.Stage;
  * {@link EditStudentProfileViewModel#saveChanges()}; on success navigates to
  * the student profile details screen, otherwise shows an error alert.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class EditStudentProfileController
 {
@@ -49,7 +49,7 @@ public class EditStudentProfileController
   /**
    * Initialises the controller: calls
    * {@link EditStudentProfileViewModel#loadStudentData()}, binds all text
-   * fields bidirectionally to the ViewModel properties, and makes every
+   * fields bidirectionally to the ViewModel properties and makes every
    * field editable.
    *
    * @param popupStage the stage hosting this popup

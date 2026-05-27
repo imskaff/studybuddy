@@ -5,7 +5,8 @@ import server.model.Session;
 /**
  * Request sent from the client when a tutor edits an existing tutoring session.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class EditSessionRequest
 {

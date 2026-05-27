@@ -9,7 +9,7 @@ import client.model.Model;
  * view can navigate to the correct main page.
  * 
  *
- * @author
+ * @author Adam Terelak
  */
 public class WelcomeViewModel {
     private final Model model;

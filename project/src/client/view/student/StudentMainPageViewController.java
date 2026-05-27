@@ -31,7 +31,8 @@ import server.model.Tutor;
  * All data operations are delegated to {@link StudentMainPageViewModel}.
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class StudentMainPageViewController {
     @FXML private TableView<Session> main_tableView;
@@ -82,7 +83,7 @@ public class StudentMainPageViewController {
 
     /**
      * Initialises the controller: configures all table columns, binds profile
-     * fields and filter controls to ViewModel properties, wires buttons, and
+     * fields and filter controls to ViewModel properties, wires buttons and
      * loads the initial data.
      *
      * @param viewHandler the application navigation handler
@@ -204,7 +205,7 @@ public class StudentMainPageViewController {
 
     /**
      * Wires all remaining buttons: refresh, view-details (both tables),
-     * filter reset, and the cancel action (duplicate of the inline handler
+     * filter reset and the cancel action (duplicate of the inline handler
      * set during {@link #init} to ensure the disable binding is applied
      * only once).
      */

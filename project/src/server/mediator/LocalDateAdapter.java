@@ -9,18 +9,17 @@ import java.time.LocalDate;
 
 /**
  * Gson {@link TypeAdapter} that serialises and deserialises {@link LocalDate} values
- * as ISO-8601 date strings (e.g. {@code "2000-01-31"}).
+ * as date strings (e.g. {@code "2000-01-31"}).
  * 
  * Register this adapter with a {@code GsonBuilder} to enable JSON
  * conversion of {@code LocalDate} fields in request and response objects.
  * 
- *
- * @author
+ * @author Kamila Jeremicz
  */
 public class LocalDateAdapter extends TypeAdapter<LocalDate>
 {
     /**
-     * Writes a {@link LocalDate} to JSON as an ISO-8601 string.
+     * Writes a {@link LocalDate} to JSON as a string.
      *
      * @param jsonWriter the Gson writer to write to
      * @param localDate  the date to serialise
@@ -33,7 +32,7 @@ public class LocalDateAdapter extends TypeAdapter<LocalDate>
     }
 
     /**
-     * Reads a {@link LocalDate} from an ISO-8601 JSON string.
+     * Reads a {@link LocalDate} from a string.
      *
      * @param jsonReader the Gson reader to read from
      * @return the parsed {@link LocalDate}

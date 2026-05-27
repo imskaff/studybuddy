@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * ViewModel for the student registration form.
  * Extends {@link CreateProfileViewModel} with student-specific registration logic.
  *
- * @author
+ * @author Kamila Jeremicz
  */
 public class CreateStudentProfileViewModel extends CreateProfileViewModel
 {

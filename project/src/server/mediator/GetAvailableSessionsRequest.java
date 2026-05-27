@@ -3,7 +3,8 @@ package server.mediator;
 /**
  * Request sent from the client to retrieve all available (unbooked, future) sessions.
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class GetAvailableSessionsRequest
 {

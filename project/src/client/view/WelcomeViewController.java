@@ -18,7 +18,8 @@ import javafx.scene.layout.Region;
  * for pending tutor accounts.
  * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class WelcomeViewController {
     @FXML private TextField email_field;
@@ -35,7 +36,7 @@ public class WelcomeViewController {
     public WelcomeViewController(){}
 
     /**
-     * Initialises the controller, wires the register button, and makes the
+     * Initialises the controller, wires the register button and makes the
      * error label invisible until a failed login occurs.
      *
      * @param viewHandler the application navigation handler

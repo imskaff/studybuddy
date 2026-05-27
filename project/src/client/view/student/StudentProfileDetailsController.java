@@ -17,7 +17,7 @@ import javafx.stage.Stage;
  * {@link EditStudentProfileController} screen.
  * 
  *
- * @author
+ * @author Kamila Jeremicz
  */
 public class StudentProfileDetailsController
 {

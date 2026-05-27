@@ -12,12 +12,11 @@ import java.time.LocalDateTime;
  * {@link SessionState} implementations ({@link Available}, {@link Book},
  * {@link Cancel}, {@link Complete}).
  * 
- * 
  * The {@code state} and {@code support} fields are marked {@code transient}
  * so that Gson excludes them during JSON serialisation.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class Session {
     private int id;

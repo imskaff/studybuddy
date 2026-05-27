@@ -13,14 +13,14 @@ import javafx.scene.layout.Region;
  * JavaFX controller for the session detail / edit screen (tutor view).
  * 
  * Starts in read-only mode. The Edit button toggles to edit mode, changes
- * its label to "Save", and enables all editable fields. On a subsequent
+ * its label to "Save" and enables all editable fields. On a subsequent
  * Save click the controller delegates to
  * {@link SessionTutorViewModel#editSession()} and navigates back on success.
  * The Delete button delegates to {@link SessionTutorViewModel#deleteSession()}.
  * The tutor-name field is always read-only.
  * 
- *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class SessionTutorViewController
 {
@@ -49,7 +49,7 @@ public class SessionTutorViewController
   /**
    * Initialises the controller: binds the tutor-name field one-way, binds
    * all editable fields bidirectionally to ViewModel properties, loads the
-   * subject options, starts in read-only mode, and wires the buttons.
+   * subject options, starts in read-only mode and wires the buttons.
    *
    * @param viewHandler the application navigation handler
    * @param viewModel   the session-tutor ViewModel (session already loaded)
@@ -104,7 +104,7 @@ public class SessionTutorViewController
   }
 
   /**
-   * Wires the back, edit/save, and delete buttons.
+   * Wires the back, edit/save and delete buttons.
    */
   private void setUpButtons()
   {

@@ -15,10 +15,10 @@ import java.util.List;
 
 /**
  * PostgreSQL implementation of {@link SessionDAO}.
- * Each method opens its own connection and closes it in a try-with-resources block.
+ * Each method opens its own connection and closes it.
  * Uses an injected {@link UserDAO} to load the tutor and student for each session row.
  *
- * @author
+ * @author Adam Terelak
  */
 public class SessionDAOImpl implements SessionDAO {
     private final UserDAO userDAO;
@@ -338,7 +338,7 @@ public class SessionDAOImpl implements SessionDAO {
             return null;
         }
         try (Connection connection = getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT id FROM subjects WHERE name = ?")) {
+            PreparedStatement statement = connection.prepareStatement("SELECT id FROM subjects WHERE name = ?")) {
             statement.setString(1, subjectName);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {

@@ -8,9 +8,9 @@ import java.util.ArrayList;
  * 
  * Extends {@link User} with no additional fields. Students can browse
  * available tutoring sessions and book them.
- * 
  *
- * @author
+ * @author Adam Terelak
+ * @author Kamila Jeremicz
  */
 public class Student extends User {
 

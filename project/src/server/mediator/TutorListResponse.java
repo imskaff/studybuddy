@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Server response that carries a list of {@link Tutor} objects back to the client.
  * Used by the {@code GET_PENDING_TUTORS} handler.
  *
- * @author
+ * @author Adam Terelak
  */
 public class TutorListResponse
 {
