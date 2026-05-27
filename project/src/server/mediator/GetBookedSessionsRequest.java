@@ -1,26 +1,47 @@
 package server.mediator;
 
-// This request is sent by the client to retrieve
-// all sessions booked by a specific student.
+/**
+ * Request sent from the client to retrieve all sessions booked by a specific student.
+ *
+ * @author
+ */
 public class GetBookedSessionsRequest
 {
-  // Identifies the request type
-  private String type = "GET_BOOKED_SESSIONS";
+    private String type = "GET_BOOKED_SESSIONS";
+    private int studentId;
 
-  // ID of the student whose booked sessions are being retrieved
-  private int studentId;
+    /**
+     * Constructs a {@code GetBookedSessionsRequest} for the given student.
+     *
+     * @param studentId the ID of the student whose booked sessions to retrieve
+     */
+    public GetBookedSessionsRequest(int studentId)
+    {
+        this.studentId = studentId;
+    }
 
-  public GetBookedSessionsRequest(int studentId)
-  {
-    this.studentId = studentId;
-  }
+    /**
+     * Returns the request type identifier.
+     *
+     * @return {@code "GET_BOOKED_SESSIONS"}
+     */
+    public String getType() { return type; }
 
-  public String getType() { return type; }
-  public int getStudentId() { return studentId; }
+    /**
+     * Returns the ID of the student whose booked sessions are being retrieved.
+     *
+     * @return the student ID
+     */
+    public int getStudentId() { return studentId; }
 
-  @Override
-  public String toString()
-  {
-    return "GET_BOOKED_SESSIONS{studentId=" + studentId + "}";
-  }
+    /**
+     * Returns a string representation of this request for debugging purposes.
+     *
+     * @return a formatted string with the student ID
+     */
+    @Override
+    public String toString()
+    {
+        return "GET_BOOKED_SESSIONS{studentId=" + studentId + "}";
+    }
 }

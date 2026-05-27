@@ -40,7 +40,7 @@ class AdminViewModelTest {
     // --- loadPendingTutors ---
 
     @Test
-    void loadPendingTutorsPopulatesListFromModel() {
+    void loadPendingTutors_populatesListFromModel() {
         Tutor t1 = makeTutor(1, "Alice", "Smith");
         Tutor t2 = makeTutor(2, "Bob", "Jones");
         when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(t1, t2)));
@@ -54,7 +54,7 @@ class AdminViewModelTest {
     }
 
     @Test
-    void loadPendingTutorsWithEmptyListShouldBeEmpty() {
+    void loadPendingTutors_emptyList_listIsEmpty() {
         when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>());
 
         viewModel.loadPendingTutors();
@@ -63,13 +63,13 @@ class AdminViewModelTest {
     }
 
     @Test
-    void loadPendingTutorsReplacesExistingContent() {
+    void loadPendingTutors_calledTwice_replacesExistingContent() {
         Tutor old = makeTutor(1, "Old", "Tutor");
         when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(old)));
         viewModel.loadPendingTutors();
-
         Tutor fresh = makeTutor(2, "New", "Tutor");
         when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(fresh)));
+
         viewModel.loadPendingTutors();
 
         ObservableList<Tutor> result = viewModel.getPendingTutors();
@@ -81,33 +81,7 @@ class AdminViewModelTest {
     // --- approveTutor ---
 
     @Test
-    void approveTutorOnFailureKeepsTutorInList() throws InterruptedException {
-        Tutor tutor = makeTutor(1, "Alice", "Smith");
-        when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(tutor)));
-        when(mockModel.approveTutor(1)).thenReturn(false);
-        viewModel.loadPendingTutors();
-
-        viewModel.approveTutor(tutor);
-        Thread.sleep(300);
-
-        assertTrue(viewModel.getPendingTutors().contains(tutor));
-    }
-
-    @Test
-    void approveTutorCallsModelWithCorrectId() throws InterruptedException {
-        Tutor tutor = makeTutor(42, "Alice", "Smith");
-        when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(tutor)));
-        when(mockModel.approveTutor(42)).thenReturn(true);
-        viewModel.loadPendingTutors();
-
-        viewModel.approveTutor(tutor);
-        Thread.sleep(300);
-
-        assertFalse(viewModel.getPendingTutors().contains(tutor));
-    }
-
-    @Test
-    void approveTutorOnSuccessRemovesFromPendingList() throws InterruptedException {
+    void approveTutor_onSuccess_removesTutorFromList() throws InterruptedException {
         Tutor tutor = makeTutor(1, "Alice", "Smith");
         when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(tutor)));
         when(mockModel.approveTutor(1)).thenReturn(true);
@@ -120,7 +94,33 @@ class AdminViewModelTest {
     }
 
     @Test
-    void approveTutorDoesNotRemoveOtherTutors() throws InterruptedException {
+    void approveTutor_onFailure_keepsTutorInList() throws InterruptedException {
+        Tutor tutor = makeTutor(1, "Alice", "Smith");
+        when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(tutor)));
+        when(mockModel.approveTutor(1)).thenReturn(false);
+        viewModel.loadPendingTutors();
+
+        viewModel.approveTutor(tutor);
+        Thread.sleep(300);
+
+        assertTrue(viewModel.getPendingTutors().contains(tutor));
+    }
+
+    @Test
+    void approveTutor_callsModelWithCorrectId() throws InterruptedException {
+        Tutor tutor = makeTutor(42, "Alice", "Smith");
+        when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(tutor)));
+        when(mockModel.approveTutor(42)).thenReturn(true);
+        viewModel.loadPendingTutors();
+
+        viewModel.approveTutor(tutor);
+        Thread.sleep(300);
+
+        verify(mockModel).approveTutor(42);
+    }
+
+    @Test
+    void approveTutor_onSuccess_doesNotRemoveOtherTutors() throws InterruptedException {
         Tutor t1 = makeTutor(1, "Alice", "Smith");
         Tutor t2 = makeTutor(2, "Bob", "Jones");
         when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(t1, t2)));
@@ -137,20 +137,7 @@ class AdminViewModelTest {
     // --- declineTutor ---
 
     @Test
-    void declineTutorCallsModelWithCorrectId() throws InterruptedException {
-        Tutor tutor = makeTutor(99, "Bob", "Jones");
-        when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(tutor)));
-        when(mockModel.declineTutor(99)).thenReturn(true);
-        viewModel.loadPendingTutors();
-
-        viewModel.declineTutor(tutor);
-        Thread.sleep(300);
-
-        assertFalse(viewModel.getPendingTutors().contains(tutor));
-    }
-
-    @Test
-    void declineTutorOnSuccessRemovesFromPendingList() throws InterruptedException {
+    void declineTutor_onSuccess_removesTutorFromList() throws InterruptedException {
         Tutor tutor = makeTutor(1, "Bob", "Jones");
         when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(tutor)));
         when(mockModel.declineTutor(1)).thenReturn(true);
@@ -163,7 +150,7 @@ class AdminViewModelTest {
     }
 
     @Test
-    void declineTutorOnFailureKeepsTutorInList() throws InterruptedException {
+    void declineTutor_onFailure_keepsTutorInList() throws InterruptedException {
         Tutor tutor = makeTutor(1, "Bob", "Jones");
         when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(tutor)));
         when(mockModel.declineTutor(1)).thenReturn(false);
@@ -176,7 +163,20 @@ class AdminViewModelTest {
     }
 
     @Test
-    void declineTutorDoesNotRemoveOtherTutors() throws InterruptedException {
+    void declineTutor_callsModelWithCorrectId() throws InterruptedException {
+        Tutor tutor = makeTutor(99, "Bob", "Jones");
+        when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(tutor)));
+        when(mockModel.declineTutor(99)).thenReturn(true);
+        viewModel.loadPendingTutors();
+
+        viewModel.declineTutor(tutor);
+        Thread.sleep(300);
+
+        verify(mockModel).declineTutor(99);
+    }
+
+    @Test
+    void declineTutor_onSuccess_doesNotRemoveOtherTutors() throws InterruptedException {
         Tutor t1 = makeTutor(1, "Alice", "Smith");
         Tutor t2 = makeTutor(2, "Bob", "Jones");
         when(mockModel.getPendingTutors()).thenReturn(new ArrayList<>(List.of(t1, t2)));

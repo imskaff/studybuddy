@@ -13,25 +13,56 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * PostgreSQL implementation of {@link SessionDAO}.
+ * Each method opens its own connection and closes it in a try-with-resources block.
+ * Uses an injected {@link UserDAO} to load the tutor and student for each session row.
+ *
+ * @author
+ */
 public class SessionDAOImpl implements SessionDAO {
     private final UserDAO userDAO;
 
+    /**
+     * Constructs a SessionDAOImpl and registers the PostgreSQL JDBC driver.
+     *
+     * @param userDAO the DAO used to load tutor and student objects
+     * @throws SQLException if the JDBC driver cannot be registered
+     */
     public SessionDAOImpl(UserDAO userDAO) throws SQLException {
         DriverManager.registerDriver(new org.postgresql.Driver());
         this.userDAO = userDAO;
     }
 
+    /**
+     * Opens and returns a new database connection.
+     *
+     * @return a new {@link Connection}
+     * @throws SQLException if the connection cannot be established
+     */
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=studybuddy", "postgres",
                 "password");
     }
 
-    // creating a session
+    /**
+     * Inserts a new session into the database and returns the created object.
+     *
+     * @param description the session description
+     * @param price       the session price
+     * @param subject     the subject name
+     * @param location    the session location
+     * @param start_date  the start date and time
+     * @param end_date    the end date and time
+     * @param tutor       the tutor who owns the session
+     * @param student     the student (may be {@code null})
+     * @return the created {@link Session} with its generated ID
+     * @throws SQLException if the insert fails
+     */
     @Override
     public Session create(String description, double price, String subject, String location, LocalDateTime start_date,
             LocalDateTime end_date, Tutor tutor, Student student) throws SQLException {
 
-        // Look up subject_id from name (nullable)
         Integer subjectId = findSubjectId(subject);
 
         String sql = "INSERT INTO sessions (description, price, location, start_date, end_date, tutor_id, student_id, subject_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -66,6 +97,13 @@ public class SessionDAOImpl implements SessionDAO {
         }
     }
 
+    /**
+     * Reads a session by ID from the database.
+     *
+     * @param id the session ID
+     * @return the matching {@link Session}
+     * @throws SQLException if the session is not found or a query error occurs
+     */
     @Override
     public Session readByInt(int id) throws SQLException {
         String sql = "SELECT s.id, s.description, s.price, s.location, s.start_date, s.end_date, "
@@ -84,7 +122,12 @@ public class SessionDAOImpl implements SessionDAO {
         }
     }
 
-    // updating a session
+    /**
+     * Saves the updated session data to the database.
+     *
+     * @param session the session to update
+     * @throws SQLException if the update fails
+     */
     @Override
     public void update(Session session) throws SQLException {
         Integer subjectId = findSubjectId(session.getSubject());
@@ -114,6 +157,12 @@ public class SessionDAOImpl implements SessionDAO {
         }
     }
 
+    /**
+     * Deletes the given session from the database.
+     *
+     * @param session the session to delete
+     * @throws SQLException if the delete fails
+     */
     @Override
     public void delete(Session session) throws SQLException {
         try (Connection connection = getConnection();
@@ -123,6 +172,12 @@ public class SessionDAOImpl implements SessionDAO {
         }
     }
 
+    /**
+     * Returns all sessions from the database.
+     *
+     * @return list of all sessions
+     * @throws SQLException if the query fails
+     */
     @Override
     public List<Session> readAll() throws SQLException {
         String sql = "SELECT s.id, s.description, s.price, s.location, s.start_date, s.end_date, "
@@ -139,12 +194,19 @@ public class SessionDAOImpl implements SessionDAO {
         }
     }
 
+    /**
+     * Returns sessions that have no assigned student, are in Available status,
+     * and whose end date is in the future.
+     *
+     * @return list of available sessions
+     * @throws SQLException if the query fails
+     */
     @Override
     public List<Session> readAvailable() throws SQLException {
         String sql = "SELECT s.id, s.description, s.price, s.location, s.start_date, s.end_date, "
                 + "s.tutor_id, s.student_id, s.status, sub.name AS subject_name "
                 + "FROM sessions s LEFT JOIN subjects sub ON s.subject_id = sub.id "
-                + "WHERE s.student_id IS NULL AND s.status = 'Available' AND s.start_date > NOW()";
+                + "WHERE s.student_id IS NULL AND s.status = 'Available' AND s.end_date > NOW()";
         try (Connection connection = getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
@@ -156,6 +218,13 @@ public class SessionDAOImpl implements SessionDAO {
         }
     }
 
+    /**
+     * Returns all sessions booked by the given student.
+     *
+     * @param studentId the student's ID
+     * @return list of the student's booked sessions
+     * @throws SQLException if the query fails
+     */
     @Override
     public List<Session> readByStudent(int studentId) throws SQLException {
         String sql = "SELECT s.id, s.description, s.price, s.location, s.start_date, s.end_date, "
@@ -174,6 +243,13 @@ public class SessionDAOImpl implements SessionDAO {
         }
     }
 
+    /**
+     * Returns all sessions belonging to the given tutor.
+     *
+     * @param tutorId the tutor's ID
+     * @return list of the tutor's sessions
+     * @throws SQLException if the query fails
+     */
     @Override
     public List<Session> readByTutor(int tutorId) throws SQLException {
         String sql = "SELECT s.id, s.description, s.price, s.location, s.start_date, s.end_date, "
@@ -192,6 +268,15 @@ public class SessionDAOImpl implements SessionDAO {
         }
     }
 
+    /**
+     * Converts the current result set row into a {@link Session} object.
+     * Loads the tutor and student via the injected {@link UserDAO} and
+     * restores the correct state based on the persisted status string.
+     *
+     * @param resultSet the result set positioned on the row to map
+     * @return the mapped {@link Session}
+     * @throws SQLException if a database or type-cast error occurs
+     */
     private Session mapRow(ResultSet resultSet) throws SQLException {
         int sessionId = resultSet.getInt("id");
         String description = resultSet.getString("description");
@@ -222,6 +307,12 @@ public class SessionDAOImpl implements SessionDAO {
         return session;
     }
 
+    /**
+     * Returns all subject names from the database.
+     *
+     * @return list of subject names
+     * @throws SQLException if the query fails
+     */
     @Override
     public List<String> readSubjects() throws SQLException {
         String sql = "SELECT name FROM subjects ORDER BY name";
@@ -234,10 +325,14 @@ public class SessionDAOImpl implements SessionDAO {
         }
     }
 
-    // sessions table stores subject_id
-    // this method finds subject_id by name in subjects table
-    // so when creating or updating a session, it converts subject name to subject_id
-    // used by create() and update() methods in this class
+    /**
+     * Looks up a subject name in the database and returns its ID.
+     * Returns {@code null} if the name is blank or not found.
+     *
+     * @param subjectName the subject name to look up
+     * @return the subject ID, or {@code null} if not found
+     * @throws SQLException if the query fails
+     */
     private Integer findSubjectId(String subjectName) throws SQLException {
         if (subjectName == null || subjectName.isEmpty()) {
             return null;

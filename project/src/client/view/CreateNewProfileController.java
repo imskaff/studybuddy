@@ -7,6 +7,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.Region;
 
+/**
+ * JavaFX controller for the profile-type selection screen.
+ * 
+ * Presents two mutually exclusive check-boxes (student / tutor). The confirm
+ * button navigates to the appropriate registration form; the back button
+ * returns to the welcome screen. If neither type is selected an error alert
+ * is shown.
+ * 
+ *
+ * @author
+ */
 public class CreateNewProfileController
 {
 
@@ -19,6 +30,15 @@ public class CreateNewProfileController
   private ViewHandler viewHandler;
   private CreateNewProfileViewModel viewModel;
 
+  /**
+   * Initialises the controller, enforces mutual exclusion between the two
+   * check-boxes, wires the back and confirm buttons, and resets both
+   * check-boxes to unchecked.
+   *
+   * @param viewHandler the application navigation handler
+   * @param viewModel   the create-new-profile ViewModel
+   * @param root        the root layout node
+   */
   public void init(ViewHandler viewHandler, CreateNewProfileViewModel viewModel, Region root)
   {
     this.root = root;
@@ -33,6 +53,11 @@ public class CreateNewProfileController
     student_checkBtn.setSelected(false);
   }
 
+  /**
+   * Wires the confirm button so it navigates to the tutor or student
+   * registration form depending on which check-box is selected, or shows
+   * an error alert when neither is selected.
+   */
   private void setupConfirmButton()
   {
     confirm_Btn.setOnAction(event -> {
@@ -51,6 +76,10 @@ public class CreateNewProfileController
     });
   }
 
+  /**
+   * Enforces mutual exclusion: selecting one check-box automatically
+   * deselects the other.
+   */
   private void chooseUserType()
   {
     tutor_checkBtn.setOnAction(e -> {
@@ -66,6 +95,10 @@ public class CreateNewProfileController
     });
   }
 
+  /**
+   * Shows an error dialog prompting the user to select a profile type before
+   * confirming.
+   */
   private void userTypeNotChosenAlert()
   {
     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -77,6 +110,11 @@ public class CreateNewProfileController
     errorAlert.showAndWait();
   }
 
+  /**
+   * Returns the root layout node.
+   *
+   * @return the root {@link Region}
+   */
   public Region getRoot()
   {
     return root;

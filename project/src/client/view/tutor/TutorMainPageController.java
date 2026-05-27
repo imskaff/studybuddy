@@ -16,6 +16,21 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import server.model.Session;
 
+/**
+ * JavaFX controller for the tutor main page.
+ * 
+ * Manages two areas:
+ * <ul>
+ *   <li><b>Sessions table</b> — shows all sessions owned by the logged-in
+ *       tutor with subject, price, date, status, and description columns.
+ *       Provides view-details, create, cancel, and refresh actions.</li>
+ *   <li><b>Profile fields</b> — editable via an Edit / Save toggle button;
+ *       delegates persistence to {@link TutorMainPageViewModel#saveProfile()}.</li>
+ * </ul>
+ * 
+ *
+ * @author
+ */
 public class TutorMainPageController
 {
   @FXML private TableView<Session> mySessions_tView;
@@ -44,6 +59,16 @@ public class TutorMainPageController
   private ViewHandler viewHandler;
   private TutorMainPageViewModel viewModel;
 
+  /**
+   * Initialises the controller: configures all table column cell-value
+   * factories, binds the table to the ViewModel's sessions list, binds
+   * profile fields bidirectionally to ViewModel properties, makes fields
+   * read-only, wires buttons, and loads data.
+   *
+   * @param viewHandler the application navigation handler
+   * @param viewModel   the tutor main-page ViewModel
+   * @param root        the root layout node
+   */
   public void init(ViewHandler viewHandler, TutorMainPageViewModel viewModel, Region root)
   {
     this.viewHandler = viewHandler;
@@ -55,7 +80,6 @@ public class TutorMainPageController
     date_column.setCellValueFactory(data ->
         new SimpleStringProperty(data.getValue().getStart_date()
             .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
-
     state_column.setCellValueFactory(cellData ->
         new SimpleStringProperty(cellData.getValue().getStatus())
     );
@@ -79,6 +103,14 @@ public class TutorMainPageController
     viewModel.loadData();
   }
 
+  /**
+   * Wires the refresh, view-details, create, edit, and cancel buttons.
+   * 
+   * The cancel button is disabled unless the selected session has status
+   * {@code "Booked"}. It shows a confirmation dialog before delegating to
+   * {@link TutorMainPageViewModel#cancelSession(Session)}.
+   * 
+   */
   private void setUpButtons()
   {
     refresh_btn.setOnAction(event -> viewModel.loadSessions());
@@ -121,6 +153,10 @@ public class TutorMainPageController
     });
   }
 
+  /**
+   * Opens the tutor session detail screen for the currently selected session.
+   * Does nothing if no row is selected.
+   */
   @FXML private void onViewDetails()
   {
     Session selected = mySessions_tView.getSelectionModel().getSelectedItem();
@@ -130,6 +166,11 @@ public class TutorMainPageController
     }
   }
 
+  /**
+   * Toggles between view and edit mode for the profile fields.
+   * In edit mode the button label changes to "Save"; on a successful save the
+   * fields revert to read-only. Shows an error alert if saving fails.
+   */
   @FXML private void onEditButtonClicked()
   {
     boolean editing = fname_textField.isEditable();
@@ -157,6 +198,9 @@ public class TutorMainPageController
     }
   }
 
+  /**
+   * Makes all profile fields and the gender combo-box non-editable.
+   */
   private void setFieldsReadOnly()
   {
     fname_textField.setEditable(false);
@@ -169,6 +213,9 @@ public class TutorMainPageController
     education_textArea.setEditable(false);
   }
 
+  /**
+   * Makes all profile fields and the gender combo-box editable.
+   */
   private void setFieldsEditable()
   {
     fname_textField.setEditable(true);
@@ -181,6 +228,11 @@ public class TutorMainPageController
     education_textArea.setEditable(true);
   }
 
+  /**
+   * Returns the root layout node.
+   *
+   * @return the root {@link Region}
+   */
   public Region getRoot()
   {
     return root;

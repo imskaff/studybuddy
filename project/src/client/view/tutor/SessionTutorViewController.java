@@ -9,6 +9,19 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 
+/**
+ * JavaFX controller for the session detail / edit screen (tutor view).
+ * 
+ * Starts in read-only mode. The Edit button toggles to edit mode, changes
+ * its label to "Save", and enables all editable fields. On a subsequent
+ * Save click the controller delegates to
+ * {@link SessionTutorViewModel#editSession()} and navigates back on success.
+ * The Delete button delegates to {@link SessionTutorViewModel#deleteSession()}.
+ * The tutor-name field is always read-only.
+ * 
+ *
+ * @author
+ */
 public class SessionTutorViewController
 {
   @FXML private TextArea description_textArea;
@@ -25,22 +38,31 @@ public class SessionTutorViewController
   private Region root;
   private SessionTutorViewModel viewModel;
   private ViewHandler viewHandler;
+  /** {@code true} when the form is in edit mode (fields are editable). */
   private boolean editMode = false;
 
+  /** No-arg constructor required by the JavaFX FXML loader. */
   public SessionTutorViewController()
   {
   }
 
+  /**
+   * Initialises the controller: binds the tutor-name field one-way, binds
+   * all editable fields bidirectionally to ViewModel properties, loads the
+   * subject options, starts in read-only mode, and wires the buttons.
+   *
+   * @param viewHandler the application navigation handler
+   * @param viewModel   the session-tutor ViewModel (session already loaded)
+   * @param root        the root layout node
+   */
   public void init(ViewHandler viewHandler, SessionTutorViewModel viewModel, Region root)
   {
     this.viewHandler = viewHandler;
     this.viewModel = viewModel;
     this.root = root;
 
-    // tutor name is display-only
     tutor_textField.textProperty().bind(viewModel.tutorProperty());
 
-    // editable fields so user input flows back to ViewModel
     description_textArea.textProperty().bindBidirectional(viewModel.descriptionProperty());
     viewModel.loadSubjects();
     subject_comboBox.setItems(viewModel.getSubjectOptions());
@@ -54,6 +76,12 @@ public class SessionTutorViewController
     setUpButtons();
   }
 
+  /**
+   * Sets the editable state of all user-editable fields.
+   * The tutor-name field is always kept read-only.
+   *
+   * @param editable {@code true} to allow editing; {@code false} for read-only
+   */
   private void setFieldsEditable(boolean editable)
   {
     description_textArea.setEditable(editable);
@@ -62,15 +90,22 @@ public class SessionTutorViewController
     startDate_textField.setEditable(editable);
     endDate_textField.setEditable(editable);
     price_textField.setEditable(editable);
-    // tutor_textField is always read-only
     tutor_textField.setEditable(false);
   }
 
+  /**
+   * Returns the root layout node.
+   *
+   * @return the root {@link Region}
+   */
   public Region getRoot()
   {
     return root;
   }
 
+  /**
+   * Wires the back, edit/save, and delete buttons.
+   */
   private void setUpButtons()
   {
     back_button.setOnAction(event -> viewHandler.openTutorMainPageView());
@@ -78,6 +113,15 @@ public class SessionTutorViewController
     delete_button.setOnAction(event -> onDelete());
   }
 
+  /**
+   * Toggles between view and edit mode.
+   * <ul>
+   *   <li>First click — enters edit mode, enables fields, changes button label
+   *       to "Save".</li>
+   *   <li>Second click — calls {@link SessionTutorViewModel#editSession()};
+   *       on success navigates back to the tutor main page.</li>
+   * </ul>
+   */
   private void onEditOrSave()
   {
     if (!editMode)
@@ -100,6 +144,10 @@ public class SessionTutorViewController
     }
   }
 
+  /**
+   * Deletes the currently selected session. Navigates back to the tutor main
+   * page on success.
+   */
   private void onDelete()
   {
     boolean success = viewModel.deleteSession();

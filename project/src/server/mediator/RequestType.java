@@ -1,18 +1,27 @@
 package server.mediator;
 
-// RequestType is a small helper class used by the server
-// to identify which type of request was received.
-// The server first converts the incoming JSON into this class
-// in order to read the "type" field before converting
-// the JSON into the correct request class
-// (e.g., BookSessionRequest, CreateSessionRequest, etc.).
+/**
+ * A lightweight helper used to identify the type of an incoming JSON request.
+ * 
+ * The server deserialises every incoming message into this class first in order
+ * to read the {@code type} field, then re-deserialises the same JSON into the
+ * appropriate concrete request class (e.g. {@link BookSessionRequest},
+ * {@link CreateSessionRequest}).
+ * 
+ *
+ * @author
+ */
 public class RequestType
 {
-  private String type;
+    private String type;
 
-  // Getter used by the server to read the request type
-  public String getType()
-  {
-    return type;
-  }
+    /**
+     * Returns the request type string (e.g. {@code "BOOK_SESSION"}).
+     *
+     * @return the type identifier
+     */
+    public String getType()
+    {
+        return type;
+    }
 }

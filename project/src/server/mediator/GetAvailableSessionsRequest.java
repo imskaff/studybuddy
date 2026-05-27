@@ -1,19 +1,34 @@
 package server.mediator;
 
-// This request is sent by the client to retrieve
-// all available (unbooked) sessions from the server.
+/**
+ * Request sent from the client to retrieve all available (unbooked, future) sessions.
+ *
+ * @author
+ */
 public class GetAvailableSessionsRequest
 {
-  // Identifies the request type
-  private String type = "GET_AVAILABLE_SESSIONS";
+    private String type = "GET_AVAILABLE_SESSIONS";
 
-  public GetAvailableSessionsRequest() {}
+    /**
+     * Constructs a {@code GetAvailableSessionsRequest}.
+     */
+    public GetAvailableSessionsRequest() {}
 
-  public String getType() { return type; }
+    /**
+     * Returns the request type identifier.
+     *
+     * @return {@code "GET_AVAILABLE_SESSIONS"}
+     */
+    public String getType() { return type; }
 
-  @Override
-  public String toString()
-  {
-    return "GET_AVAILABLE_SESSIONS{}";
-  }
+    /**
+     * Returns a string representation of this request for debugging purposes.
+     *
+     * @return a fixed string {@code "GET_AVAILABLE_SESSIONS{}"}
+     */
+    @Override
+    public String toString()
+    {
+        return "GET_AVAILABLE_SESSIONS{}";
+    }
 }

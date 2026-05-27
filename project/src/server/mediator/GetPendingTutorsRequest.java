@@ -1,19 +1,35 @@
 package server.mediator;
 
-// This request is sent by the client to retrieve
-// all pending tutor registrations from the server.
+/**
+ * Request sent from the client to retrieve all tutor registrations
+ * awaiting administrator approval.
+ *
+ * @author
+ */
 public class GetPendingTutorsRequest
 {
-  // Identifies the request type
-  private String type = "GET_PENDING_TUTORS";
+    private String type = "GET_PENDING_TUTORS";
 
-  public GetPendingTutorsRequest() {}
+    /**
+     * Constructs a {@code GetPendingTutorsRequest}.
+     */
+    public GetPendingTutorsRequest() {}
 
-  public String getType() { return type; }
+    /**
+     * Returns the request type identifier.
+     *
+     * @return {@code "GET_PENDING_TUTORS"}
+     */
+    public String getType() { return type; }
 
-  @Override
-  public String toString()
-  {
-    return "GET_PENDING_TUTORS{}";
-  }
+    /**
+     * Returns a string representation of this request for debugging purposes.
+     *
+     * @return a fixed string {@code "GET_PENDING_TUTORS{}"}
+     */
+    @Override
+    public String toString()
+    {
+        return "GET_PENDING_TUTORS{}";
+    }
 }

@@ -15,6 +15,18 @@ import javafx.stage.Stage;
 import server.model.Session;
 import server.model.Tutor;
 
+/**
+ * JavaFX controller for the create-new-session popup.
+ * 
+ * Binds all input fields bidirectionally to the
+ * {@link CreateNewSessionViewModel}. The create button parses the field
+ * values, constructs a {@link Session}, and delegates to
+ * {@link CreateNewSessionViewModel#createSession(Session)}. Date-time values
+ * must be in the format {@code yyyy-MM-dd HH:mm}.
+ * 
+ *
+ * @author
+ */
 public class CreateNewSessionController
 {
   @FXML private ComboBox<String> subject_comboBox;
@@ -32,13 +44,21 @@ public class CreateNewSessionController
   private CreateNewSessionViewModel viewModel;
   private Region root;
 
+  /**
+   * Initialises the controller: binds all form fields to ViewModel properties,
+   * loads the subject list, and wires the back and create buttons.
+   *
+   * @param popup       the popup {@link Stage} (closed on back or successful creation)
+   * @param viewHandler the application navigation handler
+   * @param viewModel   the create-new-session ViewModel
+   * @param root        the root layout node
+   */
   public void init(Stage popup, ViewHandler viewHandler, CreateNewSessionViewModel viewModel, Region root)
   {
     this.popup = popup;
     this.viewHandler = viewHandler;
     this.viewModel = viewModel;
     this.root = root;
-
 
     subject_comboBox.setItems(viewModel.getSubjectOptions());
     subject_comboBox.valueProperty().bindBidirectional(viewModel.subjectProperty());
@@ -52,12 +72,26 @@ public class CreateNewSessionController
     setUpButtons();
   }
 
+  /**
+   * Wires the back button to close the popup and the create button to
+   * {@link #setCreate_btn()}.
+   */
   private void setUpButtons()
   {
     back_btn.setOnAction(event -> popup.close());
     create_btn.setOnAction(event -> setCreate_btn());
   }
 
+  /**
+   * Reads and validates the form fields, builds a {@link Session}, and calls
+   * {@link CreateNewSessionViewModel#createSession(Session)}.
+   * Closes the popup on success. Logs an error message if the price is not a
+   * valid number, the date format is wrong, or any other exception occurs.
+   * 
+   * Expected date-time format: {@code yyyy-MM-dd HH:mm} (e.g.
+   * {@code 2024-05-20 14:30}).
+   * 
+   */
   private void setCreate_btn()
   {
     try
@@ -90,16 +124,19 @@ public class CreateNewSessionController
         System.err.println("Database error: Could not create session.");
       }
     }
-  catch (NumberFormatException e) {
-  System.err.println("Invalid input: Price must be a valid number.");
-} catch (DateTimeParseException e) {
-  // This catches errors if the user types the date in the wrong format!
-  System.err.println("Invalid date format! Please use: yyyy-MM-dd HH:mm (e.g., 2024-05-20 14:30)");
-} catch (Exception e) {
-  e.printStackTrace();
-}
+    catch (NumberFormatException e) {
+      System.err.println("Invalid input: Price must be a valid number.");
+    } catch (DateTimeParseException e) {
+      System.err.println("Invalid date format! Please use: yyyy-MM-dd HH:mm (e.g., 2024-05-20 14:30)");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
+  /**
+   * Fetches the subject list from the ViewModel and populates the subject
+   * combo-box.
+   */
   private void loadSubjects()
   {
     viewModel.loadSubjects();

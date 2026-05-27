@@ -2,27 +2,48 @@ package server.mediator;
 
 import server.model.Tutor;
 
+/**
+ * Request sent from the client when a tutor updates their profile information.
+ *
+ * @author
+ */
 public class EditTutorProfileRequest
 {
-  private String type = "EDIT_TUTOR_PROFILE";
-  private Tutor tutor;
+    private String type = "EDIT_TUTOR_PROFILE";
+    private Tutor tutor;
 
-  public EditTutorProfileRequest(Tutor tutor){
-    this.tutor = tutor;
-  }
+    /**
+     * Constructs an {@code EditTutorProfileRequest} wrapping the updated tutor data.
+     *
+     * @param tutor the tutor with updated field values
+     */
+    public EditTutorProfileRequest(Tutor tutor) {
+        this.tutor = tutor;
+    }
 
-  public String getType(){
-    return type;
-  }
+    /**
+     * Returns the request type identifier.
+     *
+     * @return {@code "EDIT_TUTOR_PROFILE"}
+     */
+    public String getType() { return type; }
 
-  public Tutor getTutor(){
-    return tutor;
-  }
+    /**
+     * Returns the tutor with the updated field values.
+     *
+     * @return the updated tutor
+     */
+    public Tutor getTutor() { return tutor; }
 
-  @Override
-  public String toString()
-  {
-    return "EDIT_TUTOR_PROFILE{" +
-        "tutor=" + tutor + '}';
-  }
+    /**
+     * Returns a string representation of this request for debugging purposes.
+     *
+     * @return a formatted string with the tutor
+     */
+    @Override
+    public String toString()
+    {
+        return "EDIT_TUTOR_PROFILE{" +
+            "tutor=" + tutor + '}';
+    }
 }

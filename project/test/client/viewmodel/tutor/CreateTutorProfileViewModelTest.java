@@ -122,9 +122,6 @@ public class CreateTutorProfileViewModelTest {
     @Override public boolean editTutorProfile(Tutor t) { return false; }
     @Override public List<String> getSubjects() { return new ArrayList<>(); }
     @Override public String login(String e, String p) { return null; }
-    @Override public void complete(Session s) {}
-    @Override public void book(Session s) {}
-    @Override public void cancel(Session s) {}
-    @Override public void remove(Session s) {}
+    @Override public boolean completeSession(int sessionId) { return false; }
   }
 }

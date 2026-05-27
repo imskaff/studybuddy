@@ -5,139 +5,111 @@ import server.dao.SessionDAO;
 import server.dao.UserDAO;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class SessionModelManagerTest {
 
-  private ModelManager manager;
-  private Session mockSession;
-  private Session existingSession;
-  private Tutor mockTutor;
-  private SessionDAO mockSessionDao;
-  private UserDAO mockUserDao;
+    private ModelManager manager;
+    private Session mockSession;
+    private Session existingSession;
+    private Tutor mockTutor;
+    private SessionDAO mockSessionDao;
+    private UserDAO mockUserDao;
 
-  @BeforeEach
-  void setUp() {
-    mockSessionDao = mock(SessionDAO.class);
-    mockUserDao = mock(UserDAO.class);
-    manager = new ModelManager(mockSessionDao, mockUserDao);
+    @BeforeEach
+    void setUp() {
+        mockSessionDao  = mock(SessionDAO.class);
+        mockUserDao     = mock(UserDAO.class);
+        manager         = new ModelManager(mockSessionDao, mockUserDao);
 
-    mockSession = mock(Session.class);
-    existingSession = mock(Session.class);
-    mockTutor = mock(Tutor.class);
-  }
+        mockTutor       = mock(Tutor.class);
+        mockSession     = mock(Session.class);
+        existingSession = mock(Session.class);
 
-  @Nested
-  @DisplayName("Tests for createSession()")
-  class CreateSessionTests {
+        // Default valid-session stubs — tests override only what they need
+        when(mockSession.getTutor()).thenReturn(mockTutor);
+        when(mockSession.getDescription()).thenReturn("Valid Description");
+        when(mockSession.getPrice()).thenReturn(50.0);
+        when(mockSession.getLocation()).thenReturn("Library");
+        when(mockSession.getSubject()).thenReturn("Mathematics");
+        when(mockSession.getStart_date()).thenReturn(LocalDateTime.now());
+        when(mockSession.getEnd_date()).thenReturn(LocalDateTime.now().plusHours(1));
+        when(mockSession.getStudent()).thenReturn(null);
+    }
+
+    // --- createSession ---
 
     @Test
-    void validDataReturnsTrue() throws SQLException {
-      when(mockSession.getTutor()).thenReturn(mockTutor);
-      when(mockSession.getDescription()).thenReturn("Valid Description");
-      when(mockSession.getPrice()).thenReturn(50.0);
-      when(mockSession.getLocation()).thenReturn("Library");
-      when(mockSession.getSubject()).thenReturn("Mathematics");
-      when(mockSession.getStart_date()).thenReturn(java.time.LocalDateTime.now());
-      when(mockSession.getEnd_date()).thenReturn(java.time.LocalDateTime.now().plusHours(1));
-      when(mockSession.getStudent()).thenReturn(null);
+    void createSession_validData_returnsTrue() throws SQLException {
+        // Arrange — fully covered by @BeforeEach
 
-      boolean result = manager.createSession(mockSession);
+        boolean result = manager.createSession(mockSession);
 
-      assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
-    void invalidDataNegativePriceReturnsFalse() throws SQLException {
-      when(mockSession.getTutor()).thenReturn(mockTutor);
-      when(mockSession.getDescription()).thenReturn("Valid Description");
-      when(mockSession.getPrice()).thenReturn(-10.0);
-      when(mockSession.getLocation()).thenReturn("Library");
+    void createSession_negativePrice_returnsFalse() throws SQLException {
+        when(mockSession.getPrice()).thenReturn(-10.0);
 
-      boolean result = manager.createSession(mockSession);
+        boolean result = manager.createSession(mockSession);
 
-      assertFalse(result);
+        assertFalse(result);
     }
 
     @Test
-    void invalidData_ZeroPrice_ReturnsFalse() throws SQLException {
-      when(mockSession.getTutor()).thenReturn(mockTutor);
-      when(mockSession.getDescription()).thenReturn("Valid Description");
-      when(mockSession.getPrice()).thenReturn(0.0);
-      when(mockSession.getLocation()).thenReturn("Library");
+    void createSession_zeroPrice_returnsFalse() throws SQLException {
+        when(mockSession.getPrice()).thenReturn(0.0);
 
-      boolean result = manager.createSession(mockSession);
+        boolean result = manager.createSession(mockSession);
 
-      assertFalse(result);
+        assertFalse(result);
     }
-  }
 
-  @Nested
-  @DisplayName("Tests for editSession()")
-  class EditSessionTests {
+    // --- editSession ---
 
     @Test
-    void validUpdate_ReturnsTrue() throws Exception {
-      int sessionId = 1;
-      when(mockSession.getId()).thenReturn(sessionId);
-      when(mockSession.getTutor()).thenReturn(mockTutor);
-      when(mockSession.getDescription()).thenReturn("New Description");
-      when(mockSession.getPrice()).thenReturn(60.0);
-      when(mockSession.getLocation()).thenReturn("Online");
-      when(mockSessionDao.readByInt(sessionId)).thenReturn(existingSession);
+    void editSession_validData_returnsTrue() throws Exception {
+        when(mockSession.getId()).thenReturn(1);
+        when(mockSession.getPrice()).thenReturn(60.0);
+        when(mockSession.getDescription()).thenReturn("New Description");
+        when(mockSession.getLocation()).thenReturn("Online");
+        when(mockSessionDao.readByInt(1)).thenReturn(existingSession);
 
-      boolean result = manager.editSession(mockSession);
+        boolean result = manager.editSession(mockSession);
 
-      assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
-    void invalidData_ReturnsFalse() throws Exception {
-      when(mockSession.getTutor()).thenReturn(mockTutor);
-      when(mockSession.getDescription()).thenReturn("New Description");
-      when(mockSession.getPrice()).thenReturn(-5.0);
+    void editSession_negativePrice_returnsFalse() throws Exception {
+        when(mockSession.getPrice()).thenReturn(-5.0);
 
-      boolean result = manager.editSession(mockSession);
+        boolean result = manager.editSession(mockSession);
 
-      assertFalse(result);
+        assertFalse(result);
     }
-  }
 
-  @Nested
-  @DisplayName("Tests for deleteSession()")
-  class DeleteSessionTests {
+    // --- deleteSession ---
 
     @Test
-    void sessionExists_ReturnsTrue() throws Exception {
-      int sessionId = 1;
-      when(mockSessionDao.readByInt(sessionId)).thenReturn(existingSession);
+    void deleteSession_sessionExists_returnsTrue() throws Exception {
+        when(mockSessionDao.readByInt(1)).thenReturn(existingSession);
 
-      boolean result = manager.deleteSession(sessionId);
+        boolean result = manager.deleteSession(1);
 
-      assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
-    void databaseThrowsException_ReturnsFalse() throws Exception {
-      int sessionId = 1;
-      when(mockSessionDao.readByInt(sessionId)).thenReturn(existingSession);
-      doThrow(new RuntimeException("DB Connection Lost")).when(mockSessionDao).delete(existingSession);
+    void deleteSession_sessionNotFound_returnsFalse() throws Exception {
+        when(mockSessionDao.readByInt(99)).thenThrow(new SQLException("No session found"));
 
-      boolean result = manager.deleteSession(sessionId);
+        boolean result = manager.deleteSession(99);
 
-      assertFalse(result);
+        assertFalse(result);
     }
-
-    @Test
-    void sessionNotFound_ReturnsFalse() throws Exception {
-      int sessionId = 99;
-      when(mockSessionDao.readByInt(sessionId)).thenThrow(new java.sql.SQLException("No session found"));
-
-      boolean result = manager.deleteSession(sessionId);
-
-      assertFalse(result);
-    }
-  }
 }

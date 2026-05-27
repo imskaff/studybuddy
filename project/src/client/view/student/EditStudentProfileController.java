@@ -10,6 +10,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
+/**
+ * JavaFX controller for the edit-student-profile popup.
+ * 
+ * Loads the logged-in student's current data into the editable fields on
+ * initialisation and provides confirm / back buttons. On confirm, calls
+ * {@link EditStudentProfileViewModel#saveChanges()}; on success navigates to
+ * the student profile details screen, otherwise shows an error alert.
+ * 
+ *
+ * @author
+ */
 public class EditStudentProfileController
 {
     @FXML private TextField fname_textField;
@@ -30,11 +41,21 @@ public class EditStudentProfileController
     private EditStudentProfileViewModel viewModel;
     private ViewHandler viewHandler = new ViewHandler();
 
+    /** No-arg constructor required by the JavaFX FXML loader. */
     public EditStudentProfileController()
     {
-
     }
 
+  /**
+   * Initialises the controller: calls
+   * {@link EditStudentProfileViewModel#loadStudentData()}, binds all text
+   * fields bidirectionally to the ViewModel properties, and makes every
+   * field editable.
+   *
+   * @param popupStage the stage hosting this popup
+   * @param viewModel  the edit-student-profile ViewModel
+   * @param root       the root layout node
+   */
   public void init(Stage popupStage, EditStudentProfileViewModel viewModel, Region root)
   {
     this.popupStage = popupStage;
@@ -61,6 +82,14 @@ public class EditStudentProfileController
     languages_textArea.setEditable(true);
   }
 
+  /**
+   * Wires the back and confirm buttons.
+   * 
+   * Back navigates to the student profile details screen. Confirm calls
+   * {@link EditStudentProfileViewModel#saveChanges()}; on success navigates
+   * to the profile details screen, on failure shows an error alert.
+   * 
+   */
   public void setUpButtons()
   {
     back_btn.setOnAction(event -> viewHandler.openStudentProfileDetails());
@@ -82,6 +111,11 @@ public class EditStudentProfileController
     });
   }
 
+  /**
+   * Returns the root layout node.
+   *
+   * @return the root {@link Region}
+   */
   public Region getRoot()
   {
     return root;

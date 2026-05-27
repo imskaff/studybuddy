@@ -17,6 +17,22 @@ import javafx.scene.layout.Region;
 import server.model.Session;
 import server.model.Tutor;
 
+/**
+ * JavaFX controller for the student main page.
+ * 
+ * Manages three tabs:
+ * <ol>
+ *   <li><b>Available sessions</b> — filterable table bound to
+ *       {@link StudentMainPageViewModel#getFilteredSessions()}</li>
+ *   <li><b>Booked sessions</b> — table bound to
+ *       {@link StudentMainPageViewModel#getBookedSessions()} with a cancel action</li>
+ *   <li><b>Profile</b> — editable fields toggled by the Edit / Save button</li>
+ * </ol>
+ * All data operations are delegated to {@link StudentMainPageViewModel}.
+ * 
+ *
+ * @author
+ */
 public class StudentMainPageViewController {
     @FXML private TableView<Session> main_tableView;
 
@@ -61,14 +77,23 @@ public class StudentMainPageViewController {
     private ViewHandler viewHandler;
     private StudentMainPageViewModel viewModel;
 
+    /** No-arg constructor required by the JavaFX FXML loader. */
     public StudentMainPageViewController() {}
 
+    /**
+     * Initialises the controller: configures all table columns, binds profile
+     * fields and filter controls to ViewModel properties, wires buttons, and
+     * loads the initial data.
+     *
+     * @param viewHandler the application navigation handler
+     * @param viewModel   the student main-page ViewModel
+     * @param root        the root layout node
+     */
     public void init(ViewHandler viewHandler, StudentMainPageViewModel viewModel, Region root) {
         this.viewHandler = viewHandler;
         this.viewModel = viewModel;
         this.root = root;
 
-        // available sessions
         main_column_title.setCellValueFactory(data ->
             new SimpleStringProperty(data.getValue().getSubject()));
         main_column_price.setCellValueFactory(data ->
@@ -82,8 +107,6 @@ public class StudentMainPageViewController {
         });
         main_tableView.setItems(viewModel.getFilteredSessions());
 
-
-        // booked sessions
         title_column_bookedS.setCellValueFactory(data ->
             new SimpleStringProperty(data.getValue().getSubject()));
         price_column_bookedS.setCellValueFactory(data ->
@@ -100,7 +123,6 @@ public class StudentMainPageViewController {
                 ? data.getValue().getStatus() : ""));
         bookedSessions_tableView.setItems(viewModel.getBookedSessions());
 
-        // profile fields
         fname_textArea.textProperty().bindBidirectional(viewModel.firstNameProperty());
         lname_textArea.textProperty().bindBidirectional(viewModel.lastNameProperty());
         dateOfBirth_textArea.textProperty().bindBidirectional(viewModel.dateOfBirthProperty());
@@ -111,7 +133,6 @@ public class StudentMainPageViewController {
         gender_comboBox.setDisable(true);
         language_textArea.textProperty().bindBidirectional(viewModel.languagesProperty());
 
-        // filter bar
         subject_comboBox.setItems(viewModel.getSubjectOptions());
         subject_comboBox.valueProperty().bindBidirectional(viewModel.subjectFilterProperty());
         minPrice_textField.textProperty().bindBidirectional(viewModel.minPriceProperty());
@@ -146,10 +167,18 @@ public class StudentMainPageViewController {
         viewModel.loadData();
     }
 
+    /**
+     * Returns the root layout node.
+     *
+     * @return the root {@link Region}
+     */
     public Region getRoot() {
         return root;
     }
 
+    /**
+     * Makes all profile text fields and the gender combo-box non-editable.
+     */
     private void setFieldsReadOnly() {
         fname_textArea.setEditable(false);
         lname_textArea.setEditable(false);
@@ -160,6 +189,10 @@ public class StudentMainPageViewController {
         language_textArea.setEditable(false);
     }
 
+    /**
+     * Opens the session detail screen for the selected available session.
+     * Does nothing if no row is selected.
+     */
     @FXML private void onViewDetailsButtonClicked() {
         Session selected = main_tableView.getSelectionModel().getSelectedItem();
         if (selected != null) {
@@ -169,15 +202,19 @@ public class StudentMainPageViewController {
         }
     }
 
+    /**
+     * Wires all remaining buttons: refresh, view-details (both tables),
+     * filter reset, and the cancel action (duplicate of the inline handler
+     * set during {@link #init} to ensure the disable binding is applied
+     * only once).
+     */
     private void setUpButtons()
     {
       refresh_btn.setOnAction(event -> viewModel.loadSessions());
 
-      //Available sessions
       viewDetails_button.disableProperty().bind(
           main_tableView.getSelectionModel().selectedItemProperty().isNull());
 
-      //Booked Sessions
       refreshBookedSessions_btn.setOnAction(event -> viewModel.loadBookedSessions());
 
       viewDetails_btn_bookedS.disableProperty().bind(
@@ -190,10 +227,8 @@ public class StudentMainPageViewController {
           }
       });
 
-      //Filtering
       reset_btn.setOnAction(e -> viewModel.resetFilters());
 
-      //Cancel Session
       cancel_btn.disableProperty().bind(
           bookedSessions_tableView.getSelectionModel().selectedItemProperty().isNull());
 
@@ -218,7 +253,12 @@ public class StudentMainPageViewController {
       });
     }
 
-        @FXML private void onEditButtonClicked() {
+    /**
+     * Toggles between view and edit mode for the profile tab.
+     * In edit mode the button label changes to "Save"; on a successful save
+     * the fields revert to read-only. Shows an error alert if saving fails.
+     */
+    @FXML private void onEditButtonClicked() {
         boolean editing = fname_textArea.isEditable();
         if (editing) {
             boolean success = viewModel.saveProfile();
@@ -239,6 +279,9 @@ public class StudentMainPageViewController {
         }
     }
 
+    /**
+     * Makes all profile text fields and the gender combo-box editable.
+     */
     private void setFieldsEditable() {
         fname_textArea.setEditable(true);
         lname_textArea.setEditable(true);

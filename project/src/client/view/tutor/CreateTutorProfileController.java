@@ -3,6 +3,7 @@ package client.view.tutor;
 import client.view.ViewHandler;
 import client.viewmodel.tutor.CreateTutorProfileViewModel;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -10,8 +11,18 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 
-import javafx.scene.control.Alert;
-
+/**
+ * JavaFX controller for the tutor registration form.
+ * 
+ * Binds all input fields bidirectionally to the
+ * {@link CreateTutorProfileViewModel}. The register button requires the rules
+ * check-box to be ticked; on success it shows an information dialog noting
+ * that the application is pending admin approval, then navigates to the
+ * welcome screen.
+ * 
+ *
+ * @author
+ */
 public class CreateTutorProfileController
 {
   @FXML private TextField fname_textField;
@@ -31,16 +42,24 @@ public class CreateTutorProfileController
   @FXML private Button rules_Btn;
   @FXML private Button back_Btn;
 
-
   private CreateTutorProfileViewModel viewModel;
   private ViewHandler viewHandler;
   private Region root;
 
+  /** No-arg constructor required by the JavaFX FXML loader. */
   public CreateTutorProfileController()
   {
-
   }
 
+  /**
+   * Initialises the controller: binds all form fields to ViewModel properties,
+   * populates the gender combo-box, resets the rules check-box, enables all
+   * fields, and wires the buttons.
+   *
+   * @param viewHandler             the application navigation handler
+   * @param createTutorViewModel    the create-tutor-profile ViewModel
+   * @param root                    the root layout node
+   */
   public void init(ViewHandler viewHandler, CreateTutorProfileViewModel createTutorViewModel, Region root)
   {
     this.viewHandler = viewHandler;
@@ -63,6 +82,11 @@ public class CreateTutorProfileController
     setUpButtons();
   }
 
+  /**
+   * Sets the editable state of all input fields and the gender combo-box.
+   *
+   * @param editable {@code true} to allow user input; {@code false} for read-only
+   */
   public void setFieldsEditable(boolean editable)
   {
     fname_textField.setEditable(editable);
@@ -76,9 +100,18 @@ public class CreateTutorProfileController
     education_textArea.setEditable(editable);
   }
 
+  /**
+   * Wires the back, rules, and register buttons.
+   * 
+   * The register button requires the rules check-box to be selected; if not,
+   * a warning alert is shown. On a successful registration an information
+   * alert is shown noting that the application is pending admin approval,
+   * and the application navigates to the welcome screen. On failure an error
+   * alert is shown.
+   * 
+   */
   private void setUpButtons()
   {
-
     back_Btn.setOnAction(event -> viewHandler.openCreateNewProfile());
     rules_Btn.setOnAction(event -> viewHandler.openRules());
     register_Btn.setOnAction(event -> {
@@ -108,6 +141,11 @@ public class CreateTutorProfileController
     });
   }
 
+  /**
+   * Returns the root layout node.
+   *
+   * @return the root {@link Region}
+   */
   public Region getRoot()
   {
     return root;

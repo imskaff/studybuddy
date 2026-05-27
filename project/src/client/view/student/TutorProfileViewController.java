@@ -8,6 +8,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
+/**
+ * JavaFX controller for the tutor public-profile popup (student view).
+ * 
+ * All fields are bound one-way to the {@link TutorProfileViewModel} and are
+ * set to read-only. The back button closes the popup stage.
+ * 
+ *
+ * @author
+ */
 public class TutorProfileViewController {
     @FXML private TextField fname_textField;
     @FXML private TextField lname_textField;
@@ -22,9 +31,18 @@ public class TutorProfileViewController {
     private Stage popupStage;
     private TutorProfileViewModel viewModel;
 
-
+    /** No-arg constructor required by the JavaFX FXML loader. */
     public TutorProfileViewController() {}
 
+    /**
+     * Initialises the controller: binds all display fields to ViewModel
+     * properties, makes them read-only, and wires the back button to close
+     * the popup stage.
+     *
+     * @param popupStage the stage hosting this popup
+     * @param viewModel  the tutor-profile ViewModel (tutor already loaded)
+     * @param root       the root layout node
+     */
     public void init(Stage popupStage, TutorProfileViewModel viewModel, Region root) {
         this.popupStage = popupStage;
         this.root = root;
@@ -49,5 +67,10 @@ public class TutorProfileViewController {
         back_btn.setOnAction(e -> popupStage.close());
     }
 
+    /**
+     * Returns the root layout node.
+     *
+     * @return the root {@link Region}
+     */
     public Region getRoot() { return root; }
 }

@@ -12,26 +12,55 @@ import javafx.stage.Stage;
 import server.model.Session;
 import server.model.Tutor;
 
+/**
+ * Central navigation controller for the JavaFX application.
+ * 
+ * Loads FXML files, obtains the matching view controller, injects the
+ * corresponding ViewModel from the {@link ViewModelFactory}, and sets the
+ * resulting {@link Scene} on the primary {@link Stage}. Each {@code open*}
+ * method corresponds to one application screen. Popup screens are shown on
+ * a new {@link Stage} owned by the primary stage.
+ * 
+ *
+ * @author
+ */
 public class ViewHandler
 {
   private ViewModelFactory viewModelFactory;
   private Stage primaryStage;
 
+  /**
+   * Constructs a {@code ViewHandler} with the given ViewModel factory.
+   *
+   * @param viewModelFactory the factory providing all ViewModels
+   */
   public ViewHandler(ViewModelFactory viewModelFactory)
   {
     this.viewModelFactory = viewModelFactory;
   }
 
+  /**
+   * No-arg constructor used when {@code ViewHandler} is instantiated without
+   * a factory (e.g. from certain popup controllers that only need navigation).
+   */
   public ViewHandler()
   {
-    //Created empty constructor to connect ViewHandler with StudentProfileDetails
   }
+
+  /**
+   * Starts the application by showing the welcome screen on the given stage.
+   *
+   * @param primaryStage the application's primary stage
+   */
   public void start(Stage primaryStage)
   {
     this.primaryStage = primaryStage;
     openWelcomeView();
   }
 
+  /**
+   * Opens the login / welcome screen on the primary stage.
+   */
   public void openWelcomeView()
   {
     try
@@ -53,6 +82,10 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Opens the student main page (available sessions, booked sessions, profile)
+   * on the primary stage.
+   */
   public void openStudentMainPageView()
   {
     try
@@ -76,6 +109,12 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Opens the session detail screen for a student with the given session
+   * pre-loaded into the ViewModel.
+   *
+   * @param selected the session to display
+   */
   public void openStudentSessionView(Session selected)
   {
     try
@@ -98,6 +137,12 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Opens the session detail / edit screen for a tutor with the given session
+   * pre-loaded into the ViewModel.
+   *
+   * @param selected the session to display
+   */
   public void openTutorSessionView(Session selected)
   {
     try
@@ -120,13 +165,19 @@ public class ViewHandler
     }
   }
 
-    public void openTutorProfileView(Tutor tutor) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("student/TutorProfileView.fxml"));
-            Region root = loader.load();
-            TutorProfileViewController controller = loader.getController();
-            viewModelFactory.getTutorProfileViewModel().loadTutor(tutor);
+  /**
+   * Opens the tutor public-profile popup for the given tutor. The popup is
+   * owned by the primary stage and is non-resizable.
+   *
+   * @param tutor the tutor whose profile should be displayed
+   */
+  public void openTutorProfileView(Tutor tutor) {
+      try {
+          FXMLLoader loader = new FXMLLoader();
+          loader.setLocation(getClass().getResource("student/TutorProfileView.fxml"));
+          Region root = loader.load();
+          TutorProfileViewController controller = loader.getController();
+          viewModelFactory.getTutorProfileViewModel().loadTutor(tutor);
 
       Stage popupStage = new Stage();
       controller.init(popupStage, viewModelFactory.getTutorProfileViewModel(),
@@ -143,6 +194,9 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Opens the tutor main page (sessions list, profile) on the primary stage.
+   */
   public void openTutorMainPageView()
   {
     try
@@ -158,7 +212,6 @@ public class ViewHandler
       primaryStage.setScene(new Scene(root));
       primaryStage.setResizable(false);
       primaryStage.show();
-
     }
     catch (Exception e)
     {
@@ -166,6 +219,10 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Opens the create-new-session popup. The popup blocks until closed
+   * ({@code showAndWait}).
+   */
   public void openCreateNewSession()
   {
     try
@@ -191,6 +248,9 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Opens the administrator panel on the primary stage.
+   */
   public void openAdminView()
   {
     try
@@ -212,6 +272,10 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Opens the profile-type selection screen (student vs. tutor) on the
+   * primary stage.
+   */
   public void openCreateNewProfile()
   {
     try
@@ -233,6 +297,9 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Opens the platform-rules acceptance screen on the primary stage.
+   */
   public void openRules()
   {
     try
@@ -254,6 +321,9 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Opens the student registration form on the primary stage.
+   */
   public void openCreateStudentProfile()
   {
     try
@@ -275,6 +345,9 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Opens the tutor registration form on the primary stage.
+   */
   public void openCreateTutorProfile()
   {
     try
@@ -296,6 +369,10 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Opens the edit-student-profile popup. The popup is owned by the primary
+   * stage and is non-resizable.
+   */
   public void openEditStudentProfileDetails()
   {
     try
@@ -319,6 +396,10 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Opens the read-only student profile details popup. The popup is owned
+   * by the primary stage and is non-resizable.
+   */
   public void openStudentProfileDetails()
   {
     try
@@ -343,6 +424,10 @@ public class ViewHandler
     }
   }
 
+  /**
+   * Opens the tutor profile details / edit popup. The popup is owned by the
+   * primary stage and is non-resizable.
+   */
   public void openTutorProfileDetails()
   {
     try
@@ -368,4 +453,3 @@ public class ViewHandler
     }
   }
 }
-

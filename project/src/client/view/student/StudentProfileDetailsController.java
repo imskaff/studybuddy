@@ -9,6 +9,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
+/**
+ * JavaFX controller for the read-only student profile details popup.
+ * 
+ * Loads the logged-in student's data into non-editable fields. Provides a
+ * back button that closes the popup and an edit button that navigates to the
+ * {@link EditStudentProfileController} screen.
+ * 
+ *
+ * @author
+ */
 public class StudentProfileDetailsController
 {
   @FXML private TextField fname_textField;
@@ -23,18 +33,26 @@ public class StudentProfileDetailsController
   @FXML private Button back_btn;
   @FXML private Button edit_btn;
 
-
   private ViewHandler viewHandler = new ViewHandler();
   private EditStudentProfileViewModel viewModel;
   private Region root;
   private Stage popupStage;
 
-
+  /** No-arg constructor required by the JavaFX FXML loader. */
   public StudentProfileDetailsController()
   {
-
   }
 
+  /**
+   * Initialises the controller: calls
+   * {@link EditStudentProfileViewModel#loadStudentData()}, binds all text
+   * fields bidirectionally to the ViewModel properties, sets them read-only,
+   * and wires the back and edit buttons.
+   *
+   * @param popupStage the stage hosting this popup
+   * @param viewModel  the edit-student-profile ViewModel (used for data binding)
+   * @param root       the root layout node
+   */
   public void init(Stage popupStage, EditStudentProfileViewModel viewModel, Region root)
   {
     this.popupStage = popupStage;
@@ -61,15 +79,23 @@ public class StudentProfileDetailsController
     setUpButtons();
   }
 
+  /**
+   * Wires the back button to close the popup and the edit button to open
+   * the edit-student-profile screen.
+   */
   private void setUpButtons()
   {
     back_btn.setOnAction(e -> popupStage.close());
     edit_btn.setOnAction(event -> viewHandler.openEditStudentProfileDetails());
   }
 
+  /**
+   * Returns the root layout node.
+   *
+   * @return the root {@link Region}
+   */
   public Region getRoot()
   {
     return root;
   }
-
 }

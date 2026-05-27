@@ -2,46 +2,62 @@ package server.mediator;
 
 import server.model.Student;
 
-// This request is sent when a user creates a new student profile.
+/**
+ * Request sent from the client when a user registers a new student profile.
+ * Registration is rejected by the server if {@code rulesConfirmed} is {@code false}.
+ *
+ * @author
+ */
 public class CreateStudentProfileRequest
 {
-  // Identifies the request type
-  private String type = "CREATE_STUDENT_PROFILE";
+    private String type = "CREATE_STUDENT_PROFILE";
+    private Student student;
+    private boolean rulesConfirmed;
 
-  // Student object containing the registration information
-  private Student student;
+    /**
+     * Constructs a {@code CreateStudentProfileRequest}.
+     *
+     * @param student        the student data to register
+     * @param rulesConfirmed whether the user has confirmed the platform rules
+     */
+    public CreateStudentProfileRequest(Student student, boolean rulesConfirmed)
+    {
+        this.student = student;
+        this.rulesConfirmed = rulesConfirmed;
+    }
 
-  // Indicates whether the user confirmed the rules
-  private boolean rulesConfirmed;
+    /**
+     * Returns the request type identifier.
+     *
+     * @return {@code "CREATE_STUDENT_PROFILE"}
+     */
+    public String getType() { return type; }
 
-  public CreateStudentProfileRequest(Student student,
-      boolean rulesConfirmed)
-  {
-    this.student = student;
-    this.rulesConfirmed = rulesConfirmed;
-  }
+    /**
+     * Returns the student data to register.
+     *
+     * @return the student
+     */
+    public Student getStudent() { return student; }
 
-  public String getType()
-  {
-    return type;
-  }
+    /**
+     * Returns whether the user has confirmed the platform rules.
+     *
+     * @return {@code true} if rules were confirmed
+     */
+    public boolean isRulesConfirmed() { return rulesConfirmed; }
 
-  public Student getStudent()
-  {
-    return student;
-  }
-
-  public boolean isRulesConfirmed()
-  {
-    return rulesConfirmed;
-  }
-
-  @Override
-  public String toString()
-  {
-    return "CREATE_STUDENT_PROFILE{" +
-        "student=" + student +
-        ", rulesConfirmed=" + rulesConfirmed +
-        '}';
-  }
+    /**
+     * Returns a string representation of this request for debugging purposes.
+     *
+     * @return a formatted string with the student and rules confirmation flag
+     */
+    @Override
+    public String toString()
+    {
+        return "CREATE_STUDENT_PROFILE{" +
+            "student=" + student +
+            ", rulesConfirmed=" + rulesConfirmed +
+            '}';
+    }
 }

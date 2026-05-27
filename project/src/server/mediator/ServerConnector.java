@@ -5,60 +5,60 @@ import java.net.Socket;
 import java.time.LocalDateTime;
 
 import server.model.ModelManager;
-// The BookingServer class acts as the connecting class.
-// It creates a server socket that listens on a specific port
-// and waits for incoming client connections. When a client connects,
-// a new ClientHandler is created and executed in a separate thread,
-// allowing the server to handle multiple clients simultaneously.
-public class ServerConnector implements Runnable{
+
+/**
+ * Listens for incoming TCP client connections and spawns a dedicated
+ * {@link ClientHandler} thread for each one.
+ * 
+ * Implements the Mediator pattern on the server side: it decouples the
+ * network layer from the business logic by passing every connected socket
+ * to a {@link ClientHandler} together with the shared {@link ModelManager}.
+ * 
+ *
+ * @author
+ */
+public class ServerConnector implements Runnable {
     private static final int PORT = 4025;
     private ModelManager model;
 
+    /**
+     * Constructs a {@code ServerConnector} with the given business-logic model.
+     *
+     * @param model the server-side model shared across all client handlers
+     */
     public ServerConnector(ModelManager model)
     {
-        // Initializes the server-side model that contains the booking logic
         this.model = model;
     }
 
-    // The run() method initializes and runs the server.
-    // It opens a ServerSocket and continuously listens for client connections.
-    // For each connected client, a new ClientHandler is created and executed in a separate thread,
-    // allowing multiple clients to communicate with the server at the same time.
+    /**
+     * Starts the server socket on port {@value #PORT} and enters an infinite
+     * accept-loop. For every connecting client a new {@link ClientHandler} is
+     * created and executed in a separate daemon thread, allowing the server to
+     * serve multiple clients simultaneously.
+     */
     public void run()
     {
-
-        // Just prints a message so we know the server has started.
         System.out.println("Starting server...");
         try
         {
-            // Creates the server socket and binds it to the port.
             ServerSocket listenSocket = new ServerSocket(PORT);
             System.out.println("Running - waiting for a client...");
 
-
-            // Infinite loop so the server keeps running and can accept multiple clients.
             while (true)
             {
-                // This method blocks (waits) until a client connects.
                 Socket socket = listenSocket.accept();
 
-                // Confirmation that a client has successfully connected.
                 String clientIp = socket.getInetAddress().getHostAddress();
-                
+
                 LocalDateTime now = LocalDateTime.now();
                 String date = String.valueOf(now.getDayOfMonth()) + "." + String.valueOf(now.getMonthValue()) + "." + String.valueOf(now.getYear());
                 String time = String.valueOf(now.getHour()) + ":" + String.valueOf(now.getMinute()) + ":" + String.valueOf(now.getSecond());
 
                 System.out.println("[" + clientIp + "] Client connected at " + date + " " + time);
 
-                // Creates a new ClientHandler object to handle this specific client.
-                // We pass the socket and the shared model.
                 ClientHandler handler = new ClientHandler(socket, model);
-
-                // Creates a new thread so multiple clients can be handled at the same time.
                 Thread thread = new Thread(handler);
-
-                // Starts the thread and runs the ClientHandler.
                 thread.start();
             }
         }
@@ -67,5 +67,4 @@ public class ServerConnector implements Runnable{
             e.printStackTrace();
         }
     }
-
 }

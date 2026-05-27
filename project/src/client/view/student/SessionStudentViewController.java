@@ -10,6 +10,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import server.model.Tutor;
 
+/**
+ * JavaFX controller for the session detail screen (student view).
+ * 
+ * Displays all session fields as read-only and provides two actions:
+ * <ul>
+ *   <li><b>Book session</b> — runs the booking on a daemon thread to avoid
+ *       blocking the JavaFX application thread, then navigates back to the
+ *       main page.</li>
+ *   <li><b>View tutor profile</b> — opens the tutor public-profile popup.</li>
+ * </ul>
+ * 
+ *
+ * @author
+ */
 public class SessionStudentViewController
 {
   @FXML private TextArea description_textArea;
@@ -27,10 +41,19 @@ public class SessionStudentViewController
   private SessionStudentViewModel viewModel;
   private ViewHandler viewHandler;
 
+  /** No-arg constructor required by the JavaFX FXML loader. */
   public SessionStudentViewController()
   {
   }
 
+  /**
+   * Initialises the controller: binds all display fields to ViewModel
+   * properties (one-way), makes fields read-only, and wires the buttons.
+   *
+   * @param viewHandler the application navigation handler
+   * @param viewModel   the session-student ViewModel (session already loaded)
+   * @param root        the root layout node
+   */
   public void init(ViewHandler viewHandler, SessionStudentViewModel viewModel, Region root)
   {
     this.viewHandler = viewHandler;
@@ -49,6 +72,9 @@ public class SessionStudentViewController
     setUpButtons();
   }
 
+  /**
+   * Makes all display fields non-editable.
+   */
   private void setFieldsReadOnly()
   {
     description_textArea.setEditable(false);
@@ -60,11 +86,19 @@ public class SessionStudentViewController
     price_textField.setEditable(false);
   }
 
+  /**
+   * Returns the root layout node.
+   *
+   * @return the root {@link Region}
+   */
   public Region getRoot()
   {
     return root;
   }
 
+  /**
+   * Wires the back, book, and view-profile buttons.
+   */
   private void setUpButtons()
   {
     back_button.setOnAction(event -> viewHandler.openStudentMainPageView());
@@ -72,6 +106,12 @@ public class SessionStudentViewController
     view_profile_button.setOnAction(event -> onViewTutorProfile());
   }
 
+  /**
+   * Books the selected session on a daemon background thread to avoid
+   * blocking the UI, disables the button to prevent double-clicks, and
+   * navigates back to the student main page on the JavaFX application thread
+   * once complete.
+   */
   @FXML private void onBookSession()
   {
     book_session_button.setDisable(true);
@@ -83,6 +123,10 @@ public class SessionStudentViewController
     t.start();
   }
 
+  /**
+   * Opens the tutor public-profile popup for the tutor of the selected
+   * session. Does nothing if no tutor is associated.
+   */
   @FXML private void onViewTutorProfile()
   {
     Tutor tutor = viewModel.getSelectedTutor();

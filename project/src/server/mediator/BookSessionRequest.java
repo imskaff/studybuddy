@@ -1,46 +1,59 @@
 package server.mediator;
 
+/**
+ * Request sent from the client when a student books a tutoring session.
+ *
+ * @author
+ */
 public class BookSessionRequest {
-  // Identifies the type of request sent to the server
-  private String type = "BOOK_SESSION";
+    private String type = "BOOK_SESSION";
+    private int studentId;
+    private int sessionId;
 
-  private int studentId;
-  // ID of the student who is booking the session
+    /**
+     * Constructs a {@code BookSessionRequest} for the given student and session.
+     *
+     * @param studentId the ID of the student booking the session
+     * @param sessionId the ID of the session to book
+     */
+    public BookSessionRequest(int studentId, int sessionId)
+    {
+        this.studentId = studentId;
+        this.sessionId = sessionId;
+    }
 
-  private int sessionId;
-  // ID of the session the student wants to book
+    /**
+     * Returns the request type identifier.
+     *
+     * @return {@code "BOOK_SESSION"}
+     */
+    public String getType() { return type; }
 
+    /**
+     * Returns the ID of the student booking the session.
+     *
+     * @return the student ID
+     */
+    public int getStudentId() { return studentId; }
 
+    /**
+     * Returns the ID of the session to book.
+     *
+     * @return the session ID
+     */
+    public int getSessionId() { return sessionId; }
 
-  public BookSessionRequest(int studentId, int sessionId)
-  {
-    this.studentId = studentId;
-    this.sessionId = sessionId;
-  }
-
-  // Getter used by the server to identify the request type
-  public String getType()
-  {
-    return type;
-  }
-
-  // Getters are needed so the server can read the values after converting from JSON
-  public int getStudentId()
-  {
-    return studentId;
-  }
-
-  public int getSessionId()
-  {
-    return sessionId;
-  }
-
-  @Override
-  public String toString()
-  {
-    return "BOOK_SESSION{" +
-        "studentId=" + studentId +
-        ", sessionId=" + sessionId +
-        '}';
-  }
+    /**
+     * Returns a string representation of this request for debugging purposes.
+     *
+     * @return a formatted string with student and session IDs
+     */
+    @Override
+    public String toString()
+    {
+        return "BOOK_SESSION{" +
+            "studentId=" + studentId +
+            ", sessionId=" + sessionId +
+            '}';
+    }
 }

@@ -2,38 +2,50 @@ package server.mediator;
 
 import server.model.Session;
 
-// CreateSessionRequest represents the data sent
-// from the client to the server when a tutor
-// creates a new tutoring session.
+/**
+ * Request sent from the client when a tutor creates a new tutoring session.
+ *
+ * @author
+ */
 public class CreateSessionRequest
 {
-  // Identifies the type of request sent to the server
-  private String type = "CREATE_SESSION";
-  private Session session;
+    private String type = "CREATE_SESSION";
+    private Session session;
 
-  // Constructor used to create the request
-  public CreateSessionRequest(Session session)
-  {
-    this.session = session;
-  }
+    /**
+     * Constructs a {@code CreateSessionRequest} wrapping the given session.
+     *
+     * @param session the session to create
+     */
+    public CreateSessionRequest(Session session)
+    {
+        this.session = session;
+    }
 
-  // Getter needed so the server can read
-  // the session after converting from JSON
-  public Session getSession()
-  {
-    return session;
-  }
+    /**
+     * Returns the session to be created.
+     *
+     * @return the session
+     */
+    public Session getSession() { return session; }
 
-  public String getType()
-  {
-    return type;
-  }
+    /**
+     * Returns the request type identifier.
+     *
+     * @return {@code "CREATE_SESSION"}
+     */
+    public String getType() { return type; }
 
-  @Override
-  public String toString()
-  {
-    return "CREATE_SESSION{" +
-        "session=" + session +
-        '}';
-  }
+    /**
+     * Returns a string representation of this request for debugging purposes.
+     *
+     * @return a formatted string with the session
+     */
+    @Override
+    public String toString()
+    {
+        return "CREATE_SESSION{" +
+            "session=" + session +
+            '}';
+    }
 }

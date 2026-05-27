@@ -17,8 +17,20 @@ import javafx.collections.transformation.FilteredList;
 import server.model.Session;
 import server.model.Student;
 
+/**
+ * ViewModel for the student main page.
+ * 
+ * Manages observable lists of available and booked sessions, subject filter
+ * options, and the logged-in student's editable profile properties.
+ * Listens for {@code SessionBooked} model events and updates the lists on the
+ * JavaFX application thread accordingly.
+ * 
+ *
+ * @author
+ */
 public class StudentMainPageViewModel implements PropertyChangeListener
 {
+  /** Formatter used to parse date filter strings entered as {@code dd/MM/yyyy}. */
   private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern(
       "dd/MM/yyyy");
 
@@ -43,6 +55,13 @@ public class StudentMainPageViewModel implements PropertyChangeListener
   private final StringProperty gender;
   private final StringProperty languages;
 
+  /**
+   * Constructs a {@code StudentMainPageViewModel}, initialises all observable
+   * properties, wires filter-change listeners so that any filter modification
+   * immediately re-evaluates the predicate, and registers as a model listener.
+   *
+   * @param model the client-side model
+   */
   public StudentMainPageViewModel(Model model)
   {
     this.model = model;
@@ -75,6 +94,10 @@ public class StudentMainPageViewModel implements PropertyChangeListener
     model.addPropertyChangeListener(this);
   }
 
+  /**
+   * Loads all data needed for the main page: subjects, available sessions,
+   * booked sessions, and the logged-in student's profile.
+   */
   public void loadData()
   {
     loadSubjects();
@@ -85,6 +108,10 @@ public class StudentMainPageViewModel implements PropertyChangeListener
       loadProfile(student);
   }
 
+  /**
+   * Refreshes the subject options list from the server, always prepending
+   * an {@code "All"} entry so the filter can be reset.
+   */
   public void loadSubjects()
   {
     subjectOptions.clear();
@@ -92,16 +119,28 @@ public class StudentMainPageViewModel implements PropertyChangeListener
     subjectOptions.addAll(model.getSubjects());
   }
 
+  /**
+   * Replaces the available-sessions list with the current server data.
+   */
   public void loadSessions()
   {
     sessions.setAll(model.getAllSessions());
   }
 
+  /**
+   * Replaces the booked-sessions list with the sessions the logged-in student
+   * has already booked.
+   */
   public void loadBookedSessions()
   {
     bookedSessions.setAll(model.getBookedSessions());
   }
 
+  /**
+   * Populates the editable profile properties from the given student object.
+   *
+   * @param student the student whose data should be loaded into the properties
+   */
   public void loadProfile(Student student) {
     firstName.set(student.getFirst_name());
     lastName.set(student.getLast_name());
@@ -112,6 +151,14 @@ public class StudentMainPageViewModel implements PropertyChangeListener
     languages.set(String.join(", ", student.getLanguages()));
   }
 
+  /**
+   * Validates the current profile properties and, if valid, sends an update
+   * to the server.
+   *
+   * @return {@code true} if the profile was saved successfully; {@code false}
+   *         if no student is logged in, the date cannot be parsed, or the
+   *         server rejects the update
+   */
   public boolean saveProfile() {
     Student current = model.getLoggedInStudent();
     if (current == null) return false;
@@ -135,6 +182,10 @@ public class StudentMainPageViewModel implements PropertyChangeListener
     return model.editStudentProfile(updated);
   }
 
+  /**
+   * Resets all filter properties to their default (empty / {@code "All"}) values,
+   * which causes {@link #applyFilter()} to show every session.
+   */
   public void resetFilters()
   {
     subjectFilter.set("All");
@@ -144,6 +195,11 @@ public class StudentMainPageViewModel implements PropertyChangeListener
     toDate.set("");
   }
 
+  /**
+   * Rebuilds the {@link FilteredList} predicate based on the current values of
+   * the five filter properties. Invalid or blank filter values are silently
+   * ignored, allowing partial filtering.
+   */
   private void applyFilter()
   {
     filteredSessions.setPredicate(session -> {
@@ -212,6 +268,13 @@ public class StudentMainPageViewModel implements PropertyChangeListener
     });
   }
 
+  /**
+   * Cancels the given session on behalf of the logged-in student. If the
+   * cancellation succeeds, the available and booked session lists are refreshed
+   * on the JavaFX application thread.
+   *
+   * @param session the session to cancel
+   */
   public void cancelSession(Session session)
   {
     Student student = model.getLoggedInStudent();
@@ -227,40 +290,84 @@ public class StudentMainPageViewModel implements PropertyChangeListener
     }
   }
 
+  /**
+   * Returns the filtered view of the available-sessions list.
+   *
+   * @return the filtered sessions list
+   */
   public FilteredList<Session> getFilteredSessions()
   {
     return filteredSessions;
   }
 
+  /**
+   * Returns the full (unfiltered) observable list of available sessions.
+   *
+   * @return the sessions list
+   */
   public ObservableList<Session> getSessions()
   {
     return sessions;
   }
 
+  /**
+   * Returns the observable list of sessions the logged-in student has booked.
+   *
+   * @return the booked-sessions list
+   */
   public ObservableList<Session> getBookedSessions()
   {
     return bookedSessions;
   }
 
+  /**
+   * Returns the observable list of subject names for the filter combo-box.
+   *
+   * @return the subject-options list
+   */
   public ObservableList<String> getSubjectOptions()
   {
     return subjectOptions;
   }
 
+  /** @return the first-name property */
   public StringProperty firstNameProperty() { return firstName; }
+  /** @return the last-name property */
   public StringProperty lastNameProperty() { return lastName; }
+  /** @return the date-of-birth property (ISO-8601 string) */
   public StringProperty dateOfBirthProperty() { return dateOfBirth; }
+  /** @return the email property */
   public StringProperty emailProperty() { return email; }
+  /** @return the password property */
   public StringProperty passwordProperty() { return password; }
+  /** @return the phone-number property */
   public StringProperty phoneProperty() { return phone; }
+  /** @return the gender property */
   public StringProperty genderProperty() { return gender; }
+  /** @return the languages property (comma-separated string) */
   public StringProperty languagesProperty() { return languages; }
+  /** @return the selected-subject filter property */
   public StringProperty subjectFilterProperty() { return subjectFilter; }
+  /** @return the minimum-price filter property */
   public StringProperty minPriceProperty() { return minPrice; }
+  /** @return the maximum-price filter property */
   public StringProperty maxPriceProperty() { return maxPrice; }
+  /** @return the from-date filter property (format {@code dd/MM/yyyy}) */
   public StringProperty fromDateProperty() { return fromDate; }
+  /** @return the to-date filter property (format {@code dd/MM/yyyy}) */
   public StringProperty toDateProperty() { return toDate; }
 
+  /**
+   * Handles model property-change events fired by the client-side
+   * {@link client.model.ModelManager}.
+   * 
+   * On a {@code SessionBooked} event the newly booked session is removed from
+   * the available list and added to the booked list on the JavaFX application
+   * thread.
+   * 
+   *
+   * @param evt the property-change event
+   */
   @Override
   public void propertyChange(PropertyChangeEvent evt)
   {
