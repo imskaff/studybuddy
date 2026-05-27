@@ -124,13 +124,14 @@ public class CreateNewSessionController
         System.err.println("Database error: Could not create session.");
       }
     }
-    catch (NumberFormatException e) {
-      System.err.println("Invalid input: Price must be a valid number.");
-    } catch (DateTimeParseException e) {
-      System.err.println("Invalid date format! Please use: yyyy-MM-dd HH:mm (e.g., 2024-05-20 14:30)");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+  catch (NumberFormatException e) {
+  System.err.println("Invalid input: Price must be a valid number.");
+} catch (DateTimeParseException e) {
+
+  System.err.println("Invalid date format! Please use: yyyy-MM-dd HH:mm (e.g., 2024-05-20 14:30)");
+} catch (Exception e) {
+  e.printStackTrace();
+}
   }
 
   /**
