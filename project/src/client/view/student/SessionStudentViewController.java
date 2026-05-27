@@ -14,12 +14,9 @@ import server.model.Tutor;
  * JavaFX controller for the session detail screen (student view).
  * 
  * Displays all session fields as read-only and provides two actions:
- * <ul>
- *   <li><b>Book session</b> — runs the booking on a daemon thread to avoid
- *       blocking the JavaFX application thread, then navigates back to the
- *       main page.</li>
- *   <li><b>View tutor profile</b> — opens the tutor public-profile popup.</li>
- * </ul>
+ * Book session — runs the booking on a daemon thread to avoid blocking the
+ * JavaFX application thread, then navigates back to the main page.
+ * View tutor profile — opens the tutor public-profile popup.
  * 
  *
  * @author Adam Terelak

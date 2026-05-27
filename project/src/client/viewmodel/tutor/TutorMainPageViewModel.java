@@ -187,7 +187,7 @@ public class TutorMainPageViewModel implements PropertyChangeListener
   public StringProperty firstNameProperty() { return firstName; }
   /** @return the last-name property */
   public StringProperty lastNameProperty() { return lastName; }
-  /** @return the date-of-birth property (ISO-8601 string) */
+  /** @return the date-of-birth property ( string) */
   public StringProperty dateOfBirthProperty() { return dateOfBirth; }
   /** @return the email property */
   public StringProperty emailProperty() { return email; }

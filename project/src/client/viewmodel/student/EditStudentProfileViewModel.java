@@ -1,14 +1,13 @@
 package client.viewmodel.student;
 
 import client.model.Model;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import server.model.Student;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import server.model.Student;
 
 /**
  * ViewModel for the edit-student-profile screen.
@@ -54,7 +53,7 @@ public class EditStudentProfileViewModel
     public StringProperty phoneProperty()     { return phone; }
     /** @return the gender property */
     public StringProperty genderProperty()    { return gender; }
-    /** @return the date-of-birth property (ISO-8601 string) */
+    /** @return the date-of-birth property ( string) */
     public StringProperty dateOfBirthProperty() { return dateOfBirth; }
     /** @return the languages property (comma-separated string) */
     public StringProperty languagesProperty() { return languages; }

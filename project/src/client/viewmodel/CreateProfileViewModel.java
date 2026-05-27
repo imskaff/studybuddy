@@ -94,7 +94,7 @@ public abstract class CreateProfileViewModel
     public StringProperty passwordProperty() { return password; }
 
     /**
-     * Returns the date-of-birth property (ISO-8601 string, e.g. {@code "2000-01-31"}).
+     * Returns the date-of-birth property ( string, e.g. {@code "2000-01-31"}).
      *
      * @return the date-of-birth {@link StringProperty}
      */
