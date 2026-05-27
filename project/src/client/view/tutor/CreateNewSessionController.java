@@ -93,7 +93,7 @@ public class CreateNewSessionController
   catch (NumberFormatException e) {
   System.err.println("Invalid input: Price must be a valid number.");
 } catch (DateTimeParseException e) {
-  // This catches errors if the user types the date in the wrong format!
+
   System.err.println("Invalid date format! Please use: yyyy-MM-dd HH:mm (e.g., 2024-05-20 14:30)");
 } catch (Exception e) {
   e.printStackTrace();
